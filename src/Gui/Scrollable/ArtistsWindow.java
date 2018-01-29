@@ -31,7 +31,7 @@ public class ArtistsWindow extends Scrollable {
 
     public void setFilterPanel() {
         date = new JLabel("Date: ");
-        name = new JLabel("Name");
+        name = new JLabel("Name (regexp)");
         nationality = new JLabel("Nationality");
         from = new DatePicker();
         to = new DatePicker();

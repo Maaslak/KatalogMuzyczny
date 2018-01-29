@@ -30,7 +30,7 @@ public class AlbumsWindow extends Scrollable{
 
     public void setFilterPanel() {
         date = new JLabel("Date: ");
-        name = new JLabel("Name");
+        name = new JLabel("Name (regexp)");
         rating = new JLabel("Rating");
         from = new DatePicker();
         to = new DatePicker();
