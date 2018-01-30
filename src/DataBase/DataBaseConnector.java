@@ -1,6 +1,7 @@
 package DataBase;
 
 import JavaObjects.Album;
+import JavaObjects.Festiwal;
 import JavaObjects.Koncert;
 import JavaObjects.Zespol;
 
@@ -17,11 +18,13 @@ public class DataBaseConnector {
     private ArrayList<Zespol> zespoly;
     private ArrayList<Album> albumy;
     private ArrayList<Koncert> koncerty;
+    private ArrayList<Festiwal> festiwale;
 
     public DataBaseConnector() throws SQLException {
         zespoly = new ArrayList<>();
         albumy = new ArrayList<>();
         koncerty = new ArrayList<>();
+        festiwale = new ArrayList<>();
         connect();
     }
 
@@ -132,6 +135,40 @@ public class DataBaseConnector {
         if (error)
             throw new Exception("Nie udalo sie pobrac albumow");
         return koncerty;
+    }
+
+    public ArrayList<Festiwal> getFestiwale() throws Exception {
+        boolean error = false;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT * FROM KONCERTY");
+            while (resultSet.next()){
+                Festiwal festiwal = new Festiwal(resultSet.getString(1), resultSet.getDate(2), resultSet.getDate(3));
+                festiwale.add(festiwal);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            error = true;
+        }
+        finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
+        if (error)
+            throw new Exception("Nie udalo sie pobrac albumow");
+        return festiwale;
     }
 
     public void disconnect() throws SQLException {
