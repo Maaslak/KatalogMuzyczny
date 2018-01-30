@@ -1,6 +1,7 @@
 package DataBase;
 
 import JavaObjects.Album;
+import JavaObjects.Koncert;
 import JavaObjects.Zespol;
 
 import java.sql.*;
@@ -15,9 +16,12 @@ public class DataBaseConnector {
     private static String password;
     private ArrayList<Zespol> zespoly;
     private ArrayList<Album> albumy;
+    private ArrayList<Koncert> koncerty;
 
     public DataBaseConnector() throws SQLException {
         zespoly = new ArrayList<>();
+        albumy = new ArrayList<>();
+        koncerty = new ArrayList<>();
         connect();
     }
 
@@ -94,6 +98,40 @@ public class DataBaseConnector {
         if (error)
             throw new Exception("Nie udalo sie pobrac albumow");
         return albumy;
+    }
+
+    public ArrayList<Koncert> getKoncert() throws Exception {
+        boolean error = false;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT * FROM KONCERTY");
+            while (resultSet.next()){
+                Koncert koncert = new Koncert(resultSet.getString(1), resultSet.getDate(2), resultSet.getString(3));
+                koncerty.add(koncert);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            error = true;
+        }
+        finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
+        if (error)
+            throw new Exception("Nie udalo sie pobrac albumow");
+        return koncerty;
     }
 
     public void disconnect() throws SQLException {
