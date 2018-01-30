@@ -2,7 +2,8 @@ package Gui;
 
 import Gui.Scrollable.AlbumsWindow;
 import Gui.Scrollable.ArtistsWindow;
-import Gui.Scrollable.ConcertsWindow;
+import Gui.Scrollable.ConcertsAndFestivalsWindow;
+import Gui.Scrollable.ConcertsAndFestivalsWindow;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -15,7 +16,7 @@ public class MainWindow {
     private JButton concertsButton;
     private ArtistsWindow artistsWindow;
     private AlbumsWindow albumsWindow;
-    private ConcertsWindow concertsWindow;
+    private ConcertsAndFestivalsWindow concertsWindow;
 
     public MainWindow() {
         JFrame frame = new JFrame("Main Window");
@@ -24,11 +25,11 @@ public class MainWindow {
         frame.pack();
         frame.setVisible(true);
         artistsWindow = new ArtistsWindow();
-        artistsWindow.setFilterPanel();
+        //artistsWindow.setFilterPanel();
         albumsWindow = new AlbumsWindow();
-        albumsWindow.setFilterPanel();
-        concertsWindow = new ConcertsWindow();
-        concertsWindow.setFilterPanel();
+        //albumsWindow.setFilterPanel();
+        concertsWindow = new ConcertsAndFestivalsWindow();
+        //concertsWindow.setFilterPanel();
 
         artistsButton.addMouseListener(new MouseAdapter() {
             @Override

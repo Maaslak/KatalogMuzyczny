@@ -15,7 +15,6 @@ public abstract class Scrollable extends JFrame {
     public Scrollable() {
         this.setContentPane(mainPanel);
         this.pack();
-
     }
 
 
@@ -25,5 +24,21 @@ public abstract class Scrollable extends JFrame {
 
     public void setFilterButton(JButton filterButton) {
         this.filterButton = filterButton;
+    }
+
+    public JButton getSelectButton() {
+        return selectButton;
+    }
+
+    public void setSelectButton(JButton selectButton) {
+        this.selectButton = selectButton;
+    }
+
+    public JTable getTable1() {
+        return table1;
+    }
+
+    public void setTable1(JTable table1) {
+        this.table1 = table1;
     }
 }

@@ -1,5 +1,7 @@
 package Gui.Scrollable;
 
+import Gui.Detailed.ConcertWindow;
+import Gui.Detailed.FestivalWindow;
 import com.github.lgooddatepicker.components.DatePicker;
 
 import javax.swing.*;
@@ -7,16 +9,25 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class ConcertsWindow extends Scrollable {
+public class ConcertsAndFestivalsWindow extends Scrollable {
     private JLabel date, name, festival;
     private JTextField nameJTextField;
     private JCheckBox festivalJCheckBox;
     private DatePicker from, to;
     private GridBagConstraints c;
+    private FestivalWindow festivalWindow;
+    private ConcertWindow concertWindow;
+    private Integer row;
+    /* TODO
+    private ArrayList<Concert> concerts;
+    private ArrayList<Festival> festivals;
+    private Concert concert;
+    private Festival festival;
+    */
 
-
-    public ConcertsWindow() {
+    public ConcertsAndFestivalsWindow() {
         super();
+
         c = new GridBagConstraints();
         setFilterPanel();
 
@@ -26,6 +37,18 @@ public class ConcertsWindow extends Scrollable {
                 super.mouseClicked(mouseEvent);
             }
         });
+
+        /*super.getSelectButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent, FestivalWindow festivalWindow, ConcertWindow concertWindow) {
+                super.mouseClicked(mouseEvent);
+
+                if(!getTable1().getSelectionModel().isSelectionEmpty()){
+
+                    getTable1().getSelectionModel();
+                }
+            }
+        });*/
     }
 
     public void setFilterPanel() {

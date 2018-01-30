@@ -20,12 +20,7 @@ public class AlbumsWindow extends Scrollable{
         c = new GridBagConstraints();
         setFilterPanel();
 
-        super.getFilterButton().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                super.mouseClicked(mouseEvent);
-            }
-        });
+        mouse();
     }
 
     public void setFilterPanel() {
@@ -58,5 +53,21 @@ public class AlbumsWindow extends Scrollable{
         c.gridx = 1;
         filterPanel.add(ratingJTextField, c);
         this.pack();
+    }
+
+    public void mouse(){
+        super.getFilterButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+            }
+        });
+
+        super.getSelectButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+            }
+        });
     }
 }

@@ -14,12 +14,12 @@ public class Main {
         DataBaseConnector.setPassword("maaslak");
         try {
             dataBaseConnector = new DataBaseConnector();
-            MainWindow mainWindow = new MainWindow();
+            //MainWindow mainWindow = new MainWindow();
         } catch (SQLException e) {
             System.out.println("Nie udalo sie polaczyc z baza danych");
             e.printStackTrace();
         }
-
+        MainWindow mainWindow = new MainWindow();
         try {
             dataBaseConnector.disconnect();
         } catch (SQLException e) {

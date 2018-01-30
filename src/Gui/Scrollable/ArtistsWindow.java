@@ -15,18 +15,15 @@ public class ArtistsWindow extends Scrollable {
     private DatePicker from, to;
     private GridBagConstraints c;
 
+    
+
 
     public ArtistsWindow() {
         super();
         c = new GridBagConstraints();
         setFilterPanel();
 
-        super.getFilterButton().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                super.mouseClicked(mouseEvent);
-            }
-        });
+        mouse();
     }
 
     public void setFilterPanel() {
@@ -59,5 +56,21 @@ public class ArtistsWindow extends Scrollable {
         c.gridx = 1;
         filterPanel.add(nationalityJTextField, c);
         this.pack();
+    }
+
+    public void mouse(){
+        super.getFilterButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+            }
+        });
+
+        super.getSelectButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+            }
+        });
     }
 }
