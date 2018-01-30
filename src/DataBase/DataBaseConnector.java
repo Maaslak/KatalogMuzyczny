@@ -1,9 +1,10 @@
 package DataBase;
 
-import java.sql.Connection;
+import JavaObjects.Zespol;
 
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+
+import java.util.ArrayList;
 import java.util.Properties;
 
 public class DataBaseConnector {
@@ -11,8 +12,10 @@ public class DataBaseConnector {
     private Properties connectionProperties;
     private static String user;
     private static String password;
+    private ArrayList<Zespol> zespols;
 
     public DataBaseConnector() throws SQLException {
+        zespols = new ArrayList<>();
         connect();
     }
 
@@ -20,7 +23,41 @@ public class DataBaseConnector {
         connectionProperties = new Properties();
         connectionProperties.put("user", user);
         connectionProperties.put("password", password);
-        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1522:orcl", connectionProperties);
+        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", connectionProperties);
+    }
+
+    public ArrayList<Zespol> getZespoly() throws Exception {
+        boolean error = false;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT * FROM ZESPOLY");
+            while (resultSet.next()){
+                Zespol zespol = new Zespol(resultSet.getString(1), resultSet.getDate(2), resultSet.getString(3), resultSet.getString(4));
+                zespols.add(zespol);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            error = true;
+        }
+        finally {
+        if (resultSet != null) {
+            try {
+                resultSet.close();
+            } catch (SQLException e) {
+                }
+        }
+        if (statement != null) {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                }
+            }
+         }
+         if (error)
+             throw new Exception("Nie udalo sie pobrac zespolow");
+        return zespols;
     }
 
     public void disconnect() throws SQLException {
