@@ -133,7 +133,7 @@ public class DataBaseConnector {
             }
         }
         if (error)
-            throw new Exception("Nie udalo sie pobrac albumow");
+            throw new Exception("Nie udalo sie pobrac koncertow");
         return koncerty;
     }
 
@@ -167,7 +167,7 @@ public class DataBaseConnector {
             }
         }
         if (error)
-            throw new Exception("Nie udalo sie pobrac albumow");
+            throw new Exception("Nie udalo sie pobrac festiwali");
         return festiwale;
     }
 

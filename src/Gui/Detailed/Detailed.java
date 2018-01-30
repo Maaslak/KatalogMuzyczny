@@ -5,7 +5,7 @@ import Gui.Scrollable.Scrollable;
 import javax.swing.*;
 import java.awt.*;
 
-public abstract class Detailed {
+public abstract class Detailed extends JPanel {
 
     private JPanel mainPanel;
     private JTable table1;
