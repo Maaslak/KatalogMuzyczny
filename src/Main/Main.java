@@ -27,9 +27,10 @@ public class Main {
     public static void main(String [] args) {
         DataBaseConnector.setUser("MAASLAK");
         DataBaseConnector.setPassword("MAASLAK");
+        MainWindow mainWindow = new MainWindow();
         try {
             dataBaseConnector = new DataBaseConnector();
-            MainWindow mainWindow = new MainWindow();
+
             //testZespoly();
         } catch (SQLException e) {
             System.out.println("Nie udalo sie polaczyc z baza danych");

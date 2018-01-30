@@ -1,6 +1,7 @@
 package Gui.Scrollable;
 
 import DataBase.DataBaseConnector;
+import Gui.Detailed.ArtistWindow;
 import JavaObjects.Zespol;
 import com.github.lgooddatepicker.components.DatePicker;
 
@@ -91,10 +92,15 @@ public class ArtistsWindow extends Scrollable {
             }
         });
 
+
+
         super.getSelectButton().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
+                if(!getTable1().getSelectionModel().isSelectionEmpty()) {
+                    ArtistWindow artistWindow = new ArtistWindow(zespoly.get(getTable1().getSelectedRow()));
+                }
             }
         });
     }

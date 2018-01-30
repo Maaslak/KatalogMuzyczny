@@ -1,5 +1,6 @@
 package Gui.Detailed;
 
+import JavaObjects.Zespol;
 import com.github.lgooddatepicker.components.DatePicker;
 
 import javax.swing.*;
@@ -9,10 +10,12 @@ import java.awt.event.MouseEvent;
 
 public class ArtistWindow extends Detailed{
 
+    private Zespol zespol;
     private GridBagConstraints c;
 
-    public ArtistWindow(){
+    public ArtistWindow(Zespol zespol){
         super();
+        this.zespol = zespol;
         c = new GridBagConstraints();
         setInformationPanel();
 
