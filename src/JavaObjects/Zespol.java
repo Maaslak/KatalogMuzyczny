@@ -48,6 +48,6 @@ public class Zespol {
 
     @Override
     public String toString() {
-        return "Nazwa " + nazwa + "\nData " + date.toString() + "\nMiasto zalozenia " + miasto_zalozenia + "\nKraj zalozenia " + kraj_zalozenia + "\n\n";
+        return "Nazwa: " + nazwa + "\nData: " + date.toString() + "\nMiasto zalozenia: " + miasto_zalozenia + "\nKraj zalozenia: " + kraj_zalozenia + "\n\n";
     }
 }

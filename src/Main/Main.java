@@ -30,7 +30,7 @@ public class Main {
         try {
             dataBaseConnector = new DataBaseConnector();
             MainWindow mainWindow = new MainWindow();
-            testZespoly();
+            //testZespoly();
         } catch (SQLException e) {
             System.out.println("Nie udalo sie polaczyc z baza danych");
             e.printStackTrace();
