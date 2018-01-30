@@ -1,12 +1,15 @@
 package Gui.Scrollable;
 
 import DataBase.DataBaseConnector;
+import JavaObjects.Album;
 import com.github.lgooddatepicker.components.DatePicker;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 public class AlbumsWindow extends Scrollable{
     private JLabel date, name, rating;
@@ -14,6 +17,7 @@ public class AlbumsWindow extends Scrollable{
     private JTextField ratingJTextField;
     private DatePicker from, to;
     private GridBagConstraints c;
+    private ArrayList<Album> albums;
 
 
     public AlbumsWindow(DataBaseConnector dataBaseConnector) {
@@ -21,6 +25,23 @@ public class AlbumsWindow extends Scrollable{
         c = new GridBagConstraints();
         setFilterPanel();
 
+        try {
+            this.albums = dataBaseConnector.getAlbumy();
+            DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
+            String header[] = new String[] { "Nazwa", "Data_wydania", "Ocena",
+                    "Język" };
+
+            model.setColumnIdentifiers(header);
+            for(int i=0; i<albums.size();i++){
+                model.addRow(new Object[] {albums.get(i).getNazwa(), albums.get(i).getDate(), albums.get(i).getOcena(), albums.get(i).getJezyk()});
+            }
+            getTable1().setModel(model);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            //TODO wyskakujace okienko z bledem
+        }
+        
         mouse();
     }
 
