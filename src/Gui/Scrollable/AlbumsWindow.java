@@ -1,5 +1,6 @@
 package Gui.Scrollable;
 
+import DataBase.DataBaseConnector;
 import com.github.lgooddatepicker.components.DatePicker;
 
 import javax.swing.*;
@@ -15,8 +16,8 @@ public class AlbumsWindow extends Scrollable{
     private GridBagConstraints c;
 
 
-    public AlbumsWindow() {
-        super();
+    public AlbumsWindow(DataBaseConnector dataBaseConnector) {
+        super(dataBaseConnector);
         c = new GridBagConstraints();
         setFilterPanel();
 

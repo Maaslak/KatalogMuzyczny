@@ -1,5 +1,6 @@
 package Gui.Scrollable;
 
+import DataBase.DataBaseConnector;
 import Gui.Detailed.ConcertWindow;
 import Gui.Detailed.FestivalWindow;
 import com.github.lgooddatepicker.components.DatePicker;
@@ -25,8 +26,8 @@ public class ConcertsAndFestivalsWindow extends Scrollable {
     private Festival festival;
     */
 
-    public ConcertsAndFestivalsWindow() {
-        super();
+    public ConcertsAndFestivalsWindow(DataBaseConnector dataBaseConnector) {
+        super(dataBaseConnector);
 
         c = new GridBagConstraints();
         setFilterPanel();

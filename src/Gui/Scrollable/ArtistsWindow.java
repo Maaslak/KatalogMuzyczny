@@ -1,11 +1,16 @@
 package Gui.Scrollable;
 
+import DataBase.DataBaseConnector;
+import JavaObjects.Zespol;
 import com.github.lgooddatepicker.components.DatePicker;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 
 public class ArtistsWindow extends Scrollable {
@@ -15,13 +20,33 @@ public class ArtistsWindow extends Scrollable {
     private DatePicker from, to;
     private GridBagConstraints c;
 
-    
+    private ArrayList<Zespol> zespoly;
 
 
-    public ArtistsWindow() {
-        super();
+    public ArtistsWindow(DataBaseConnector dataBaseConnector) {
+        super(dataBaseConnector);
+
+        try {
+            this.zespoly = dataBaseConnector.getZespoly();
+            DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
+            model.addColumn("nazwa");
+            model.addColumn("data_zalozenia");
+            model.addColumn("miast_zalozenia");
+            model.addColumn("kraj_zalozenia");
+
+            for(int i=0; i<zespoly.size();i++){
+                model.addRow(new Object[] {zespoly.get(i).getNazwa(), zespoly.get(i).getDate(), zespoly.get(i).getMiasto_zalozenia(), zespoly.get(i).getKraj_zalozenia()});
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            //TODO wyskakujace okienko z bledem
+        }
+
         c = new GridBagConstraints();
         setFilterPanel();
+
+
 
         mouse();
     }

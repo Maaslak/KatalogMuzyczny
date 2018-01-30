@@ -1,5 +1,7 @@
 package Gui.Scrollable;
 
+import DataBase.DataBaseConnector;
+
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -11,8 +13,10 @@ public abstract class Scrollable extends JFrame {
     private JButton selectButton;
     protected JPanel filterPanel;
     private JButton filterButton;
+    private DataBaseConnector dataBaseConnector;
 
-    public Scrollable() {
+    public Scrollable(DataBaseConnector dataBaseConnector) {
+        this.dataBaseConnector = dataBaseConnector;
         this.setContentPane(mainPanel);
         this.pack();
     }
