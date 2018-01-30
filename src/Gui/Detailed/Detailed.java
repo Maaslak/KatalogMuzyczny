@@ -5,7 +5,7 @@ import Gui.Scrollable.Scrollable;
 import javax.swing.*;
 import java.awt.*;
 
-public abstract class Detailed {
+public abstract class Detailed extends JFrame{
 
     private JPanel mainPanel;
     private JTable table1;
@@ -16,7 +16,8 @@ public abstract class Detailed {
     private JButton deleteButton;
 
     public Detailed(){
-
+        this.setContentPane(mainPanel);
+        this.pack();
     }
 
     public JButton getSelectButton() {

@@ -100,6 +100,7 @@ public class ArtistsWindow extends Scrollable {
                 super.mouseClicked(mouseEvent);
                 if(!getTable1().getSelectionModel().isSelectionEmpty()) {
                     ArtistWindow artistWindow = new ArtistWindow(zespoly.get(getTable1().getSelectedRow()));
+                    artistWindow.setVisible(true);
                 }
             }
         });
