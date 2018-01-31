@@ -94,7 +94,7 @@ public class ArtistsWindow extends Scrollable {
                 try {
                     zespoly.clear();
                     //boolean temp[] = {};
-                    zespoly = getDataBaseConnector().getZespoly(nameJTextField.getText(),null,null,null,nationality.getText());
+                    zespoly = getDataBaseConnector().getZespoly(nameJTextField.getText(),null,null,"",nationalityJTextField.getText());
                     DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
                     model.getDataVector().removeAllElements();
                     model.fireTableDataChanged();
