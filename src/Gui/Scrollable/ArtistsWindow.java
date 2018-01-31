@@ -1,6 +1,8 @@
 package Gui.Scrollable;
 
 import DataBase.DataBaseConnector;
+import Gui.Change.AddOrEditAlbumWindow;
+import Gui.Change.AddOrEditArtistWindow;
 import Gui.Detailed.ArtistWindow;
 import JavaObjects.Zespol;
 import com.github.lgooddatepicker.components.DatePicker;
@@ -12,6 +14,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class ArtistsWindow extends Scrollable {
@@ -90,7 +93,8 @@ public class ArtistsWindow extends Scrollable {
                 super.mouseClicked(mouseEvent);
                 try {
                     zespoly.clear();
-                    zespoly = getDataBaseConnector().getZespoly();
+                    //boolean temp[] = {};
+                    zespoly = getDataBaseConnector().getZespoly(nameJTextField.getText(),null,null,null,nationality.getText());
                     DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
                     model.getDataVector().removeAllElements();
                     model.fireTableDataChanged();
@@ -117,5 +121,37 @@ public class ArtistsWindow extends Scrollable {
                 }
             }
         });
+
+        super.getAddButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                AddOrEditArtistWindow addOrEditArtistWindow = new AddOrEditArtistWindow(getDataBaseConnector(),temp);
+                addOrEditArtistWindow.setVisible(true);
+                setVisible(false);
+            }
+        });
+
+        /*super.getEditButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                if(!getTable1().getSelectionModel().isSelectionEmpty()) {
+                    AddOrEditArtistWindow addOrEditArtistWindow = new AddOrEditArtistWindow(getDataBaseConnector(),temp,zespoly.get(getTable1().getSelectedRow()));
+                    addOrEditArtistWindow.setVisible(true);
+                    setVisible(false);
+                }
+            }
+        });
+
+        super.getDeleteButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                if(!getTable1().getSelectionModel().isSelectionEmpty()) {
+                    // Drop
+                };
+            }
+        });*/
     }
 }
