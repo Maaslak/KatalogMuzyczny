@@ -32,7 +32,7 @@ public class DataBaseConnector {
         connectionProperties = new Properties();
         connectionProperties.put("user", user);
         connectionProperties.put("password", password);
-        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", connectionProperties);
+        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1522:orcl", connectionProperties);
     }
 
     public ArrayList<Zespol> getZespoly() throws Exception {
@@ -44,7 +44,9 @@ public class DataBaseConnector {
     public ArrayList<Zespol> getZespoly(String nazwa, Date dataBegin, Date dataEnd, String kraj_zalozenia, String miasto_zalozenia) throws Exception {
         String query= new String();
         query += "SELECT * FROM ZESPOLY WHERE ";
-        if(nazwa != null) query += "NAZWA LIKE ? ";
+        if(!nazwa.isEmpty()) {
+            query += "NAZWA LIKE ? ";
+        }
         if(dataBegin != null){
             if(query.charAt(query.length() - 1) == '?')
                 query += "AND ";
@@ -53,22 +55,23 @@ public class DataBaseConnector {
         if(dataEnd != null){
             if(query.charAt(query.length() - 1) == '?')
                 query += "AND ";
-            query += "data_zalozenia < ?";
+            query += "data_zalozenia < ? ";
         }
-        if(kraj_zalozenia != null){
+        if(kraj_zalozenia != null)
+        if(kraj_zalozenia.isEmpty()){
             if(query.charAt(query.length() - 1) == '?')
                 query += "AND ";
-            query += "kraj_zalozenia = ?";
+            query += "kraj_zalozenia = ? ";
         }
-        if(miasto_zalozenia != null){
+        if(!miasto_zalozenia.isEmpty()){
             if(query.charAt(query.length() - 1) == '?')
                 query += "AND ";
-            query += "miasto_zalozenia = ?";
+            query += "miasto_zalozenia = ? ";
         }
         PreparedStatement statement = null;
         statement = connection.prepareStatement(query);
         int i = 1;
-        if(nazwa != null) {
+        if(!nazwa.isEmpty()) {
             statement.setString(i, nazwa);
             i ++;
         }
@@ -80,11 +83,12 @@ public class DataBaseConnector {
             statement.setDate(i, dataEnd);
             i++;
         }
-        if(kraj_zalozenia != null){
+        if(kraj_zalozenia!=null)
+        if(!kraj_zalozenia.isEmpty()){
             statement.setString(i, kraj_zalozenia);
             i++;
         }
-        if(miasto_zalozenia != null){
+        if(!miasto_zalozenia.isEmpty()){
             statement.setString(i, miasto_zalozenia);
             i++;
         }
@@ -125,7 +129,7 @@ public class DataBaseConnector {
     }
 
     public ArrayList<Album> getAlbumy() throws Exception {
-        albumy = null;
+        albumy.clear();
         boolean error = false;
         Statement statement = null;
         ResultSet resultSet = null;
@@ -160,7 +164,7 @@ public class DataBaseConnector {
     }
 
     public ArrayList<Koncert> getKoncert() throws Exception {
-        koncerty = null;
+        koncerty.clear();
         boolean error = false;
         Statement statement = null;
         ResultSet resultSet = null;
@@ -195,7 +199,7 @@ public class DataBaseConnector {
     }
 
     public ArrayList<Festiwal> getFestiwale() throws Exception {
-        festiwale = null;
+        festiwale.clear();
         boolean error = false;
         Statement statement = null;
         ResultSet resultSet = null;
