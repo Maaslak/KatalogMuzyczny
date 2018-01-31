@@ -25,8 +25,8 @@ public class Main {
     }
 
     public static void main(String [] args) {
-        DataBaseConnector.setUser("MAASLAK");
-        DataBaseConnector.setPassword("MAASLAK");
+        DataBaseConnector.setUser("maaslak");
+        DataBaseConnector.setPassword("maaslak");
         MainWindow mainWindow = new MainWindow();
         try {
             dataBaseConnector = new DataBaseConnector();

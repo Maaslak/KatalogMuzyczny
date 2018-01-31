@@ -32,16 +32,71 @@ public class DataBaseConnector {
         connectionProperties = new Properties();
         connectionProperties.put("user", user);
         connectionProperties.put("password", password);
-        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", connectionProperties);
+        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1522:orcl", connectionProperties);
     }
 
     public ArrayList<Zespol> getZespoly() throws Exception {
+        PreparedStatement statement = null;
+        statement = connection.prepareStatement("SELECT * FROM ZESPOLY");
+        return executegetZespoly(statement);
+    }
+
+    public ArrayList<Zespol> getZespoly(String nazwa, Date dataBegin, Date dataEnd, String kraj_zalozenia, String miasto_zalozenia) throws Exception {
+        String query= new String();
+        query += "SELECT * FROM ZESPOLY WHERE ";
+        if(nazwa != null) query += "NAZWA LIKE ? ";
+        if(dataBegin != null){
+            if(query.charAt(query.length() - 1) == '?')
+                query += "AND ";
+            query += "data_zalozenia > ? ";
+        }
+        if(dataEnd != null){
+            if(query.charAt(query.length() - 1) == '?')
+                query += "AND ";
+            query += "data_zalozenia < ?";
+        }
+        if(kraj_zalozenia != null){
+            if(query.charAt(query.length() - 1) == '?')
+                query += "AND ";
+            query += "kraj_zalozenia = ?";
+        }
+        if(miasto_zalozenia != null){
+            if(query.charAt(query.length() - 1) == '?')
+                query += "AND ";
+            query += "miasto_zalozenia = ?";
+        }
+        PreparedStatement statement = null;
+        statement = connection.prepareStatement(query);
+        int i = 1;
+        if(nazwa != null) {
+            statement.setString(i, nazwa);
+            i ++;
+        }
+        if(dataBegin != null){
+            statement.setDate(i, dataBegin);
+            i++;
+        }
+        if(dataEnd != null){
+            statement.setDate(i, dataEnd);
+            i++;
+        }
+        if(kraj_zalozenia != null){
+            statement.setString(i, kraj_zalozenia);
+            i++;
+        }
+        if(miasto_zalozenia != null){
+            statement.setString(i, miasto_zalozenia);
+            i++;
+        }
+        return executegetZespoly(statement);
+    }
+
+    private ArrayList<Zespol> executegetZespoly(PreparedStatement statement) throws Exception {
+        zespoly = null;
         boolean error = false;
-        Statement statement = null;
         ResultSet resultSet = null;
         try {
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM ZESPOLY");
+            resultSet = statement.executeQuery();
             while (resultSet.next()){
                 Zespol zespol = new Zespol(resultSet.getString(1), resultSet.getDate(2), resultSet.getString(3), resultSet.getString(4));
                 zespoly.add(zespol);
@@ -51,25 +106,26 @@ public class DataBaseConnector {
             error = true;
         }
         finally {
-        if (resultSet != null) {
-            try {
-                resultSet.close();
-            } catch (SQLException e) {
-                }
-        }
-        if (statement != null) {
-            try {
-                statement.close();
-            } catch (SQLException e) {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
                 }
             }
-         }
-         if (error)
-             throw new Exception("Nie udalo sie pobrac zespolow");
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
+        if (error)
+            throw new Exception("Nie udalo sie pobrac zespolow");
         return zespoly;
     }
 
     public ArrayList<Album> getAlbumy() throws Exception {
+        albumy = null;
         boolean error = false;
         Statement statement = null;
         ResultSet resultSet = null;
@@ -104,6 +160,7 @@ public class DataBaseConnector {
     }
 
     public ArrayList<Koncert> getKoncert() throws Exception {
+        koncerty = null;
         boolean error = false;
         Statement statement = null;
         ResultSet resultSet = null;
@@ -138,6 +195,7 @@ public class DataBaseConnector {
     }
 
     public ArrayList<Festiwal> getFestiwale() throws Exception {
+        festiwale = null;
         boolean error = false;
         Statement statement = null;
         ResultSet resultSet = null;
