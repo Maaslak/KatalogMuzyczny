@@ -15,14 +15,25 @@ public abstract class Scrollable extends JFrame {
     private JButton filterButton;
     private JButton addButton;
     private JButton deleteButton;
+    private JButton exitButton;
+    private JButton editButton;
     private DataBaseConnector dataBaseConnector;
+    private JFrame father;
 
-    public Scrollable(DataBaseConnector dataBaseConnector) {
-        this.dataBaseConnector = dataBaseConnector;
+    public Scrollable(DataBaseConnector dataBaseConnector, JFrame father) {
+        this.setDataBaseConnector(dataBaseConnector);
+        this.father = father;
         this.setContentPane(mainPanel);
         this.pack();
+        getExitButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                setVisible(false);
+                father.setVisible(true);
+            }
+        });
     }
-
 
     public JButton getFilterButton() {
         return filterButton;
@@ -46,5 +57,45 @@ public abstract class Scrollable extends JFrame {
 
     public void setTable1(JTable table1) {
         this.table1 = table1;
+    }
+
+    public DataBaseConnector getDataBaseConnector() {
+        return dataBaseConnector;
+    }
+
+    public void setDataBaseConnector(DataBaseConnector dataBaseConnector) {
+        this.dataBaseConnector = dataBaseConnector;
+    }
+
+    public JButton getExitButton() {
+        return exitButton;
+    }
+
+    public void setExitButton(JButton exitButton) {
+        this.exitButton = exitButton;
+    }
+
+    public JButton getAddButton() {
+        return addButton;
+    }
+
+    public void setAddButton(JButton addButton) {
+        this.addButton = addButton;
+    }
+
+    public JButton getDeleteButton() {
+        return deleteButton;
+    }
+
+    public void setDeleteButton(JButton deleteButton) {
+        this.deleteButton = deleteButton;
+    }
+
+    public JButton getEditButton() {
+        return editButton;
+    }
+
+    public void setEditButton(JButton editButton) {
+        this.editButton = editButton;
     }
 }

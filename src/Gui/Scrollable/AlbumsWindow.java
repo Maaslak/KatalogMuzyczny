@@ -1,6 +1,8 @@
 package Gui.Scrollable;
 
 import DataBase.DataBaseConnector;
+import Gui.Change.AddAlbumWindow;
+import Gui.Detailed.AlbumWindow;
 import JavaObjects.Album;
 import com.github.lgooddatepicker.components.DatePicker;
 
@@ -20,8 +22,8 @@ public class AlbumsWindow extends Scrollable{
     private ArrayList<Album> albums;
 
 
-    public AlbumsWindow(DataBaseConnector dataBaseConnector) {
-        super(dataBaseConnector);
+    public AlbumsWindow(DataBaseConnector dataBaseConnector, JFrame father) {
+        super(dataBaseConnector,father);
         c = new GridBagConstraints();
         setFilterPanel();
 
@@ -82,13 +84,52 @@ public class AlbumsWindow extends Scrollable{
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
+                try {
+                    albums.clear();
+                    albums = getDataBaseConnector().getAlbumy();
+                    DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
+                    model.getDataVector().removeAllElements();
+                    model.fireTableDataChanged();
+                    for(int i=0; i<albums.size();i++){
+                        model.addRow(new Object[] {albums.get(i).getNazwa(), albums.get(i).getDate(), albums.get(i).getOcena(), albums.get(i).getJezyk()});
+                    }
+                    getTable1().setModel(model);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
+        AlbumsWindow temp = this;
         super.getSelectButton().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
+                if(!getTable1().getSelectionModel().isSelectionEmpty()) {
+                    AlbumWindow albumWindow = new AlbumWindow(getDataBaseConnector(),temp,albums.get(getTable1().getSelectedRow()));
+                    albumWindow.setVisible(true);
+                    setVisible(false);
+                }
+            }
+        });
+
+        super.getAddButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                AddAlbumWindow addAlbumWindow = new AddAlbumWindow(getDataBaseConnector(),temp);
+                addAlbumWindow.setVisible(true);
+                setVisible(false);
+            }
+        });
+
+        super.getEditButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                AddAlbumWindow addAlbumWindow = new AddAlbumWindow(getDataBaseConnector(),temp);
+                addAlbumWindow.setVisible(true);
+                setVisible(false);
             }
         });
     }

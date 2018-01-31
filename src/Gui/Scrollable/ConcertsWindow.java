@@ -1,8 +1,8 @@
 package Gui.Scrollable;
 
 import DataBase.DataBaseConnector;
-import Gui.Detailed.ArtistWindow;
-import JavaObjects.Zespol;
+import Gui.Detailed.ConcertWindow;
+import JavaObjects.Koncert;
 import com.github.lgooddatepicker.components.DatePicker;
 
 import javax.swing.*;
@@ -10,55 +10,46 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-
-public class ArtistsWindow extends Scrollable {
-    private JLabel date, name, nationality;
+public class ConcertsWindow extends Scrollable {
+    private JLabel date, name, festival;
     private JTextField nameJTextField;
-    private JTextField nationalityJTextField;
+    private JCheckBox festivalJCheckBox;
     private DatePicker from, to;
     private GridBagConstraints c;
-    private ArrayList<Zespol> zespoly;
+    //private ConcertWindow concertWindow;
+    private ArrayList<Koncert> koncerty;
 
-
-    public ArtistsWindow(DataBaseConnector dataBaseConnector, JFrame father) {
+    public ConcertsWindow(DataBaseConnector dataBaseConnector, JFrame father) {
         super(dataBaseConnector,father);
-
         try {
-            this.zespoly = dataBaseConnector.getZespoly();
+            this.koncerty = dataBaseConnector.getKoncert();
             DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
-            model.addColumn("nazwa");
-            model.addColumn("data_zalozenia");
-            model.addColumn("miast_zalozenia");
-            model.addColumn("kraj_zalozenia");
-
-            for(int i=0; i<zespoly.size();i++){
-                model.addRow(new Object[] {zespoly.get(i).getNazwa(), zespoly.get(i).getDate(), zespoly.get(i).getMiasto_zalozenia(), zespoly.get(i).getKraj_zalozenia()});
+            String header[] = new String[] { "Nazwa", "Data", "Miasto" };
+            model.setColumnIdentifiers(header);
+            for(int i=0; i<koncerty.size();i++){
+                model.addRow(new Object[] {koncerty.get(i).getNazwa(), koncerty.get(i).getData(), koncerty.get(i).getMiasto_nazwa()});
             }
-
+            getTable1().setModel(model);
         } catch (Exception e) {
             e.printStackTrace();
-            //TODO wyskakujace okienko z bledem
         }
 
         c = new GridBagConstraints();
         setFilterPanel();
-
-
 
         mouse();
     }
 
     public void setFilterPanel() {
         date = new JLabel("Date: ");
-        name = new JLabel("Name (regexp)");
-        nationality = new JLabel("Nationality");
+        name = new JLabel("Name");
+        festival = new JLabel("Rating");
         from = new DatePicker();
         to = new DatePicker();
         nameJTextField = new JTextField(5);
-        nationalityJTextField = new JTextField(5);
+        festivalJCheckBox = new JCheckBox("festivals");
         c.gridy = 0;
         c.gridx = 0;
         filterPanel.add(date, c);
@@ -76,10 +67,10 @@ public class ArtistsWindow extends Scrollable {
         filterPanel.add(nameJTextField, c);
         c.gridy = 3;
         c.gridx = 0;
-        filterPanel.add(nationality, c);
+        filterPanel.add(festival, c);
         c.gridy = 3;
         c.gridx = 1;
-        filterPanel.add(nationalityJTextField, c);
+        filterPanel.add(festivalJCheckBox, c);
         this.pack();
     }
 
@@ -89,13 +80,13 @@ public class ArtistsWindow extends Scrollable {
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 try {
-                    zespoly.clear();
-                    zespoly = getDataBaseConnector().getZespoly();
+                    koncerty.clear();
+                    koncerty = getDataBaseConnector().getKoncert();
                     DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
                     model.getDataVector().removeAllElements();
                     model.fireTableDataChanged();
-                    for(int i=0; i<zespoly.size();i++){
-                        model.addRow(new Object[] {zespoly.get(i).getNazwa(), zespoly.get(i).getDate(), zespoly.get(i).getMiasto_zalozenia(), zespoly.get(i).getKraj_zalozenia()});
+                    for(int i=0; i<koncerty.size();i++){
+                        model.addRow(new Object[] {koncerty.get(i).getNazwa(), koncerty.get(i).getData(), koncerty.get(i).getMiasto_nazwa()});
                     }
                     getTable1().setModel(model);
                 } catch (Exception e) {
@@ -104,15 +95,14 @@ public class ArtistsWindow extends Scrollable {
             }
         });
 
-
-        ArtistsWindow temp = this;
+        ConcertsWindow temp = this;
         super.getSelectButton().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 if(!getTable1().getSelectionModel().isSelectionEmpty()) {
-                    ArtistWindow artistWindow = new ArtistWindow(getDataBaseConnector(),temp,zespoly.get(getTable1().getSelectedRow()));
-                    artistWindow.setVisible(true);
+                    ConcertWindow concertWindow= new ConcertWindow(getDataBaseConnector(),temp,koncerty.get(getTable1().getSelectedRow()));
+                    concertWindow.setVisible(true);
                     setVisible(false);
                 }
             }

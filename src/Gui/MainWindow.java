@@ -3,22 +3,24 @@ package Gui;
 import DataBase.DataBaseConnector;
 import Gui.Scrollable.AlbumsWindow;
 import Gui.Scrollable.ArtistsWindow;
-import Gui.Scrollable.ConcertsAndFestivalsWindow;
-import Gui.Scrollable.ConcertsAndFestivalsWindow;
+import Gui.Scrollable.ConcertsWindow;
+import Gui.Scrollable.FestivalsWindow;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
-public class MainWindow {
+public class MainWindow{
     private JPanel mainPanel;
     private JButton artistsButton;
     private JButton albumsButton;
     private JButton concertsButton;
+    private JButton festivalsButton;
     private ArtistsWindow artistsWindow;
     private AlbumsWindow albumsWindow;
-    private ConcertsAndFestivalsWindow concertsWindow;
+    private ConcertsWindow concertsWindow;
+    private FestivalsWindow festivalsWindow;
     private DataBaseConnector dataBaseConnector;
 
     public MainWindow() {
@@ -31,18 +33,17 @@ public class MainWindow {
         try {
             this.dataBaseConnector = new DataBaseConnector();
 
-            artistsWindow = new ArtistsWindow(dataBaseConnector);
-            //artistsWindow.setFilterPanel();
-            albumsWindow = new AlbumsWindow(dataBaseConnector);
-            //albumsWindow.setFilterPanel();
-            concertsWindow = new ConcertsAndFestivalsWindow(dataBaseConnector);
-            //concertsWindow.setFilterPanel();
+            artistsWindow = new ArtistsWindow(dataBaseConnector,frame);
+            albumsWindow = new AlbumsWindow(dataBaseConnector,frame);
+            concertsWindow = new ConcertsWindow(dataBaseConnector,frame);
+            festivalsWindow = new FestivalsWindow(dataBaseConnector,frame);
 
             artistsButton.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent mouseEvent) {
                     super.mouseClicked(mouseEvent);
                     artistsWindow.setVisible(true);
+                    frame.setVisible(false);
                 }
             });
             albumsButton.addMouseListener(new MouseAdapter() {
@@ -50,6 +51,7 @@ public class MainWindow {
                 public void mouseClicked(MouseEvent mouseEvent) {
                     super.mouseClicked(mouseEvent);
                     albumsWindow.setVisible(true);
+                    frame.setVisible(false);
                 }
             });
             concertsButton.addMouseListener(new MouseAdapter() {
@@ -57,6 +59,15 @@ public class MainWindow {
                 public void mouseClicked(MouseEvent mouseEvent) {
                     super.mouseClicked(mouseEvent);
                     concertsWindow.setVisible(true);
+                    frame.setVisible(false);
+                }
+            });
+            festivalsButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent mouseEvent) {
+                    super.mouseClicked(mouseEvent);
+                    festivalsWindow.setVisible(true);
+                    frame.setVisible(false);
                 }
             });
         } catch (SQLException e) {

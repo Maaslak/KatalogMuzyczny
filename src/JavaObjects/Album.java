@@ -49,6 +49,6 @@ public class Album {
 
     @Override
     public String toString() {
-        return "Nazwa: " + nazwa + "\nData wydania: " + dataWydania + "\nOcena" + ocena + "\nJezyk: " + jezyk + "\n\n";
+        return "Nazwa: " + nazwa + "\nData wydania: " + dataWydania + "\nOcena: " + ocena + "\nJezyk: " + jezyk + "\n\n";
     }
 }
