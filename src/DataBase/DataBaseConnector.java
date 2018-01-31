@@ -32,7 +32,7 @@ public class DataBaseConnector {
         connectionProperties = new Properties();
         connectionProperties.put("user", user);
         connectionProperties.put("password", password);
-        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1522:orcl", connectionProperties);
+        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", connectionProperties);
     }
 
     public ArrayList<Zespol> getZespoly() throws Exception {
@@ -92,7 +92,7 @@ public class DataBaseConnector {
     }
 
     private ArrayList<Zespol> executegetZespoly(PreparedStatement statement) throws Exception {
-        zespoly = null;
+        zespoly.clear();
         boolean error = false;
         ResultSet resultSet = null;
         try {

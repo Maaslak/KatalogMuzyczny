@@ -27,7 +27,6 @@ public class Main {
     public static void main(String [] args) {
         DataBaseConnector.setUser("Blagej");
         DataBaseConnector.setPassword("emc2emc2");
-        MainWindow mainWindow = new MainWindow();
         try {
             dataBaseConnector = new DataBaseConnector();
 
@@ -36,6 +35,7 @@ public class Main {
             System.out.println("Nie udalo sie polaczyc z baza danych");
             e.printStackTrace();
         }
+        MainWindow mainWindow = new MainWindow();
 
         try {
             dataBaseConnector.disconnect();
