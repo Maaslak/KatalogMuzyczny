@@ -2,10 +2,8 @@ package Gui.Detailed;
 
 //import Gui.Scrollable.Scrollable;
 import DataBase.DataBaseConnector;
-import Gui.Detailed.Detailed;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -23,7 +21,7 @@ public abstract class Detailed extends JFrame{
     private JFrame father;
 
     public Detailed(DataBaseConnector dataBaseConnector, JFrame father){
-        this.dataBaseConnector = dataBaseConnector;
+        this.setDataBaseConnector(dataBaseConnector);
         this.father = father;
         this.setContentPane(mainPanel);
         this.pack();
@@ -75,5 +73,21 @@ public abstract class Detailed extends JFrame{
 
     public void setExitButton(JButton exitButton) {
         this.exitButton = exitButton;
+    }
+
+    public DataBaseConnector getDataBaseConnector() {
+        return dataBaseConnector;
+    }
+
+    public void setDataBaseConnector(DataBaseConnector dataBaseConnector) {
+        this.dataBaseConnector = dataBaseConnector;
+    }
+
+    public JTable getTable1() {
+        return table1;
+    }
+
+    public void setTable1(JTable table1) {
+        this.table1 = table1;
     }
 }

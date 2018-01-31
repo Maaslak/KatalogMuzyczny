@@ -1,7 +1,7 @@
 package JavaObjects;
 
+import java.awt.*;
 import java.sql.Date;
-import java.time.LocalDate;
 
 public class Zespol {
     private String nazwa, miasto_zalozenia, kraj_zalozenia;

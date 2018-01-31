@@ -1,7 +1,7 @@
 package Gui.Scrollable;
 
 import DataBase.DataBaseConnector;
-import Gui.Change.AddAlbumWindow;
+import Gui.Change.AddOrEditAlbumWindow;
 import Gui.Detailed.AlbumWindow;
 import JavaObjects.Album;
 import com.github.lgooddatepicker.components.DatePicker;
@@ -117,8 +117,8 @@ public class AlbumsWindow extends Scrollable{
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
-                AddAlbumWindow addAlbumWindow = new AddAlbumWindow(getDataBaseConnector(),temp);
-                addAlbumWindow.setVisible(true);
+                AddOrEditAlbumWindow addOrEditAlbumWindow = new AddOrEditAlbumWindow(getDataBaseConnector(),temp);
+                addOrEditAlbumWindow.setVisible(true);
                 setVisible(false);
             }
         });
@@ -127,9 +127,11 @@ public class AlbumsWindow extends Scrollable{
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
-                AddAlbumWindow addAlbumWindow = new AddAlbumWindow(getDataBaseConnector(),temp);
-                addAlbumWindow.setVisible(true);
-                setVisible(false);
+                if(!getTable1().getSelectionModel().isSelectionEmpty()) {
+                    AddOrEditAlbumWindow addOrEditAlbumWindow = new AddOrEditAlbumWindow(getDataBaseConnector(),temp,albums.get(getTable1().getSelectedRow()));
+                    addOrEditAlbumWindow.setVisible(true);
+                    setVisible(false);
+                }
             }
         });
     }

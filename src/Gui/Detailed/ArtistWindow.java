@@ -1,9 +1,9 @@
 package Gui.Detailed;
 
 import DataBase.DataBaseConnector;
+import Gui.Change.AddOrEditAlbumWindow;
 import JavaObjects.Album;
 import JavaObjects.Zespol;
-import com.github.lgooddatepicker.components.DatePicker;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,10 +40,14 @@ public class ArtistWindow extends Detailed{
     }
 
     public void mouse(){
+        ArtistWindow temp = this;
         super.getAddButton().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
+                AddOrEditAlbumWindow addOrEditAlbumWindow = new AddOrEditAlbumWindow(getDataBaseConnector(),zespol,temp);
+                addOrEditAlbumWindow.setVisible(true);
+                setVisible(false);
             }
         });
 
@@ -58,6 +62,11 @@ public class ArtistWindow extends Detailed{
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
+                if(!getTable1().getSelectionModel().isSelectionEmpty()) {
+                    AddOrEditAlbumWindow addOrEditAlbumWindow = new AddOrEditAlbumWindow(getDataBaseConnector(),temp,albumy.get(getTable1().getSelectedRow()));
+                    addOrEditAlbumWindow.setVisible(true);
+                    setVisible(false);
+                }
             }
         });
 

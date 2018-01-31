@@ -15,7 +15,7 @@ public abstract class Change extends JFrame{
     private JFrame father;
 
     public Change(DataBaseConnector dataBaseConnector, JFrame father) {
-        this.dataBaseConnector = dataBaseConnector;
+        this.setDataBaseConnector(dataBaseConnector);
         this.setFather(father);
         this.setContentPane(mainPanel);
         this.pack();
@@ -51,5 +51,13 @@ public abstract class Change extends JFrame{
 
     public void setFather(JFrame father) {
         this.father = father;
+    }
+
+    public DataBaseConnector getDataBaseConnector() {
+        return dataBaseConnector;
+    }
+
+    public void setDataBaseConnector(DataBaseConnector dataBaseConnector) {
+        this.dataBaseConnector = dataBaseConnector;
     }
 }
