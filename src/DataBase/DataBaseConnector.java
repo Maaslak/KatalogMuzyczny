@@ -42,6 +42,8 @@ public class DataBaseConnector {
     }
 
     public ArrayList<Zespol> getZespoly(String nazwa, Date dataBegin, Date dataEnd, String kraj_zalozenia, String miasto_zalozenia) throws Exception {
+        if(nazwa.isEmpty() && dataBegin == null && dataEnd == null && kraj_zalozenia!= null && kraj_zalozenia.isEmpty() && miasto_zalozenia.isEmpty())
+            return getZespoly();
         String query= new String();
         query += "SELECT * FROM ZESPOLY WHERE ";
         if(!nazwa.isEmpty()) {
@@ -57,8 +59,7 @@ public class DataBaseConnector {
                 query += "AND ";
             query += "data_zalozenia < ? ";
         }
-        if(kraj_zalozenia != null)
-        if(kraj_zalozenia.isEmpty()){
+        if(!kraj_zalozenia.isEmpty()){
             if(query.charAt(query.length() - 1) == '?')
                 query += "AND ";
             query += "kraj_zalozenia = ? ";
@@ -83,7 +84,6 @@ public class DataBaseConnector {
             statement.setDate(i, dataEnd);
             i++;
         }
-        if(kraj_zalozenia!=null)
         if(!kraj_zalozenia.isEmpty()){
             statement.setString(i, kraj_zalozenia);
             i++;
@@ -129,13 +129,72 @@ public class DataBaseConnector {
     }
 
     public ArrayList<Album> getAlbumy() throws Exception {
+        PreparedStatement statement = null;
+        statement = connection.prepareStatement("SELECT * FROM ALBUMY");
+        return executegetAlbumy(statement);
+    }
+
+    public ArrayList<Album> getAlbumy(String nazwa, Date dateBegin, Date dateEnd, Float ocena, String jezyk) throws Exception {
+        if(nazwa.isEmpty() && dateBegin == null && dateEnd == null && ocena != null && jezyk.isEmpty())
+            return getAlbumy();
+        String query= new String();
+        query += "SELECT * FROM ALBUMY WHERE ";
+        if(!nazwa.isEmpty()) {
+            query += "NAZWA LIKE ? ";
+        }
+        if(dateBegin != null){
+            if(query.charAt(query.length() - 1) == '?')
+                query += "AND ";
+            query += "data_wydania > ? ";
+        }
+        if(dateEnd != null){
+            if(query.charAt(query.length() - 1) == '?')
+                query += "AND ";
+            query += "data_wydania < ? ";
+        }
+        if(ocena != null){
+                if(query.charAt(query.length() - 1) == '?')
+                    query += "AND ";
+                query += "ocena = ? ";
+            }
+        if(!jezyk.isEmpty()){
+            if(query.charAt(query.length() - 1) == '?')
+                query += "AND ";
+            query += "jezyk = ? ";
+        }
+        PreparedStatement statement = null;
+        statement = connection.prepareStatement(query);
+        int i = 1;
+        if(!nazwa.isEmpty()) {
+            statement.setString(i, nazwa);
+            i ++;
+        }
+        if(dateBegin != null){
+            statement.setDate(i, dateBegin);
+            i++;
+        }
+        if(dateEnd != null){
+            statement.setDate(i, dateEnd);
+            i++;
+        }
+        if(ocena!=null){
+                statement.setFloat(i, ocena);
+                i++;
+            }
+        if(!jezyk.isEmpty()){
+            statement.setString(i, jezyk);
+            i++;
+        }
+        return executegetAlbumy(statement);
+    }
+
+    private ArrayList<Album> executegetAlbumy(PreparedStatement statement) throws Exception {
         albumy.clear();
         boolean error = false;
-        Statement statement = null;
         ResultSet resultSet = null;
         try {
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM ALBUMY");
+
+            resultSet = statement.executeQuery();
             while (resultSet.next()){
                 Album album = new Album(resultSet.getString(1), resultSet.getDate(2), resultSet.getFloat(3), resultSet.getString(4));
                 albumy.add(album);
@@ -164,13 +223,62 @@ public class DataBaseConnector {
     }
 
     public ArrayList<Koncert> getKoncert() throws Exception {
+        PreparedStatement statement = null;
+        statement = connection.prepareStatement("SELECT * FROM KONCERTY");
+        return executegetKoncerty(statement);
+    }
+
+    public ArrayList<Koncert> getKoncert(String nazwa, Date dateBegin, Date dateEnd, String miastoNazwa) throws Exception {
+        if(nazwa.isEmpty() && dateBegin == null && dateEnd == null && miastoNazwa.isEmpty())
+            return getKoncert();
+        String query= new String();
+        query += "SELECT * FROM KONCERTY WHERE ";
+        if(!nazwa.isEmpty()) {
+            query += "NAZWA LIKE ? ";
+        }
+        if(dateBegin != null){
+            if(query.charAt(query.length() - 1) == '?')
+                query += "AND ";
+            query += "data > ? ";
+        }
+        if(dateEnd != null){
+            if(query.charAt(query.length() - 1) == '?')
+                query += "AND ";
+            query += "data < ? ";
+        }
+        if(!miastoNazwa.isEmpty()){
+            if(query.charAt(query.length() - 1) == '?')
+                query += "AND ";
+            query += "Miasto_nazwa = ? ";
+        }
+        PreparedStatement statement = null;
+        statement = connection.prepareStatement(query);
+        int i = 1;
+        if(!nazwa.isEmpty()) {
+            statement.setString(i, nazwa);
+            i ++;
+        }
+        if(dateBegin != null){
+            statement.setDate(i, dateBegin);
+            i++;
+        }
+        if(dateEnd != null){
+            statement.setDate(i, dateEnd);
+            i++;
+        }
+        if(!miastoNazwa.isEmpty()){
+            statement.setString(i, miastoNazwa);
+            i++;
+        }
+        return executegetKoncerty(statement);
+    }
+
+    private ArrayList<Koncert> executegetKoncerty(PreparedStatement statement) throws Exception {
         koncerty.clear();
         boolean error = false;
-        Statement statement = null;
         ResultSet resultSet = null;
         try {
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM KONCERTY");
+            resultSet = statement.executeQuery();
             while (resultSet.next()){
                 Koncert koncert = new Koncert(resultSet.getString(1), resultSet.getDate(2), resultSet.getString(3));
                 koncerty.add(koncert);
@@ -199,13 +307,21 @@ public class DataBaseConnector {
     }
 
     public ArrayList<Festiwal> getFestiwale() throws Exception {
+        PreparedStatement statement = null;
+        statement = connection.prepareStatement("SELECT * FROM FESTIWALE");
+        return executegetFestiwale(statement);
+    }
+    /*
+    public ArrayList<Festiwal> getFestiwale() throws Exception {
+
+    }
+    */
+    private ArrayList<Festiwal> executegetFestiwale(PreparedStatement statement) throws Exception {
         festiwale.clear();
         boolean error = false;
-        Statement statement = null;
         ResultSet resultSet = null;
         try {
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM KONCERTY");
+            resultSet = statement.executeQuery();
             while (resultSet.next()){
                 Festiwal festiwal = new Festiwal(resultSet.getString(1), resultSet.getDate(2), resultSet.getDate(3));
                 festiwale.add(festiwal);
