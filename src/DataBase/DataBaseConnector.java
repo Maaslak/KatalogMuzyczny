@@ -311,11 +311,44 @@ public class DataBaseConnector {
         statement = connection.prepareStatement("SELECT * FROM FESTIWALE");
         return executegetFestiwale(statement);
     }
-    /*
-    public ArrayList<Festiwal> getFestiwale() throws Exception {
 
+    public ArrayList<Festiwal> getFestiwale(String nazwa, Date dateBegin, Date dateEnd) throws Exception {
+        if(nazwa.isEmpty() && dateBegin == null && dateEnd == null)
+            return getFestiwale();
+        String query= new String();
+        query += "SELECT * FROM FESTIWALE WHERE ";
+        if(!nazwa.isEmpty()) {
+            query += "NAZWA LIKE ? ";
+        }
+        if(dateBegin != null){
+            if(query.charAt(query.length() - 1) == '?')
+                query += "AND ";
+            query += "data_rozpoczecia > ? ";
+        }
+        if(dateEnd != null){
+            if(query.charAt(query.length() - 1) == '?')
+                query += "AND ";
+            query += "data_zakonczenia < ? ";
+        }
+
+        PreparedStatement statement = null;
+        statement = connection.prepareStatement(query);
+        int i = 1;
+        if(!nazwa.isEmpty()) {
+            statement.setString(i, nazwa);
+            i ++;
+        }
+        if(dateBegin != null){
+            statement.setDate(i, dateBegin);
+            i++;
+        }
+        if(dateEnd != null){
+            statement.setDate(i, dateEnd);
+            i++;
+        }
+        return executegetFestiwale(statement);
     }
-    */
+
     private ArrayList<Festiwal> executegetFestiwale(PreparedStatement statement) throws Exception {
         festiwale.clear();
         boolean error = false;
