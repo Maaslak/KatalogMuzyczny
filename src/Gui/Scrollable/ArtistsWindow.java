@@ -132,7 +132,7 @@ public class ArtistsWindow extends Scrollable {
             }
         });
 
-        /*super.getEditButton().addMouseListener(new MouseAdapter() {
+        super.getEditButton().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
@@ -152,6 +152,6 @@ public class ArtistsWindow extends Scrollable {
                     // Drop
                 };
             }
-        });*/
+        });
     }
 }

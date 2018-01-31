@@ -1,6 +1,8 @@
 package Gui.Detailed;
 
 import DataBase.DataBaseConnector;
+import Gui.Change.AddOrEditAlbumWindow;
+import Gui.Change.AddOrEditArtistWindow;
 import JavaObjects.Koncert;
 import JavaObjects.Zespol;
 import com.github.lgooddatepicker.components.DatePicker;
@@ -16,7 +18,7 @@ public class ConcertWindow extends Detailed{
     private JLabel info;
     private JLabel head;
     private Koncert koncert;
-    private ArrayList<Zespol> zespoly;
+    private Zespol zespol;
     private GridBagConstraints c;
 
     public ConcertWindow(DataBaseConnector dataBaseConnector, JFrame father, Koncert koncert){
@@ -40,10 +42,14 @@ public class ConcertWindow extends Detailed{
     }
 
     public void mouse(){
+        ConcertWindow temp = this;
         super.getAddButton().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
+                AddOrEditArtistWindow addOrEditArtistWindow = new AddOrEditArtistWindow(getDataBaseConnector(),koncert,temp);
+                addOrEditArtistWindow.setVisible(true);
+                setVisible(false);
             }
         });
 
@@ -58,6 +64,11 @@ public class ConcertWindow extends Detailed{
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
+                if(!getTable1().getSelectionModel().isSelectionEmpty()) {
+                    AddOrEditArtistWindow addOrEditArtistWindow = new AddOrEditArtistWindow(getDataBaseConnector(),koncert,temp,zespol);
+                    addOrEditArtistWindow.setVisible(true);
+                    setVisible(false);
+                }
             }
         });
 
