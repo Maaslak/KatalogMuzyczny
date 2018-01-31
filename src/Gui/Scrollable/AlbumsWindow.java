@@ -134,5 +134,15 @@ public class AlbumsWindow extends Scrollable{
                 }
             }
         });
+
+        super.getDeleteButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                if(!getTable1().getSelectionModel().isSelectionEmpty()) {
+                    // Drop
+                };
+            }
+        });
     }
 }
