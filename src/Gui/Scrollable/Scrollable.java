@@ -13,6 +13,8 @@ public abstract class Scrollable extends JFrame {
     private JButton selectButton;
     protected JPanel filterPanel;
     private JButton filterButton;
+    private JButton addButton;
+    private JButton deleteButton;
     private DataBaseConnector dataBaseConnector;
 
     public Scrollable(DataBaseConnector dataBaseConnector) {

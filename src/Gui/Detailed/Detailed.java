@@ -1,6 +1,7 @@
 package Gui.Detailed;
 
-import Gui.Scrollable.Scrollable;
+//import Gui.Scrollable.Scrollable;
+import Gui.Detailed.Detailed;
 
 import javax.swing.*;
 import java.awt.*;
