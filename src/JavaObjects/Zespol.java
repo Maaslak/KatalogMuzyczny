@@ -6,12 +6,14 @@ import java.sql.Date;
 public class Zespol {
     private String nazwa, miasto_zalozenia, kraj_zalozenia;
     private Date date;
+    private int id;
 
-    public Zespol(String nazwa, Date date, String miasto_zalozenia, String kraj_zalozenia){
+    public Zespol(String nazwa, Date date, String miasto_zalozenia, String kraj_zalozenia, int id){
         this.nazwa = nazwa;
         this.date = date;
         this.miasto_zalozenia = miasto_zalozenia;
         this.kraj_zalozenia = kraj_zalozenia;
+        this.id = id;
     }
 
     public String getNazwa() {
@@ -44,6 +46,14 @@ public class Zespol {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override

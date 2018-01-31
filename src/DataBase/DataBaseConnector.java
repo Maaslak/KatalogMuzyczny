@@ -102,7 +102,7 @@ public class DataBaseConnector {
         try {
             resultSet = statement.executeQuery();
             while (resultSet.next()){
-                Zespol zespol = new Zespol(resultSet.getString(1), resultSet.getDate(2), resultSet.getString(3), resultSet.getString(4));
+                Zespol zespol = new Zespol(resultSet.getString(1), resultSet.getDate(2), resultSet.getString(3), resultSet.getString(4), resultSet.getInt(5));
                 zespoly.add(zespol);
             }
         } catch (SQLException e) {
@@ -196,7 +196,7 @@ public class DataBaseConnector {
 
             resultSet = statement.executeQuery();
             while (resultSet.next()){
-                Album album = new Album(resultSet.getString(1), resultSet.getDate(2), resultSet.getFloat(3), resultSet.getString(4));
+                Album album = new Album(resultSet.getString(1), resultSet.getDate(2), resultSet.getFloat(3), resultSet.getString(4), resultSet.getInt(5));
                 albumy.add(album);
             }
         } catch (SQLException e) {
@@ -356,7 +356,7 @@ public class DataBaseConnector {
         try {
             resultSet = statement.executeQuery();
             while (resultSet.next()){
-                Festiwal festiwal = new Festiwal(resultSet.getString(1), resultSet.getDate(2), resultSet.getDate(3));
+                Festiwal festiwal = new Festiwal(resultSet.getString(1), resultSet.getDate(2), resultSet.getDate(3), resultSet.getInt(4));
                 festiwale.add(festiwal);
             }
         } catch (SQLException e) {
