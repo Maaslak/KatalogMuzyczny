@@ -31,7 +31,7 @@ public class DataBaseConnector {
         connectionProperties = new Properties();
         connectionProperties.put("user", user);
         connectionProperties.put("password", password);
-        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", connectionProperties);
+        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1522:orcl", connectionProperties);
     }
 
     public ArrayList<Zespol> getZespoly() throws Exception {
@@ -430,7 +430,6 @@ public class DataBaseConnector {
             sql += " ,?";
         sql += ")";
         try {
-            connection.setAutoCommit(false);
             statement = connection.prepareStatement(sql);
             statement.setString(1, tytul);
             statement.setInt(2, albumId);
@@ -482,7 +481,6 @@ public class DataBaseConnector {
             sql += ", ?";
         sql += ")";
         try {
-            connection.setAutoCommit(false);
             statement = connection.prepareStatement(sql);
             statement.setString(1, nazwa);
             statement.setInt(2, zespolId);
@@ -537,7 +535,6 @@ public class DataBaseConnector {
             sql += ", ?";
         sql += ")";
         try {
-            connection.setAutoCommit(false);
             statement = connection.prepareStatement(sql);
             statement.setString(1, nazwa);
             statement.setDate(2, data);
@@ -566,6 +563,345 @@ public class DataBaseConnector {
         }
         if(error)
             throw new Exception("Nie udalo sie dodac koncertu");
+        return changes;
+    }
+
+    public int insertZespol(String nazwa,  Date dataZalozenia, String miastoZalozenia, String krajZalozenia) throws Exception {
+        boolean error = false;
+        int changes = 0;
+        PreparedStatement statement= null;
+        ResultSet rs = null;
+        String sql;
+        sql = "INSERT INTO ZESPOLY(NAZWA, DATA_ZALOZENIA";
+        if(!miastoZalozenia.isEmpty())
+            sql += ", MIASTO_ZALOZENIA";
+        if(!krajZalozenia.isEmpty())
+            sql += ", KRAJ_ZALOZENIA";
+        sql += ") VALUES (?, ?";
+        if(!miastoZalozenia.isEmpty())
+            sql += ", ?";
+        if(!krajZalozenia.isEmpty())
+            sql += ", ?";
+        sql += ")";
+        try {
+
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, nazwa);
+            statement.setDate(2, dataZalozenia);
+            int i =3;
+            if(!miastoZalozenia.isEmpty()){
+                statement.setString(i, miastoZalozenia);
+                i++;
+            }
+            if(!krajZalozenia.isEmpty())
+                statement.setString(i, krajZalozenia);
+            changes = statement.executeUpdate(sql);
+
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if(error)
+            throw new Exception("Nie udalo sie dodac zespolu");
+        return changes;
+    }
+
+    public int insertFestiwal(String nazwa,  Date dataRozpoczecia, Date dataZakonczenia) throws Exception {
+        boolean error = false;
+        int changes = 0;
+        PreparedStatement statement= null;
+        ResultSet rs = null;
+        String sql;
+        sql = "INSERT INTO FESTIWALE(NAZWA, DATA_ROZPOCZECIA";
+        if(dataZakonczenia != null)
+            sql += ", DATA_ZAKONCZENIA";
+        sql += ") VALUES (?, ?";
+        if(dataZakonczenia != null)
+            sql += ", ?";
+        sql += ")";
+        try {
+
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, nazwa);
+            statement.setDate(2, dataRozpoczecia);
+            int i =3;
+            if(dataZakonczenia != null)
+                statement.setDate(i, dataZakonczenia);
+            changes = statement.executeUpdate(sql);
+
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if(error)
+            throw new Exception("Nie udalo sie dodac festiwalu");
+        return changes;
+    }
+
+    public int insertMiasto(String nazwa,  Integer polozenieX, Integer polozenieY) throws Exception {
+        boolean error = false;
+        int changes = 0;
+        PreparedStatement statement= null;
+        ResultSet rs = null;
+        String sql;
+        sql = "INSERT INTO MIASTA(NAZWA";
+        if(polozenieX != null)
+            sql += ", POLOZENIE_X";
+        if(polozenieY != null)
+            sql += ", KRAJ_ZALOZENIA";
+        sql += ") VALUES (?";
+        if(polozenieX != null)
+            sql += ", ?";
+        if(polozenieY != null)
+            sql += ", ?";
+        sql += ")";
+        try {
+
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, nazwa);
+            int i= 2;
+            if(polozenieX != null){
+                statement.setInt(i, polozenieX);
+                i++;
+            }
+            if(polozenieY != null){
+                statement.setInt(i, polozenieY);
+                i++;
+            }
+
+            changes = statement.executeUpdate(sql);
+
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if(error)
+            throw new Exception("Nie udalo sie dodac miasta");
+        return changes;
+    }
+
+    public int insertGatunek(String nazwa,  String opis) throws Exception {
+        boolean error = false;
+        int changes = 0;
+        PreparedStatement statement= null;
+        ResultSet rs = null;
+        String sql;
+        sql = "INSERT INTO GATUNKI(NAZWA";
+        if(!opis.isEmpty())
+            sql += ", OPIS";
+        sql += ") VALUES (?";
+        if(!opis.isEmpty())
+            sql += ", ?";
+        sql += ")";
+        try {
+
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, nazwa);
+            if(!opis.isEmpty())
+                statement.setString(2, opis);
+            changes = statement.executeUpdate(sql);
+
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if(error)
+            throw new Exception("Nie udalo sie dodac gatunku");
+        return changes;
+    }
+
+    public int insertMuzyk(String imie, String nazwisko,  Date dataUrodzenia, String pochodzenie) throws Exception {
+        boolean error = false;
+        int changes = 0;
+        PreparedStatement statement= null;
+        ResultSet rs = null;
+        String sql;
+        sql = "INSERT INTO MUZYCY(IMIE, NAZWISKO, DATA_URODZENIA";
+        if(!pochodzenie.isEmpty())
+            sql += ", POCHODZENIE";
+        sql += ") VALUES (?, ?, ?";
+        if(!pochodzenie.isEmpty())
+            sql += ", ?";
+        sql += ")";
+        try {
+
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, imie);
+            statement.setString(2, nazwisko);
+            if(!pochodzenie.isEmpty())
+                statement.setString(3, pochodzenie);
+            changes = statement.executeUpdate(sql);
+
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if(error)
+            throw new Exception("Nie udalo sie dodac muzyka");
+        return changes;
+    }
+
+    public int insertPrzynaleznosc(String nazwa,  String gatunekNazwa, int zespolId, Character glowna) throws Exception {
+        boolean error = false;
+        int changes = 0;
+        PreparedStatement statement= null;
+        ResultSet rs = null;
+        String sql;
+        sql = "INSERT INTO PRZYNALEZNOSCI(NAZWA, GATUNEK_NAZWA, ZESPOL_ID";
+        if(glowna != null)
+            sql += ", GLOWNA";
+        sql += ") VALUES (?, ?, ?";
+        if(glowna != null)
+            sql += ", ?";
+        sql += ")";
+        try {
+
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, nazwa);
+            statement.setString(2, gatunekNazwa);
+            statement.setInt(3, zespolId);
+            if(glowna != null)
+                statement.setString(4, glowna.toString());
+            changes = statement.executeUpdate(sql);
+
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if(error)
+            throw new Exception("Nie udalo sie dodac przynaleznosci do zespolu");
+        return changes;
+    }
+
+    public int insertCzlonkostwo(Date dataOd,  int zespolId, int muzykId, Date dataDo, String funkcja) throws Exception {
+        boolean error = false;
+        int changes = 0;
+        PreparedStatement statement= null;
+        ResultSet rs = null;
+        String sql;
+        sql = "INSERT INTO CZŁONKOWSTWA(OD, ZESPOL_ID, MUZYK_ID";
+        if(dataDo != null)
+            sql += ", DO";
+        if(!funkcja.isEmpty())
+            sql += ", FUNKCJA";
+        sql += ") VALUES (?, ?, ?";
+        if(dataDo != null)
+            sql += ", ?";
+        if(!funkcja.isEmpty())
+            sql += ", ?";
+        sql += ")";
+        try {
+
+            statement = connection.prepareStatement(sql);
+            statement.setDate(1, dataOd);
+            statement.setInt(2, zespolId);
+            statement.setInt(3, muzykId);
+            int i =4;
+            if(dataDo != null){
+                statement.setDate(i, dataDo);
+                i++;
+            }
+            if(!funkcja.isEmpty())
+                statement.setString(i, funkcja);
+            changes = statement.executeUpdate(sql);
+
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if(error)
+            throw new Exception("Nie udalo sie dodac czlonkowstwa");
         return changes;
     }
 
