@@ -13,8 +13,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.lang.reflect.Array;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 
 public class ArtistsWindow extends Scrollable {
@@ -94,7 +95,13 @@ public class ArtistsWindow extends Scrollable {
                 try {
                     zespoly.clear();
                     //boolean temp[] = {};
-                    zespoly = getDataBaseConnector().getZespoly(nameJTextField.getText(),null,null,"",nationalityJTextField.getText());
+                    Date dateFrom = null, dateTo = null;
+                    if(from.getDate() != null)
+                        dateFrom = Date.valueOf(from.getDate());
+                    if(to.getDate() != null)
+                        dateTo = Date.valueOf(to.getDate());
+                    Date.valueOf(from.getDate());
+                    zespoly = getDataBaseConnector().getZespoly(nameJTextField.getText(),dateFrom,dateTo,"",nationalityJTextField.getText());
                     DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
                     model.getDataVector().removeAllElements();
                     model.fireTableDataChanged();
