@@ -302,7 +302,7 @@ public class DataBaseConnector {
         try {
             resultSet = statement.executeQuery();
             while (resultSet.next()){
-                Koncert koncert = new Koncert(resultSet.getString(1), resultSet.getDate(2), resultSet.getString(3));
+                Koncert koncert = new Koncert(resultSet.getString(1), resultSet.getDate(2), resultSet.getString(3), resultSet.getInt(5));
                 koncerty.add(koncert);
             }
         } catch (SQLException e) {
@@ -413,7 +413,7 @@ public class DataBaseConnector {
             statement = connection.prepareStatement("SELECT * FROM MIASTA");
             resultSet = statement.executeQuery();
             while (resultSet.next()){
-                Koncert koncert = new Koncert(resultSet.getString(1), resultSet.getDate(2), resultSet.getString(3));
+                Koncert koncert = new Koncert(resultSet.getString(1), resultSet.getDate(2), resultSet.getString(3), resultSet.getInt(5));
                 koncerty.add(koncert);
             }
         } catch (SQLException e) {
@@ -1399,7 +1399,34 @@ public class DataBaseConnector {
         if (error == true)
             throw new Exception("Nie udalo sie zmodyfikowac czlonkostwa");
     }
-
+/*
+    public void updateKoncerty(String nazwa, Date data, String miastoNazwa, int festiwalId, int zespolId) throws Exception {
+        boolean error =false;
+        PreparedStatement statement = null;
+        int changes = 0;
+        try {
+            statement = connection.prepareStatement("UPDATE KONCERTY SET  = ?, FUNKCJA = ? WHERE OD = ? AND ZESPOL_ID = ? AND MUZYK_ID = ?");
+            statement.setDate(1, dataDo);
+            statement.setString(2, funkcja);
+            statement.setDate(3, dataOd);
+            statement.setInt(4, zespolId);
+            statement.setInt(5, muzykId);
+            changes = statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi *//* }
+            }
+        }
+        if (error == true)
+            throw new Exception("Nie udalo sie zmodyfikowac czlonkostwa");
+    }
+*/
 
 
     public void disconnect() throws SQLException {

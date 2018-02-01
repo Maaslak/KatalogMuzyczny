@@ -5,11 +5,13 @@ import java.sql.Date;
 public class Koncert {
     private String nazwa, miasto_nazwa;
     private Date data;
+    private int zespolId;
 
-    public Koncert(String nazwa, Date data, String miasto_nazwa) {
+    public Koncert(String nazwa, Date data, String miasto_nazwa, int zespolId) {
         this.nazwa = nazwa;
         this.miasto_nazwa = miasto_nazwa;
         this.data = data;
+        this.zespolId = zespolId;
     }
 
     public String getNazwa() {
