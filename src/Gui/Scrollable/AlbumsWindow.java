@@ -103,7 +103,7 @@ public class AlbumsWindow extends Scrollable{
                         dateTo = Date.valueOf(to.getDate());
                     if(!ratingJTextField.getText().isEmpty())
                         ratingFloat = Float.valueOf(ratingJTextField.getText());
-                    albums = getDataBaseConnector().getAlbumy(nameJTextField.getText(),dateFrom,dateTo,ratingFloat,languageJTextField.getText());
+                    albums = getDataBaseConnector().getAlbumy(nameJTextField.getText(),dateFrom,dateTo,ratingFloat,languageJTextField.getText(),null);
                     DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
                     model.getDataVector().removeAllElements();
                     model.fireTableDataChanged();
