@@ -22,12 +22,12 @@ public class AddOrEditArtistWindow extends Change {
     private Zespol zespolEdit;
     private GridBagConstraints c;
 
-    public AddOrEditArtistWindow(DataBaseConnector dataBaseConnector, Koncert koncert, JFrame father) {
+    /*public AddOrEditArtistWindow(DataBaseConnector dataBaseConnector, Koncert koncert, JFrame father) {
         super(dataBaseConnector, father);
         this.koncert = koncert;
         setAddArtistInConcert();
         mouse();
-    }
+    }*/
 
     public AddOrEditArtistWindow(DataBaseConnector dataBaseConnector, JFrame father) {
         super(dataBaseConnector, father);
@@ -35,12 +35,12 @@ public class AddOrEditArtistWindow extends Change {
         mouse(); //TODO przeciazyc
     }
 
-    public AddOrEditArtistWindow(DataBaseConnector dataBaseConnector, Koncert koncert, JFrame father, Zespol zespol) {
+    /*public AddOrEditArtistWindow(DataBaseConnector dataBaseConnector, Koncert koncert, JFrame father, Zespol zespol) {
         super(dataBaseConnector, father);
         this.zespolEdit = zespol;
         setEditArtistInConcert();
         mouse(); //TODO przeciazyc
-    }
+    }*/
 
     public AddOrEditArtistWindow(DataBaseConnector dataBaseConnector, JFrame father, Zespol zespol) {
         super(dataBaseConnector, father);

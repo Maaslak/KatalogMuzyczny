@@ -1,6 +1,8 @@
 package Gui.Scrollable;
 
 import DataBase.DataBaseConnector;
+import Gui.Change.AddOrEditArtistWindow;
+import Gui.Change.AddOrEditConcertWindow;
 import Gui.Detailed.ConcertWindow;
 import JavaObjects.Koncert;
 import com.github.lgooddatepicker.components.DatePicker;
@@ -96,6 +98,16 @@ public class ConcertsWindow extends Scrollable {
         });
 
         ConcertsWindow temp = this;
+        super.getAddButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                AddOrEditConcertWindow addOrEditConcertWindow = new AddOrEditConcertWindow(getDataBaseConnector(),temp);
+                addOrEditConcertWindow.setVisible(true);
+                setVisible(false);
+            }
+        });
+
         super.getSelectButton().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
