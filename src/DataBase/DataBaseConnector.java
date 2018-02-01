@@ -1273,6 +1273,134 @@ public class DataBaseConnector {
             throw new Exception("Nie udalo sie usunac muzyka");
     }
 
+    public void updateUtwor(String tytul, Date czas) throws Exception {
+        boolean error =false;
+        PreparedStatement statement = null;
+        int changes = 0;
+        try {
+            statement = connection.prepareStatement("UPDATE UTWORY SET CZAS = ? WHERE TYTUL = ?");
+            statement.setDate(1, czas);
+            statement.setString(2, tytul);
+            changes = statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if (error == true)
+            throw new Exception("Nie udalo sie zmodyfikowac utworu");
+    }
+
+    public void updateAlbum(String nazwa, Date dataWydania, Float ocena, String jezyk, int albumId) throws Exception {
+        boolean error =false;
+        PreparedStatement statement = null;
+        int changes = 0;
+        try {
+            statement = connection.prepareStatement("UPDATE ALBUMY SET NAZWA = ?, DATA_WYDANIA = ?, OCENA = ?, JEZYK = ? WHERE ALBUM_ID = ?");
+            statement.setString(1, nazwa);
+            statement.setDate(2, dataWydania);
+            statement.setFloat(3, ocena);
+            statement.setString(4, jezyk);
+            statement.setInt(5, albumId);
+            changes = statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if (error == true)
+            throw new Exception("Nie udalo sie zmodyfikowac albumu");
+    }
+
+    public void updatePrzynaleznosc(String glowna, String nazwaGatunku,  int zespolId) throws Exception {
+        boolean error =false;
+        PreparedStatement statement = null;
+        int changes = 0;
+        try {
+            statement = connection.prepareStatement("UPDATE PRZYNALEZNOSCI SET GLOWNA = ? WHERE GATUNEK_NAZWA = ? AND ZESPOL_ID = ?");
+            statement.setString(1, glowna);
+            statement.setString(2, nazwaGatunku);
+            statement.setInt(3, zespolId);
+            changes = statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if (error == true)
+            throw new Exception("Nie udalo sie zmodyfikowac przynaleznosci");
+    }
+
+    public void updateGatunek(String nazwa, String opis) throws Exception {
+        boolean error =false;
+        PreparedStatement statement = null;
+        int changes = 0;
+        try {
+            statement = connection.prepareStatement("UPDATE GATUNKI SET OPIS = ? WHERE NAZWA = ?");
+            statement.setString(1, opis);
+            statement.setString(2, nazwa);
+            changes = statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if (error == true)
+            throw new Exception("Nie udalo sie zmodyfikowac gatunek");
+    }
+
+    public void updateCzlonkostwo(Date dataOd, Date dataDo, String funkcja, int zespolId, int muzykId) throws Exception {
+        boolean error =false;
+        PreparedStatement statement = null;
+        int changes = 0;
+        try {
+            statement = connection.prepareStatement("UPDATE CZŁONKOWSTWA SET DO = ?, FUNKCJA = ? WHERE OD = ? AND ZESPOL_ID = ? AND MUZYK_ID = ?");
+            statement.setDate(1, dataDo);
+            statement.setString(2, funkcja);
+            statement.setDate(3, dataOd);
+            statement.setInt(4, zespolId);
+            statement.setInt(5, muzykId);
+            changes = statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if (error == true)
+            throw new Exception("Nie udalo sie zmodyfikowac czlonkostwa");
+    }
+
+
 
     public void disconnect() throws SQLException {
         connection.close();
