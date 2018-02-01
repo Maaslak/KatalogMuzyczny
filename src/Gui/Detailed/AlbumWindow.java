@@ -6,6 +6,7 @@ import JavaObjects.Utwor;
 import com.github.lgooddatepicker.components.DatePicker;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -24,7 +25,21 @@ public class AlbumWindow extends Detailed{
         super(dataBaseConnector,father);
         this.album = album;
         setInformationPanel();
+        try {
+            this.utwory = dataBaseConnector.getUtwory(album.getId());
+            DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
+            String header[] = new String[] { "Tytuł", "Czas" };
 
+            model.setColumnIdentifiers(header);
+            for(int i=0; i<utwory.size();i++){
+                model.addRow(new Object[] {utwory.get(i).getTytul(), utwory.get(i).getCzas()});
+            }
+            getTable1().setModel(model);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            //TODO wyskakujace okienko z bledem
+        }
         mouse();
     }
 
