@@ -12,12 +12,12 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class ConcertsWindow extends Scrollable {
-    private JLabel date, name, festival;
-    private JTextField nameJTextField;
-    private JCheckBox festivalJCheckBox;
+    private JLabel date, name, city;
+    private JTextField nameJTextField, cityTextField;
     private DatePicker from, to;
     private GridBagConstraints c;
     //private ConcertWindow concertWindow;
@@ -47,11 +47,13 @@ public class ConcertsWindow extends Scrollable {
     public void setFilterPanel() {
         date = new JLabel("Date: ");
         name = new JLabel("Name");
-        festival = new JLabel("Rating");
+        city = new JLabel("City");
+        //festival = new JLabel("Rating");
         from = new DatePicker();
         to = new DatePicker();
         nameJTextField = new JTextField(5);
-        festivalJCheckBox = new JCheckBox("festivals");
+        cityTextField = new JTextField(5);
+        //festivalJCheckBox = new JCheckBox("festivals");
         c.gridy = 0;
         c.gridx = 0;
         filterPanel.add(date, c);
@@ -67,12 +69,6 @@ public class ConcertsWindow extends Scrollable {
         c.gridy = 1;
         c.gridx = 1;
         filterPanel.add(nameJTextField, c);
-        c.gridy = 3;
-        c.gridx = 0;
-        filterPanel.add(festival, c);
-        c.gridy = 3;
-        c.gridx = 1;
-        filterPanel.add(festivalJCheckBox, c);
         this.pack();
     }
 
@@ -83,7 +79,12 @@ public class ConcertsWindow extends Scrollable {
                 super.mouseClicked(mouseEvent);
                 try {
                     koncerty.clear();
-                    koncerty = getDataBaseConnector().getKoncert();
+                    Date dateFrom = null, dateTo = null;
+                    if(from.getDate() != null)
+                        dateFrom = Date.valueOf(from.getDate());
+                    if(to.getDate() != null)
+                        dateTo = Date.valueOf(to.getDate());
+                    koncerty = getDataBaseConnector().getKoncert(nameJTextField.getText(),dateFrom,dateTo,cityTextField.getText());
                     DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
                     model.getDataVector().removeAllElements();
                     model.fireTableDataChanged();

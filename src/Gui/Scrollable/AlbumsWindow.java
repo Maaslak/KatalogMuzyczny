@@ -52,10 +52,12 @@ public class AlbumsWindow extends Scrollable{
         date = new JLabel("Date: ");
         name = new JLabel("Name (regexp)");
         rating = new JLabel("Rating");
+        language = new JLabel("Language");
         from = new DatePicker();
         to = new DatePicker();
         nameJTextField = new JTextField(5);
         ratingJTextField = new JTextField(5);
+        languageJTextField = new JTextField(5);
         c.gridy = 0;
         c.gridx = 0;
         filterPanel.add(date, c);
@@ -77,6 +79,12 @@ public class AlbumsWindow extends Scrollable{
         c.gridy = 3;
         c.gridx = 1;
         filterPanel.add(ratingJTextField, c);
+        c.gridy = 4;
+        c.gridx = 0;
+        filterPanel.add(language, c);
+        c.gridy = 4;
+        c.gridx = 1;
+        filterPanel.add(languageJTextField, c);
         this.pack();
     }
 
@@ -88,11 +96,14 @@ public class AlbumsWindow extends Scrollable{
                 try {
                     albums.clear();
                     Date dateFrom = null, dateTo = null;
+                    Float ratingFloat = null;
                     if(from.getDate() != null)
                         dateFrom = Date.valueOf(from.getDate());
                     if(to.getDate() != null)
                         dateTo = Date.valueOf(to.getDate());
-                    albums = getDataBaseConnector().getAlbumy();
+                    if(!ratingJTextField.getText().isEmpty())
+                        ratingFloat = Float.valueOf(ratingJTextField.getText());
+                    albums = getDataBaseConnector().getAlbumy(nameJTextField.getText(),dateFrom,dateTo,ratingFloat,languageJTextField.getText());
                     DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
                     model.getDataVector().removeAllElements();
                     model.fireTableDataChanged();

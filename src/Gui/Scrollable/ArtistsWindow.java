@@ -63,6 +63,7 @@ public class ArtistsWindow extends Scrollable {
         from = new DatePicker();
         to = new DatePicker();
         nameJTextField = new JTextField(5);
+        cityJTextField = new JTextField(5);
         nationalityJTextField = new JTextField(5);
         c.gridy = 0;
         c.gridx = 0;

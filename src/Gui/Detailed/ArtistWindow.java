@@ -6,6 +6,7 @@ import JavaObjects.Album;
 import JavaObjects.Zespol;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -16,13 +17,31 @@ public class ArtistWindow extends Detailed{
     private JLabel info;
     private JLabel head;
     private Zespol zespol;
-    private ArrayList<Album> albumy;
+    private ArrayList<Album> albums;
     private GridBagConstraints c;
 
     public ArtistWindow(DataBaseConnector dataBaseConnector, JFrame father, Zespol zespol){
         super(dataBaseConnector,father);
         this.zespol = zespol;
         setInformationPanel();
+
+        try {
+            this.albums = dataBaseConnector.getAlbumy("",null,null,null, "", new Integer(zespol.getId()));
+            DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
+            String header[] = new String[] { "Nazwa", "Data_wydania", "Ocena",
+                    "Język" };
+
+            model.setColumnIdentifiers(header);
+            for(int i=0; i<albums.size();i++){
+                model.addRow(new Object[] {albums.get(i).getNazwa(), albums.get(i).getDate(), albums.get(i).getOcena(), albums.get(i).getJezyk()});
+            }
+            getTable1().setModel(model);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            //TODO wyskakujace okienko z bledem
+        }
+
         mouse();
     }
 
@@ -63,7 +82,7 @@ public class ArtistWindow extends Detailed{
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 if(!getTable1().getSelectionModel().isSelectionEmpty()) {
-                    AddOrEditAlbumWindow addOrEditAlbumWindow = new AddOrEditAlbumWindow(getDataBaseConnector(),zespol,temp,albumy.get(getTable1().getSelectedRow()));
+                    AddOrEditAlbumWindow addOrEditAlbumWindow = new AddOrEditAlbumWindow(getDataBaseConnector(),zespol,temp,albums.get(getTable1().getSelectedRow()));
                     addOrEditAlbumWindow.setVisible(true);
                     setVisible(false);
                 }
