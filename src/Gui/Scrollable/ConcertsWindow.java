@@ -108,6 +108,18 @@ public class ConcertsWindow extends Scrollable {
             }
         });
 
+        super.getEditButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                if(!getTable1().getSelectionModel().isSelectionEmpty()) {
+                    AddOrEditConcertWindow addOrEditConcertWindow = new AddOrEditConcertWindow(getDataBaseConnector(),temp,koncerty.get(getTable1().getSelectedRow()));
+                    addOrEditConcertWindow.setVisible(true);
+                    setVisible(false);
+                }
+            }
+        });
+
         super.getSelectButton().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {

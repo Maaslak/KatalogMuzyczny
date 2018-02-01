@@ -21,13 +21,6 @@ public class AddOrEditAlbumWindow extends Change {
     private Album albumEdit;
     private GridBagConstraints c;
 
-    public AddOrEditAlbumWindow(DataBaseConnector dataBaseConnector, Zespol zespol, JFrame father) {
-        super(dataBaseConnector, father);
-        this.zespol = zespol;
-        setAddPanel();
-        mouse();
-    }
-
     public AddOrEditAlbumWindow(DataBaseConnector dataBaseConnector, JFrame father) {
         super(dataBaseConnector, father);
         setAddPanelwithoutzespol();
@@ -41,43 +34,19 @@ public class AddOrEditAlbumWindow extends Change {
         mouse(); //TODO przeciazyc
     }
 
-    public void setAddPanel(){
-        this.name = new JLabel("Name");
-        this.date = new JLabel("Date");
-        this.rating = new JLabel("Rate");
-        this.language = new JLabel("Language");
+    public AddOrEditAlbumWindow(DataBaseConnector dataBaseConnector, Zespol zespol, JFrame father) {
+        super(dataBaseConnector, father);
+        this.zespol = zespol;
+        setAdd();
+        mouse();
+    }
 
-        this.nameJTextField = new JTextField(5);
-        this.dateDatePicker = new DatePicker();
-        this.ratingJTextField = new JTextField(5);
-        this.languageJTextField = new JTextField(5);
-
-        c = new GridBagConstraints();
-        c.gridy = 1;
-        c.gridx = 1;
-        addPanel.add(this.name, c);
-        c.gridy = 2;
-        c.gridx = 1;
-        addPanel.add(date, c);
-        c.gridy = 3;
-        c.gridx = 1;
-        addPanel.add(rating, c);
-        c.gridy = 4;
-        c.gridx = 1;
-        addPanel.add(language, c);
-        c.gridy = 1;
-        c.gridx = 2;
-        addPanel.add(nameJTextField, c);
-        c.gridy = 2;
-        c.gridx = 2;
-        addPanel.add(dateDatePicker, c);
-        c.gridy = 3;
-        c.gridx = 2;
-        addPanel.add(ratingJTextField, c);
-        c.gridy = 4;
-        c.gridx = 2;
-        addPanel.add(languageJTextField, c);
-        this.pack();
+    public AddOrEditAlbumWindow(DataBaseConnector dataBaseConnector, Zespol zespol, JFrame father, Album albumEdit) {
+        super(dataBaseConnector, father);
+        this.zespol = zespol;
+        this.albumEdit = albumEdit;
+        setEdit();
+        mouse();
     }
 
     public void setAddPanelwithoutzespol(){
@@ -137,6 +106,86 @@ public class AddOrEditAlbumWindow extends Change {
     }
 
     public void setEditPanel(){
+        this.name = new JLabel("Name");
+        this.date = new JLabel("Date");
+        this.rating = new JLabel("Rate");
+        this.language = new JLabel("Language");
+
+        this.nameJTextField = new JTextField(albumEdit.getNazwa(),5);
+        this.dateDatePicker = new DatePicker();
+        this.ratingJTextField = new JTextField(Float.toString(albumEdit.getOcena()),5);
+        this.languageJTextField = new JTextField(albumEdit.getJezyk(),5);
+
+        c = new GridBagConstraints();
+        c.gridy = 1;
+        c.gridx = 1;
+        addPanel.add(this.name, c);
+        c.gridy = 2;
+        c.gridx = 1;
+        addPanel.add(date, c);
+        c.gridy = 3;
+        c.gridx = 1;
+        addPanel.add(rating, c);
+        c.gridy = 4;
+        c.gridx = 1;
+        addPanel.add(language, c);
+        c.gridy = 1;
+        c.gridx = 2;
+        addPanel.add(nameJTextField, c);
+        c.gridy = 2;
+        c.gridx = 2;
+        addPanel.add(dateDatePicker, c);
+        c.gridy = 3;
+        c.gridx = 2;
+        addPanel.add(ratingJTextField, c);
+        c.gridy = 4;
+        c.gridx = 2;
+        addPanel.add(languageJTextField, c);
+        this.pack();
+    }
+
+    public void setAdd(){
+        //z id zespolu
+        this.name = new JLabel("Name");
+        this.date = new JLabel("Date");
+        this.rating = new JLabel("Rate");
+        this.language = new JLabel("Language");
+
+        this.nameJTextField = new JTextField(5);
+        this.dateDatePicker = new DatePicker();
+        this.ratingJTextField = new JTextField(5);
+        this.languageJTextField = new JTextField(5);
+
+        c = new GridBagConstraints();
+        c.gridy = 1;
+        c.gridx = 1;
+        addPanel.add(this.name, c);
+        c.gridy = 2;
+        c.gridx = 1;
+        addPanel.add(date, c);
+        c.gridy = 3;
+        c.gridx = 1;
+        addPanel.add(rating, c);
+        c.gridy = 4;
+        c.gridx = 1;
+        addPanel.add(language, c);
+        c.gridy = 1;
+        c.gridx = 2;
+        addPanel.add(nameJTextField, c);
+        c.gridy = 2;
+        c.gridx = 2;
+        addPanel.add(dateDatePicker, c);
+        c.gridy = 3;
+        c.gridx = 2;
+        addPanel.add(ratingJTextField, c);
+        c.gridy = 4;
+        c.gridx = 2;
+        addPanel.add(languageJTextField, c);
+        this.pack();
+    }
+
+    public void setEdit(){
+        //z id zespolu
         this.name = new JLabel("Name");
         this.date = new JLabel("Date");
         this.rating = new JLabel("Rate");
