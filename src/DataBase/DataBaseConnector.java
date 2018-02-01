@@ -241,7 +241,7 @@ public class DataBaseConnector {
         return executegetKoncerty(statement);
     }
 
-    public ArrayList<Koncert> getKoncert(String nazwa, Date dateBegin, Date dateEnd, String miastoNazwa) throws Exception {
+    public ArrayList<Koncert> getKoncert(String nazwa, Date dateBegin, Date dateEnd, String miastoNazwa, Integer festiwalId) throws Exception {
         if(nazwa.isEmpty() && dateBegin == null && dateEnd == null && miastoNazwa.isEmpty())
             return getKoncert();
         String query= new String();
@@ -264,6 +264,11 @@ public class DataBaseConnector {
                 query += "AND ";
             query += "Miasto_nazwa = ? ";
         }
+        if(festiwalId != null){
+            if(query.charAt(query.length() - 1) == '?')
+                query += "AND ";
+            query += "FESTIWAL_ID = ?";
+        }
         PreparedStatement statement = null;
         statement = connection.prepareStatement(query);
         int i = 1;
@@ -281,6 +286,10 @@ public class DataBaseConnector {
         }
         if(!miastoNazwa.isEmpty()){
             statement.setString(i, miastoNazwa);
+            i++;
+        }
+        if(festiwalId != null){
+            statement.setInt(i, festiwalId);
             i++;
         }
         return executegetKoncerty(statement);
