@@ -38,6 +38,14 @@ public class Koncert {
         this.data = data;
     }
 
+    public int getZespolId() {
+        return zespolId;
+    }
+
+    public void setZespolId(int zespolId) {
+        this.zespolId = zespolId;
+    }
+
     @Override
     public String toString() {
         return "<html>Nazwa: " + nazwa + "<br/>Data: " + data + "<br/>Miasto: " + miasto_nazwa + "<br/><br/><html>";
