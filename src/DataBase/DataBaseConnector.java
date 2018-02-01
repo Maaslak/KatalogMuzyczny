@@ -421,7 +421,7 @@ public class DataBaseConnector {
         int changes = 0;
         PreparedStatement statement= null;
         ResultSet rs = null;
-        String sql = new String();
+        String sql;
         sql = "INSERT INTO UTWORY(TYTUL, ALBUM_ID";
         if(czas != null)
             sql += ", CZAS ";
