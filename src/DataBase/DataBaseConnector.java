@@ -37,7 +37,7 @@ public class DataBaseConnector {
         connectionProperties = new Properties();
         connectionProperties.put("user", user);
         connectionProperties.put("password", password);
-        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", connectionProperties);
+        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1522:orcl", connectionProperties);
     }
 
     public ArrayList<Zespol> getZespoly() throws Exception {
@@ -449,7 +449,7 @@ public class DataBaseConnector {
             statement.setInt(1, albumId);
             resultSet = statement.executeQuery();
             while (resultSet.next()){
-                Utwor utwor = new Utwor(resultSet.getString(1), resultSet.getDate(2));
+                Utwor utwor = new Utwor(resultSet.getString(1), resultSet.getTimestamp(2));
                 utwory.add(utwor);
             }
         } catch (SQLException e) {
@@ -547,7 +547,7 @@ public class DataBaseConnector {
         return muzycy;
     }
 
-    public int insertUtwor(String tytul, Date czas, int albumId) throws Exception {
+    public int insertUtwor(String tytul, Timestamp czas, int albumId) throws Exception {
         boolean error = false;
         int changes = 0;
         PreparedStatement statement= null;
@@ -565,7 +565,7 @@ public class DataBaseConnector {
             statement.setString(1, tytul);
             statement.setInt(2, albumId);
             if(czas != null)
-                statement.setDate(3, czas);
+                statement.setTimestamp(3, czas);
             changes = statement.executeUpdate();
 
         } catch (SQLException ex) {
@@ -1273,13 +1273,13 @@ public class DataBaseConnector {
             throw new Exception("Nie udalo sie usunac muzyka");
     }
 
-    public void updateUtwor(String tytul, Date czas) throws Exception {
+    public void updateUtwor(String tytul, Timestamp czas) throws Exception {
         boolean error =false;
         PreparedStatement statement = null;
         int changes = 0;
         try {
             statement = connection.prepareStatement("UPDATE UTWORY SET CZAS = ? WHERE TYTUL = ?");
-            statement.setDate(1, czas);
+            statement.setTimestamp(1, czas);
             statement.setString(2, tytul);
             changes = statement.executeUpdate();
         } catch (SQLException ex) {

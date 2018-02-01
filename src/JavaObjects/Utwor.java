@@ -2,12 +2,13 @@ package JavaObjects;
 
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Utwor {
     String tytul;
-    Date czas;
+    Timestamp czas;
 
-    public Utwor(String tytul, Date czas) {
+    public Utwor(String tytul, Timestamp czas) {
         this.tytul = tytul;
         this.czas = czas;
     }
@@ -20,16 +21,16 @@ public class Utwor {
         this.tytul = tytul;
     }
 
-    public Date getCzas() {
+    public Timestamp getCzas() {
         return czas;
     }
 
-    public void setCzas(Date czas) {
+    public void setCzas(Timestamp czas) {
         this.czas = czas;
     }
 
     @Override
     public String toString() {
-        return "<html>Tytul: " + tytul + "<br/>Czas: " + czas.getMinutes() + ':' + czas.getSeconds() + "<br/><br/></html>";
+        return "<html>Tytul: " + tytul + "<br/>Czas: " + czas + ':' + czas.toString() + "<br/><br/></html>";
     }
 }
