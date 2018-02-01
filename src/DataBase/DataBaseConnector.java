@@ -19,6 +19,7 @@ public class DataBaseConnector {
     private ArrayList<Miasto> miasta;
     private ArrayList<Utwor> utwory;
     private ArrayList<Gatunek> gatunki;
+    private ArrayList<Muzyk> muzycy;
 
     public DataBaseConnector() throws SQLException {
         zespoly = new ArrayList<>();
@@ -28,6 +29,7 @@ public class DataBaseConnector {
         miasta = new ArrayList<>();
         utwory = new ArrayList<>();
         gatunki = new ArrayList<>();
+        muzycy = new ArrayList<>();
         connect();
     }
 
@@ -496,8 +498,44 @@ public class DataBaseConnector {
             }
         }
         if (error)
-            throw new Exception("Nie udalo sie pobrac koncertow");
+            throw new Exception("Nie udalo sie pobrac gatunkow");
         return gatunki;
+    }
+
+    public ArrayList<Muzyk> getMuzycy(int zespolId) throws Exception {
+        PreparedStatement statement = null;
+        miasta.clear();
+        boolean error = false;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement("SELECT * FROM MUZYCY g JOIN CZŁONKOWSTWA p USING(MUZYK_ID) WHERE p.ZESPOL_ID= ?");
+            statement.setInt(1, zespolId);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                Muzyk muzyk= new Muzyk(resultSet.getString(2), resultSet.getString(3), resultSet.getDate(4), resultSet.getString(5));
+                muzycy.add(muzyk);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            error = true;
+        }
+        finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
+        if (error)
+            throw new Exception("Nie udalo sie pobrac muzykow");
+        return muzycy;
     }
 
     public int insertUtwor(String tytul, Date czas, int albumId) throws Exception {
