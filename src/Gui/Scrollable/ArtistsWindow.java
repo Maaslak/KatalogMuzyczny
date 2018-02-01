@@ -19,9 +19,9 @@ import java.util.ArrayList;
 
 
 public class ArtistsWindow extends Scrollable {
-    private JLabel date, name, nationality;
+    private JLabel date, name, city, nationality;
     private JTextField nameJTextField;
-    private JTextField nationalityJTextField;
+    private JTextField cityJTextField, nationalityJTextField;
     private DatePicker from, to;
     private GridBagConstraints c;
     private ArrayList<Zespol> zespoly;
@@ -58,6 +58,7 @@ public class ArtistsWindow extends Scrollable {
     public void setFilterPanel() {
         date = new JLabel("Date: ");
         name = new JLabel("Name (regexp)");
+        city = new JLabel("City");
         nationality = new JLabel("Nationality");
         from = new DatePicker();
         to = new DatePicker();
@@ -80,8 +81,14 @@ public class ArtistsWindow extends Scrollable {
         filterPanel.add(nameJTextField, c);
         c.gridy = 3;
         c.gridx = 0;
-        filterPanel.add(nationality, c);
+        filterPanel.add(city, c);
         c.gridy = 3;
+        c.gridx = 1;
+        filterPanel.add(cityJTextField, c);
+        c.gridy = 4;
+        c.gridx = 0;
+        filterPanel.add(nationality, c);
+        c.gridy = 4;
         c.gridx = 1;
         filterPanel.add(nationalityJTextField, c);
         this.pack();
@@ -94,14 +101,12 @@ public class ArtistsWindow extends Scrollable {
                 super.mouseClicked(mouseEvent);
                 try {
                     zespoly.clear();
-                    //boolean temp[] = {};
                     Date dateFrom = null, dateTo = null;
                     if(from.getDate() != null)
                         dateFrom = Date.valueOf(from.getDate());
                     if(to.getDate() != null)
                         dateTo = Date.valueOf(to.getDate());
-                    Date.valueOf(from.getDate());
-                    zespoly = getDataBaseConnector().getZespoly(nameJTextField.getText(),dateFrom,dateTo,"",nationalityJTextField.getText());
+                    zespoly = getDataBaseConnector().getZespoly(nameJTextField.getText(),dateFrom,dateTo,nationalityJTextField.getText(),"");
                     DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
                     model.getDataVector().removeAllElements();
                     model.fireTableDataChanged();

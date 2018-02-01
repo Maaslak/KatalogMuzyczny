@@ -11,12 +11,13 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class AlbumsWindow extends Scrollable{
-    private JLabel date, name, rating;
+    private JLabel date, name, rating, language;
     private JTextField nameJTextField;
-    private JTextField ratingJTextField;
+    private JTextField ratingJTextField, languageJTextField;
     private DatePicker from, to;
     private GridBagConstraints c;
     private ArrayList<Album> albums;
@@ -86,6 +87,11 @@ public class AlbumsWindow extends Scrollable{
                 super.mouseClicked(mouseEvent);
                 try {
                     albums.clear();
+                    Date dateFrom = null, dateTo = null;
+                    if(from.getDate() != null)
+                        dateFrom = Date.valueOf(from.getDate());
+                    if(to.getDate() != null)
+                        dateTo = Date.valueOf(to.getDate());
                     albums = getDataBaseConnector().getAlbumy();
                     DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
                     model.getDataVector().removeAllElements();
