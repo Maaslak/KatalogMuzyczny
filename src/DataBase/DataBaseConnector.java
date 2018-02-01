@@ -31,7 +31,7 @@ public class DataBaseConnector {
         connectionProperties = new Properties();
         connectionProperties.put("user", user);
         connectionProperties.put("password", password);
-        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", connectionProperties);
+        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1522:orcl", connectionProperties);
     }
 
     public ArrayList<Zespol> getZespoly() throws Exception {
@@ -133,8 +133,8 @@ public class DataBaseConnector {
         return executegetAlbumy(statement);
     }
 
-    public ArrayList<Album> getAlbumy(String nazwa, Date dateBegin, Date dateEnd, Float ocena, String jezyk) throws Exception {
-        if(nazwa.isEmpty() && dateBegin == null && dateEnd == null && ocena != null && jezyk.isEmpty())
+    public ArrayList<Album> getAlbumy(String nazwa, Date dateBegin, Date dateEnd, Float ocena, String jezyk, Integer zespolId) throws Exception {
+        if(nazwa.isEmpty() && dateBegin == null && dateEnd == null && ocena != null && jezyk.isEmpty() && zespolId == null)
             return getAlbumy();
         String query= new String();
         query += "SELECT * FROM ALBUMY WHERE ";
@@ -161,6 +161,11 @@ public class DataBaseConnector {
                 query += "AND ";
             query += "jezyk = ? ";
         }
+        if(zespolId != null){
+            if(query.charAt(query.length() - 1) == '?')
+                query += "AND ";
+            query += "zespol_id = ? ";
+        }
         PreparedStatement statement = null;
         statement = connection.prepareStatement(query);
         int i = 1;
@@ -183,6 +188,9 @@ public class DataBaseConnector {
         if(!jezyk.isEmpty()){
             statement.setString(i, jezyk);
             i++;
+        }
+        if(zespolId != null){
+            statement.setInt(i, zespolId);
         }
         return executegetAlbumy(statement);
     }
@@ -421,7 +429,7 @@ public class DataBaseConnector {
         int changes = 0;
         PreparedStatement statement= null;
         ResultSet rs = null;
-        String sql = new String();
+        String sql;
         sql = "INSERT INTO UTWORY(TYTUL, ALBUM_ID";
         if(czas != null)
             sql += ", CZAS ";
