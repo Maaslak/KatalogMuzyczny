@@ -17,6 +17,7 @@ public class DataBaseConnector {
     private ArrayList<Koncert> koncerty;
     private ArrayList<Festiwal> festiwale;
     private ArrayList<Miasto> miasta;
+    private ArrayList<Utwor> utwory;
 
     public DataBaseConnector() throws SQLException {
         zespoly = new ArrayList<>();
@@ -24,6 +25,7 @@ public class DataBaseConnector {
         koncerty = new ArrayList<>();
         festiwale = new ArrayList<>();
         miasta = new ArrayList<>();
+        utwory = new ArrayList<>();
         connect();
     }
 
@@ -422,6 +424,42 @@ public class DataBaseConnector {
         if (error)
             throw new Exception("Nie udalo sie pobrac koncertow");
         return miasta;
+    }
+
+    public ArrayList<Utwor> getUtwory(Integer albumId) throws Exception {
+        PreparedStatement statement = null;
+        utwory.clear();
+        boolean error = false;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement("SELECT * FROM UTWORY WHERE ALBUM_ID = ?");
+            statement.setInt(1, albumId);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                Utwor utwor = new Utwor(resultSet.getString(1), resultSet.getDate(2));
+                utwory.add(utwor);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            error = true;
+        }
+        finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
+        if (error)
+            throw new Exception("Nie udalo sie pobrac koncertow");
+        return utwory;
     }
 
     public int insertUtwor(String tytul, Date czas, int albumId) throws Exception {
