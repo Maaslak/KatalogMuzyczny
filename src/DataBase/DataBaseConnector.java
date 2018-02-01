@@ -416,6 +416,159 @@ public class DataBaseConnector {
         return miasta;
     }
 
+    public int insertUtwor(String tytul, Date czas, int albumId) throws Exception {
+        boolean error = false;
+        int changes = 0;
+        PreparedStatement statement= null;
+        ResultSet rs = null;
+        String sql = new String();
+        sql = "INSERT INTO UTWORY(TYTUL, ALBUM_ID";
+        if(czas != null)
+            sql += ", CZAS ";
+        sql += ") VALUES (?, ?";
+        if(czas != null)
+            sql += " ,?";
+        sql += ")";
+        try {
+            connection.setAutoCommit(false);
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, tytul);
+            statement.setInt(2, albumId);
+            if(czas != null)
+                statement.setDate(3, czas);
+            changes = statement.executeUpdate(sql);
+
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if(error)
+            throw new Exception("Nie udalo sie dodac utworu");
+        return changes;
+    }
+
+    public int insertAlbum(String nazwa, int zespolId, Date dataWydania, Float ocena, String jezyk) throws Exception {
+        boolean error = false;
+        int changes = 0;
+        PreparedStatement statement= null;
+        ResultSet rs = null;
+        String sql;
+        sql = "INSERT INTO ALBUMY(NAZWA, ZESPOL_ID";
+        if(dataWydania != null)
+            sql += ", data_wydania";
+        if(ocena != null)
+            sql += ", ocena";
+        if(!jezyk.isEmpty())
+            sql += ", jezyk";
+        sql += ") VALUES (?, ?, ";
+        if(dataWydania != null)
+            sql += ", ?";
+        if(ocena != null)
+            sql += ", ?";
+        if(!jezyk.isEmpty())
+            sql += ", ?";
+        sql += ")";
+        try {
+            connection.setAutoCommit(false);
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, nazwa);
+            statement.setInt(2, zespolId);
+            int i = 3;
+            if(dataWydania != null) {
+                statement.setDate(i, dataWydania);
+                i++;
+            }
+            if(ocena != null){
+                statement.setFloat(i, ocena);
+                i++;
+            }
+            if(!jezyk.isEmpty()){
+                statement.setString(i, jezyk);
+                i++;
+            }
+            changes = statement.executeUpdate(sql);
+
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if(error)
+            throw new Exception("Nie udalo sie dodac albumu");
+        return changes;
+    }
+
+    public int insertKoncert(String nazwa,  Date data, String miastoNazwa, int zespolId, Integer festiwalId) throws Exception {
+        boolean error = false;
+        int changes = 0;
+        PreparedStatement statement= null;
+        ResultSet rs = null;
+        String sql;
+        sql = "INSERT INTO KONCERTY(NAZWA, DATA,  MIASTO_NAZWA, ZESPOL_ID";
+        if(festiwalId != null)
+            sql += ", Festiwal_ID";
+        sql += ") VALUES (?, ?, ?, ?, ?";
+        if(festiwalId != null)
+            sql += ", ?";
+        sql += ")";
+        try {
+            connection.setAutoCommit(false);
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, nazwa);
+            statement.setDate(2, data);
+            statement.setString(3, miastoNazwa);
+            statement.setInt(4, zespolId);
+            if(festiwalId != null)
+                statement.setInt(5, festiwalId);
+            changes = statement.executeUpdate(sql);
+
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if(error)
+            throw new Exception("Nie udalo sie dodac koncertu");
+        return changes;
+    }
+
     public void disconnect() throws SQLException {
         connection.close();
     }
