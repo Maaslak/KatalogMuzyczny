@@ -25,21 +25,18 @@ public class AddOrEditAlbumWindow extends Change {
     public AddOrEditAlbumWindow(DataBaseConnector dataBaseConnector, JFrame father) {
         super(dataBaseConnector, father);
         setAddPanelwithoutzespol();
-        //mouse(); //TODO przeciazyc
     }
 
     public AddOrEditAlbumWindow(DataBaseConnector dataBaseConnector, JFrame father, Album albumEdit) {
         super(dataBaseConnector, father);
         this.albumEdit = albumEdit;
         setEditPanel();
-        //mouse(); //TODO przeciazyc
     }
 
     public AddOrEditAlbumWindow(DataBaseConnector dataBaseConnector, Zespol zespol, JFrame father) {
         super(dataBaseConnector, father);
         this.zespol = zespol;
         setAdd();
-        //mouse();
     }
 
     public AddOrEditAlbumWindow(DataBaseConnector dataBaseConnector, Zespol zespol, JFrame father, Album albumEdit) {
@@ -47,7 +44,6 @@ public class AddOrEditAlbumWindow extends Change {
         this.zespol = zespol;
         this.albumEdit = albumEdit;
         setEdit();
-        //mouse();
     }
 
     public void setAddPanelwithoutzespol(){

@@ -1,6 +1,8 @@
 package Gui.Detailed;
 
 import DataBase.DataBaseConnector;
+import Gui.Change.AddOrEditAlbumWindow;
+import Gui.Change.AddOrEditSongWindow;
 import JavaObjects.Album;
 import JavaObjects.Utwor;
 import com.github.lgooddatepicker.components.DatePicker;
@@ -56,11 +58,33 @@ public class AlbumWindow extends Detailed{
         this.pack();
     }
 
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        this.utwory.clear();
+        try {
+            this.utwory = dataBaseConnector.getUtwory(album.getId());
+            DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
+            model.getDataVector().removeAllElements();
+            model.fireTableDataChanged();
+            for(int i=0; i<utwory.size();i++){
+                model.addRow(new Object[] {utwory.get(i).getTytul(), utwory.get(i).getCzas()});
+            }
+            getTable1().setModel(model);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void mouse(){
+        AlbumWindow temp = this;
         super.getAddButton().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
+                AddOrEditSongWindow addOrEditSongWindow = new AddOrEditSongWindow(getDataBaseConnector(),album,temp);
+                addOrEditSongWindow.setVisible(true);
+                setVisible(false);
             }
         });
 

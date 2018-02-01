@@ -62,7 +62,7 @@ public class FestivalWindow extends Detailed{
         super.setVisible(b);
         this.koncerty.clear();
         try {
-            this.koncerty = getDataBaseConnector().getKoncert();
+            this.koncerty = getDataBaseConnector().getKoncert("",null,null,"", festiwal.getId());
             DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
             model.getDataVector().removeAllElements();
             model.fireTableDataChanged();
