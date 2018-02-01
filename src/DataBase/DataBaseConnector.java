@@ -18,6 +18,7 @@ public class DataBaseConnector {
     private ArrayList<Festiwal> festiwale;
     private ArrayList<Miasto> miasta;
     private ArrayList<Utwor> utwory;
+    private ArrayList<Gatunek> gatunki;
 
     public DataBaseConnector() throws SQLException {
         zespoly = new ArrayList<>();
@@ -26,6 +27,7 @@ public class DataBaseConnector {
         festiwale = new ArrayList<>();
         miasta = new ArrayList<>();
         utwory = new ArrayList<>();
+        gatunki = new ArrayList<>();
         connect();
     }
 
@@ -33,7 +35,7 @@ public class DataBaseConnector {
         connectionProperties = new Properties();
         connectionProperties.put("user", user);
         connectionProperties.put("password", password);
-        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", connectionProperties);
+        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1522:orcl", connectionProperties);
     }
 
     public ArrayList<Zespol> getZespoly() throws Exception {
@@ -136,7 +138,7 @@ public class DataBaseConnector {
     }
 
     public ArrayList<Album> getAlbumy(String nazwa, Date dateBegin, Date dateEnd, Float ocena, String jezyk, Integer zespolId) throws Exception {
-        if(nazwa.isEmpty() && dateBegin == null && dateEnd == null && ocena != null && jezyk.isEmpty() && zespolId == null)
+        if(nazwa.isEmpty() && dateBegin == null && dateEnd == null && ocena == null && jezyk.isEmpty() && zespolId == null)
             return getAlbumy();
         String query= new String();
         query += "SELECT * FROM ALBUMY WHERE ";
@@ -460,6 +462,42 @@ public class DataBaseConnector {
         if (error)
             throw new Exception("Nie udalo sie pobrac koncertow");
         return utwory;
+    }
+
+    public ArrayList<Gatunek> getGatunki(int zespolId) throws Exception {
+        PreparedStatement statement = null;
+        miasta.clear();
+        boolean error = false;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement("SELECT * FROM GATUNKI g JOIN PRZYNALEZNOSCI p USING(nazwa) WHERE p.ZESPOL_ID = ?");
+            statement.setInt(1, zespolId);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                Gatunek gatunek= new Gatunek(resultSet.getString(1), resultSet.getString(2));
+                gatunki.add(gatunek);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            error = true;
+        }
+        finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
+        if (error)
+            throw new Exception("Nie udalo sie pobrac koncertow");
+        return gatunki;
     }
 
     public int insertUtwor(String tytul, Date czas, int albumId) throws Exception {
