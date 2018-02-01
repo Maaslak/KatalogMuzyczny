@@ -49,11 +49,11 @@ public class FestivalsWindow extends Scrollable{
     public void setFilterPanel() {
         date = new JLabel("Date: ");
         name = new JLabel("Name");
-        festival = new JLabel("Rating");
+        //festival = new JLabel("Rating");
         from = new DatePicker();
         to = new DatePicker();
         nameJTextField = new JTextField(5);
-        festivalJCheckBox = new JCheckBox("festivals");
+        //festivalJCheckBox = new JCheckBox("festivals");
         c.gridy = 0;
         c.gridx = 0;
         filterPanel.add(date, c);
@@ -69,12 +69,6 @@ public class FestivalsWindow extends Scrollable{
         c.gridy = 1;
         c.gridx = 1;
         filterPanel.add(nameJTextField, c);
-        c.gridy = 3;
-        c.gridx = 0;
-        filterPanel.add(festival, c);
-        c.gridy = 3;
-        c.gridx = 1;
-        filterPanel.add(festivalJCheckBox, c);
         this.pack();
     }
 
@@ -149,6 +143,19 @@ public class FestivalsWindow extends Scrollable{
                     FestivalWindow festivalWindow= new FestivalWindow(getDataBaseConnector(),temp,festiwale.get(getTable1().convertRowIndexToModel(getTable1().getSelectedRow())));
                     festivalWindow.setVisible(true);
                     setVisible(false);
+                }
+            }
+        });
+        super.getDeleteButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                if(!getTable1().getSelectionModel().isSelectionEmpty()) {
+                    try {
+                        //edit concert
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });

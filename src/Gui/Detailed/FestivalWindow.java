@@ -104,6 +104,7 @@ public class FestivalWindow extends Detailed{
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
+                //edit concert
             }
         });
 
