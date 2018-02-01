@@ -18,6 +18,8 @@ public class DataBaseConnector {
     private ArrayList<Festiwal> festiwale;
     private ArrayList<Miasto> miasta;
     private ArrayList<Utwor> utwory;
+    private ArrayList<Gatunek> gatunki;
+    private ArrayList<Muzyk> muzycy;
 
     public DataBaseConnector() throws SQLException {
         zespoly = new ArrayList<>();
@@ -26,6 +28,8 @@ public class DataBaseConnector {
         festiwale = new ArrayList<>();
         miasta = new ArrayList<>();
         utwory = new ArrayList<>();
+        gatunki = new ArrayList<>();
+        muzycy = new ArrayList<>();
         connect();
     }
 
@@ -33,7 +37,7 @@ public class DataBaseConnector {
         connectionProperties = new Properties();
         connectionProperties.put("user", user);
         connectionProperties.put("password", password);
-        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", connectionProperties);
+        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1522:orcl", connectionProperties);
     }
 
     public ArrayList<Zespol> getZespoly() throws Exception {
@@ -136,7 +140,7 @@ public class DataBaseConnector {
     }
 
     public ArrayList<Album> getAlbumy(String nazwa, Date dateBegin, Date dateEnd, Float ocena, String jezyk, Integer zespolId) throws Exception {
-        if(nazwa.isEmpty() && dateBegin == null && dateEnd == null && ocena != null && jezyk.isEmpty() && zespolId == null)
+        if(nazwa.isEmpty() && dateBegin == null && dateEnd == null && ocena == null && jezyk.isEmpty() && zespolId == null)
             return getAlbumy();
         String query= new String();
         query += "SELECT * FROM ALBUMY WHERE ";
@@ -237,7 +241,7 @@ public class DataBaseConnector {
         return executegetKoncerty(statement);
     }
 
-    public ArrayList<Koncert> getKoncert(String nazwa, Date dateBegin, Date dateEnd, String miastoNazwa) throws Exception {
+    public ArrayList<Koncert> getKoncert(String nazwa, Date dateBegin, Date dateEnd, String miastoNazwa, Integer festiwalId) throws Exception {
         if(nazwa.isEmpty() && dateBegin == null && dateEnd == null && miastoNazwa.isEmpty())
             return getKoncert();
         String query= new String();
@@ -260,6 +264,11 @@ public class DataBaseConnector {
                 query += "AND ";
             query += "Miasto_nazwa = ? ";
         }
+        if(festiwalId != null){
+            if(query.charAt(query.length() - 1) == '?')
+                query += "AND ";
+            query += "FESTIWAL_ID = ?";
+        }
         PreparedStatement statement = null;
         statement = connection.prepareStatement(query);
         int i = 1;
@@ -277,6 +286,10 @@ public class DataBaseConnector {
         }
         if(!miastoNazwa.isEmpty()){
             statement.setString(i, miastoNazwa);
+            i++;
+        }
+        if(festiwalId != null){
+            statement.setInt(i, festiwalId);
             i++;
         }
         return executegetKoncerty(statement);
@@ -460,6 +473,78 @@ public class DataBaseConnector {
         if (error)
             throw new Exception("Nie udalo sie pobrac koncertow");
         return utwory;
+    }
+
+    public ArrayList<Gatunek> getGatunki(int zespolId) throws Exception {
+        PreparedStatement statement = null;
+        miasta.clear();
+        boolean error = false;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement("SELECT * FROM GATUNKI g JOIN PRZYNALEZNOSCI p USING(nazwa) WHERE p.ZESPOL_ID = ?");
+            statement.setInt(1, zespolId);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                Gatunek gatunek= new Gatunek(resultSet.getString(1), resultSet.getString(2));
+                gatunki.add(gatunek);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            error = true;
+        }
+        finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
+        if (error)
+            throw new Exception("Nie udalo sie pobrac gatunkow");
+        return gatunki;
+    }
+
+    public ArrayList<Muzyk> getMuzycy(int zespolId) throws Exception {
+        PreparedStatement statement = null;
+        miasta.clear();
+        boolean error = false;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement("SELECT * FROM MUZYCY g JOIN CZŁONKOWSTWA p USING(MUZYK_ID) WHERE p.ZESPOL_ID= ?");
+            statement.setInt(1, zespolId);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                Muzyk muzyk= new Muzyk(resultSet.getString(2), resultSet.getString(3), resultSet.getDate(4), resultSet.getString(5));
+                muzycy.add(muzyk);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            error = true;
+        }
+        finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
+        if (error)
+            throw new Exception("Nie udalo sie pobrac muzykow");
+        return muzycy;
     }
 
     public int insertUtwor(String tytul, Date czas, int albumId) throws Exception {
