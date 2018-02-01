@@ -18,7 +18,6 @@ public class AlbumWindow extends Detailed{
 
     private JLabel info;
     private JLabel head;
-    private DataBaseConnector dataBaseConnector;
     private Album album;
     private ArrayList<Utwor> utwory;
     private GridBagConstraints c;
@@ -63,7 +62,7 @@ public class AlbumWindow extends Detailed{
         super.setVisible(b);
         this.utwory.clear();
         try {
-            this.utwory = dataBaseConnector.getUtwory(album.getId());
+            this.utwory = getDataBaseConnector().getUtwory(album.getId());
             DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
             model.getDataVector().removeAllElements();
             model.fireTableDataChanged();
