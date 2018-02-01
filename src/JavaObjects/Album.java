@@ -7,12 +7,14 @@ public class Album {
     private String jezyk;
     private float ocena;
     private Date dataWydania;
+    private int id;
 
-    public Album(String nazwa, Date dataWydania, float ocena, String jezyk){
+    public Album(String nazwa, Date dataWydania, float ocena, String jezyk, int id){
         this.nazwa = nazwa;
         this.dataWydania = dataWydania;
         this.ocena = ocena;
         this.jezyk = jezyk;
+        this.id = id;
     }
 
     public String getNazwa() {
@@ -45,6 +47,22 @@ public class Album {
 
     public void setDate(Date dataWydania) {
         this.dataWydania = dataWydania;
+    }
+
+    public Date getDataWydania() {
+        return dataWydania;
+    }
+
+    public void setDataWydania(Date dataWydania) {
+        this.dataWydania = dataWydania;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override

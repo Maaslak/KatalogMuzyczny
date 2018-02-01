@@ -5,11 +5,13 @@ import java.sql.Date;
 public class Festiwal {
     private String nazwa;
     private Date dataRozpoczecia, dataZakonczenia;
+    private int id;
 
-    public Festiwal(String nazwa, Date dataRozpoczecia, Date dataZakonczenia) {
+    public Festiwal(String nazwa, Date dataRozpoczecia, Date dataZakonczenia, int id) {
         this.nazwa = nazwa;
         this.dataRozpoczecia = dataRozpoczecia;
         this.dataZakonczenia = dataZakonczenia;
+        this.id = id;
     }
 
     public String getNazwa() {
@@ -34,6 +36,14 @@ public class Festiwal {
 
     public void setDataZakonczenia(Date dataZakonczenia) {
         this.dataZakonczenia = dataZakonczenia;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
