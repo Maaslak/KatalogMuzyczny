@@ -48,10 +48,10 @@ public class Festiwal {
 
     @Override
     public String toString() {
-        return "Festiwal: " +
-                "\nNazwa: " + nazwa +
-                "\nDataRozpoczecia: " + dataRozpoczecia +
-                "\nDataZakonczenia: " + dataZakonczenia +
-                "\n\n";
+        return "<html>Festiwal: " +
+                "<br/>Nazwa: " + nazwa +
+                "<br/>DataRozpoczecia: " + dataRozpoczecia +
+                "<br/>DataZakonczenia: " + dataZakonczenia +
+                "<br/><br/></html>";
     }
 }

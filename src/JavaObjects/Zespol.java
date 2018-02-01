@@ -58,6 +58,6 @@ public class Zespol {
 
     @Override
     public String toString() {
-        return "Nazwa: " + nazwa + "\nData: " + date.toString() + "\nMiasto zalozenia: " + miasto_zalozenia + "\nKraj zalozenia: " + kraj_zalozenia + "\n\n";
+        return "<html>Nazwa: " + nazwa + "<br/>Data: " + date.toString() + "<br/>Miasto zalozenia: " + miasto_zalozenia + "<br/>Kraj zalozenia: " + kraj_zalozenia + "<br/><br/></html>";
     }
 }

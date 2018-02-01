@@ -1036,6 +1036,244 @@ public class DataBaseConnector {
         return changes;
     }
 
+    public void deleteUtwor(String tytul, int albumId) throws Exception {
+        boolean error =false;
+        PreparedStatement statement = null;
+        int changes = 0;
+        try {
+            statement = connection.prepareStatement("delete from UTWORY where TYTUL = ? AND ALBUM_ID = ?");
+            statement.setString(1, tytul);
+            statement.setInt(2, albumId);
+            changes = statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if (error == true)
+            throw new Exception("Nie udalo sie usunac utworu");
+    }
+
+    public void deleteAlbum(int albumId) throws Exception {
+        boolean error =false;
+        PreparedStatement statement = null;
+        int changes = 0;
+        try {
+            statement = connection.prepareStatement("delete from ALBUMY WHERE ALBUM_ID = ?");
+            statement.setInt(1, albumId);
+            changes = statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if (error == true)
+            throw new Exception("Nie udalo sie usunac albumu");
+    }
+
+    public void deleteZespol(int zespolId) throws Exception {
+        boolean error =false;
+        PreparedStatement statement = null;
+        int changes = 0;
+        try {
+            statement = connection.prepareStatement("delete from ZESPOLY WHERE ZESPOL_ID = ?");
+            statement.setInt(1, zespolId);
+            changes = statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if (error == true)
+            throw new Exception("Nie udalo sie usunac zespolu");
+    }
+
+    public void deletePrzynaleznosc(String gatunekNazwa, int zespolId) throws Exception {
+        boolean error =false;
+        PreparedStatement statement = null;
+        int changes = 0;
+        try {
+            statement = connection.prepareStatement("delete from PRZYNALEZNOSCI where GATUNEK_NAZWA = ? AND ZESPOL_ID = ?");
+            statement.setString(1, gatunekNazwa);
+            statement.setInt(2, zespolId);
+            changes = statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if (error == true)
+            throw new Exception("Nie udalo sie usunac przynaleznosci do gatunku");
+    }
+
+    public void deleteGatunek(String nazwa) throws Exception {
+        boolean error =false;
+        PreparedStatement statement = null;
+        int changes = 0;
+        try {
+            statement = connection.prepareStatement("delete from GATUNKI where NAZWA = ?");
+            statement.setString(1, nazwa);
+            changes = statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if (error == true)
+            throw new Exception("Nie udalo sie usunac gatunku");
+    }
+
+    public void deleteCzlonkostwo(Date od, int zespolId, int muzykId) throws Exception {
+        boolean error =false;
+        PreparedStatement statement = null;
+        int changes = 0;
+        try {
+            statement = connection.prepareStatement("delete from CZŁONKOWSTWA where OD = ? AND ZESPOL_ID = ? AND MUZYK_ID = ?");
+            statement.setDate(1, od);
+            statement.setInt(2, zespolId);
+            statement.setInt(3, muzykId);
+            changes = statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if (error == true)
+            throw new Exception("Nie udalo sie usunac przynaleznosci do Czlonkostwa");
+    }
+
+    public void deleteKoncert(String nazwa, Date data, String miastoNazwa, int zespolId) throws Exception {
+        boolean error =false;
+        PreparedStatement statement = null;
+        int changes = 0;
+        try {
+            statement = connection.prepareStatement("delete from KONCERTY WHERE NAZWA = ? AND DATA = ? AND MIASTO_NAZWA = ? AND ZESPOL_ID = ?");
+            statement.setString(1, nazwa);
+            statement.setDate(2, data);
+            statement.setString(3, miastoNazwa);
+            statement.setInt(4, zespolId);
+            changes = statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if (error == true)
+            throw new Exception("Nie udalo sie usunac koncertu");
+    }
+
+    public void deleteMiasto(String nazwa) throws Exception {
+        boolean error =false;
+        PreparedStatement statement = null;
+        int changes = 0;
+        try {
+            statement = connection.prepareStatement("delete from MIASTA where NAZWA= ?");
+            statement.setString(1, nazwa);
+            changes = statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if (error == true)
+            throw new Exception("Nie udalo sie usunac miasta");
+    }
+
+    public void deleteFestiwal(int festiwalId) throws Exception {
+        boolean error =false;
+        PreparedStatement statement = null;
+        int changes = 0;
+        try {
+            statement = connection.prepareStatement("delete from FESTIWALE where FESTIWAL_ID= ?");
+            statement.setInt(1, festiwalId);
+            changes = statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if (error == true)
+            throw new Exception("Nie udalo sie usunac festiwalu");
+    }
+
+    public void deleteMuzyk(int muzykId) throws Exception {
+        boolean error =false;
+        PreparedStatement statement = null;
+        int changes = 0;
+        try {
+            statement = connection.prepareStatement("delete from MUZYCY WHERE MUZYK_ID = ?");
+            statement.setInt(1, muzykId);
+            changes = statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if (error == true)
+            throw new Exception("Nie udalo sie usunac muzyka");
+    }
+
+
     public void disconnect() throws SQLException {
         connection.close();
     }

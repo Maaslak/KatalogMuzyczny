@@ -30,7 +30,6 @@ public class Utwor {
 
     @Override
     public String toString() {
-        return "Tytul: " + tytul + "\nCzas: " + czas.getMinutes() + ':' + czas.getSeconds() + "\n\n";
-
+        return "<html>Tytul: " + tytul + "<br/>Czas: " + czas.getMinutes() + ':' + czas.getSeconds() + "<br/><br/></html>";
     }
 }

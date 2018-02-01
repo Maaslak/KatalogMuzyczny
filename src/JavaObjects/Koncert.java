@@ -38,6 +38,6 @@ public class Koncert {
 
     @Override
     public String toString() {
-        return "Nazwa: " + nazwa + "\nData: " + data + "\nMiasto: " + miasto_nazwa + "\n\n";
+        return "<html>Nazwa: " + nazwa + "<br/>Data: " + data + "<br/>Miasto: " + miasto_nazwa + "<br/><br/><html>";
     }
 }

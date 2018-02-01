@@ -67,6 +67,6 @@ public class Album {
 
     @Override
     public String toString() {
-        return "Nazwa: " + nazwa + "\nData wydania: " + dataWydania + "\nOcena: " + ocena + "\nJezyk: " + jezyk + "\n\n";
+        return "<html>Nazwa: " + nazwa + "<br/>Data wydania: " + dataWydania + "<br/>Ocena: " + ocena + "<br/>Jezyk: " + jezyk + "<br/><br/></html>";
     }
 }
