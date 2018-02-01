@@ -37,7 +37,7 @@ public class DataBaseConnector {
         connectionProperties = new Properties();
         connectionProperties.put("user", user);
         connectionProperties.put("password", password);
-        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1522:orcl", connectionProperties);
+        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", connectionProperties);
     }
 
     public ArrayList<Zespol> getZespoly() throws Exception {

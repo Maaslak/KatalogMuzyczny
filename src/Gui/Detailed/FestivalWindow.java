@@ -27,7 +27,7 @@ public class FestivalWindow extends Detailed{
         this.festiwal = festiwal;
         setInformationPanel();
         try {
-            //this.koncerty = dataBaseConnector.getKoncert("",null,null,"", "", new Integer(festiwal.getId()));
+            this.koncerty = dataBaseConnector.getKoncert("",null,null,"", festiwal.getId());
             DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
             String header[] = new String[] { "Nazwa", "Data", "Miasto" };
 

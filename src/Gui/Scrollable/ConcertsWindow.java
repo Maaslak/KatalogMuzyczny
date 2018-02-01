@@ -102,7 +102,7 @@ public class ConcertsWindow extends Scrollable {
                         dateFrom = Date.valueOf(from.getDate());
                     if(to.getDate() != null)
                         dateTo = Date.valueOf(to.getDate());
-                    koncerty = getDataBaseConnector().getKoncert(nameJTextField.getText(),dateFrom,dateTo,cityTextField.getText());
+                    koncerty = getDataBaseConnector().getKoncert(nameJTextField.getText(),dateFrom,dateTo,cityTextField.getText(),null);
                     DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
                     model.getDataVector().removeAllElements();
                     model.fireTableDataChanged();
