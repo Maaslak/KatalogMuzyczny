@@ -37,7 +37,7 @@ public class DataBaseConnector {
         connectionProperties = new Properties();
         connectionProperties.put("user", user);
         connectionProperties.put("password", password);
-        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", connectionProperties);
+        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1522:orcl", connectionProperties);
     }
 
     public ArrayList<Zespol> getZespoly() throws Exception {
@@ -566,7 +566,7 @@ public class DataBaseConnector {
             statement.setInt(2, albumId);
             if(czas != null)
                 statement.setDate(3, czas);
-            changes = statement.executeUpdate(sql);
+            changes = statement.executeUpdate();
 
         } catch (SQLException ex) {
             System.out.println("Bład wykonania polecenia" + ex.toString());
@@ -603,7 +603,7 @@ public class DataBaseConnector {
             sql += ", ocena";
         if(!jezyk.isEmpty())
             sql += ", jezyk";
-        sql += ") VALUES (?, ?, ";
+        sql += ") VALUES (?, ?";
         if(dataWydania != null)
             sql += ", ?";
         if(ocena != null)
@@ -628,7 +628,7 @@ public class DataBaseConnector {
                 statement.setString(i, jezyk);
                 i++;
             }
-            changes = statement.executeUpdate(sql);
+            changes = statement.executeUpdate();
 
         } catch (SQLException ex) {
             System.out.println("Bład wykonania polecenia" + ex.toString());
@@ -673,7 +673,7 @@ public class DataBaseConnector {
             statement.setInt(4, zespolId);
             if(festiwalId != null)
                 statement.setInt(5, festiwalId);
-            changes = statement.executeUpdate(sql);
+            changes = statement.executeUpdate();
 
         } catch (SQLException ex) {
             System.out.println("Bład wykonania polecenia" + ex.toString());
@@ -726,7 +726,7 @@ public class DataBaseConnector {
             }
             if(!krajZalozenia.isEmpty())
                 statement.setString(i, krajZalozenia);
-            changes = statement.executeUpdate(sql);
+            changes = statement.executeUpdate();
 
         } catch (SQLException ex) {
             System.out.println("Bład wykonania polecenia" + ex.toString());
@@ -771,7 +771,7 @@ public class DataBaseConnector {
             int i =3;
             if(dataZakonczenia != null)
                 statement.setDate(i, dataZakonczenia);
-            changes = statement.executeUpdate(sql);
+            changes = statement.executeUpdate();
 
         } catch (SQLException ex) {
             System.out.println("Bład wykonania polecenia" + ex.toString());
@@ -826,7 +826,7 @@ public class DataBaseConnector {
                 i++;
             }
 
-            changes = statement.executeUpdate(sql);
+            changes = statement.executeUpdate();
 
         } catch (SQLException ex) {
             System.out.println("Bład wykonania polecenia" + ex.toString());
@@ -869,7 +869,7 @@ public class DataBaseConnector {
             statement.setString(1, nazwa);
             if(!opis.isEmpty())
                 statement.setString(2, opis);
-            changes = statement.executeUpdate(sql);
+            changes = statement.executeUpdate();
 
         } catch (SQLException ex) {
             System.out.println("Bład wykonania polecenia" + ex.toString());
@@ -913,7 +913,7 @@ public class DataBaseConnector {
             statement.setString(2, nazwisko);
             if(!pochodzenie.isEmpty())
                 statement.setString(3, pochodzenie);
-            changes = statement.executeUpdate(sql);
+            changes = statement.executeUpdate();
 
         } catch (SQLException ex) {
             System.out.println("Bład wykonania polecenia" + ex.toString());
@@ -958,7 +958,7 @@ public class DataBaseConnector {
             statement.setInt(3, zespolId);
             if(glowna != null)
                 statement.setString(4, glowna.toString());
-            changes = statement.executeUpdate(sql);
+            changes = statement.executeUpdate();
 
         } catch (SQLException ex) {
             System.out.println("Bład wykonania polecenia" + ex.toString());
@@ -1012,7 +1012,7 @@ public class DataBaseConnector {
             }
             if(!funkcja.isEmpty())
                 statement.setString(i, funkcja);
-            changes = statement.executeUpdate(sql);
+            changes = statement.executeUpdate();
 
         } catch (SQLException ex) {
             System.out.println("Bład wykonania polecenia" + ex.toString());
