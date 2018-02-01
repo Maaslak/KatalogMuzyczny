@@ -25,6 +25,10 @@ public class ConcertWindow extends Detailed{
     public ConcertWindow(DataBaseConnector dataBaseConnector, JFrame father, Koncert koncert){
         super(dataBaseConnector,father);
         this.koncert = koncert;
+        getAddButton().setVisible(false);
+        getEditButton().setVisible(false);
+        getSelectButton().setVisible(false);
+        getDeleteButton().setVisible(false);
         setInformationPanel();
         mouse();
     }
@@ -45,19 +49,19 @@ public class ConcertWindow extends Detailed{
     public void mouse(){
         ConcertWindow temp = this;
 
-        super.getEditButton().addMouseListener(new MouseAdapter() {
+        /*super.getEditButton().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 AddOrEditConcertWindow addOrEditConcertWindow = new AddOrEditConcertWindow(getDataBaseConnector(),temp,koncert);
             }
-        });
+        });*/
 
-        super.getSelectButton().addMouseListener(new MouseAdapter() {
+        /*super.getSelectButton().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
             }
-        });
+        });*/
     }
 }

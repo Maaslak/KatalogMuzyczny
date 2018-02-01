@@ -52,7 +52,7 @@ public class AddOrEditArtistWindow extends Change {
 
 
 
-    public void setAddArtistInConcert(){
+    /*public void setAddArtistInConcert(){
         this.zespolName = new JLabel("Name");
         try {
             ArrayList<Zespol> zespoly = getDataBaseConnector().getZespoly();
@@ -72,7 +72,7 @@ public class AddOrEditArtistWindow extends Change {
         addPanel.add(zespolyJComboBox, c);
 
         this.pack();
-    }
+    }*/
 
     public void setAddArtist(){
         this.name = new JLabel("Name");
@@ -113,7 +113,7 @@ public class AddOrEditArtistWindow extends Change {
         this.pack();
     }
 
-    public void setEditArtistInConcert(){
+    /*public void setEditArtistInConcert(){
         this.zespolName = new JLabel("Name");
         try {
             ArrayList<Zespol> zespoly = getDataBaseConnector().getZespoly();
@@ -133,7 +133,7 @@ public class AddOrEditArtistWindow extends Change {
         addPanel.add(zespolyJComboBox, c);
 
         this.pack();
-    }
+    }*/
 
     public void setEditArtist(){
         this.name = new JLabel("Name");

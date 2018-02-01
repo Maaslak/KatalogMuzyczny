@@ -1,5 +1,7 @@
 package Gui.Detailed;
 import DataBase.DataBaseConnector;
+import Gui.Change.AddOrEditConcertWindow;
+import Gui.Change.AddOrEditFestivalWindow;
 import JavaObjects.Festiwal;
 import JavaObjects.Koncert;
 import JavaObjects.Zespol;
@@ -16,7 +18,7 @@ public class FestivalWindow extends Detailed{
     private JLabel info;
     private JLabel head;
     private Festiwal festiwal;
-    private ArrayList<Zespol> zespoly;
+    private ArrayList<Koncert> koncerty;
     private GridBagConstraints c;
 
     public FestivalWindow(DataBaseConnector dataBaseConnector, JFrame father, Festiwal festiwal){
@@ -39,22 +41,31 @@ public class FestivalWindow extends Detailed{
         this.pack();
     }
 
+    FestivalWindow temp = this;
     public void mouse(){
         super.getAddButton().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
-            }
-        });
-
-        super.getDeleteButton().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                super.mouseClicked(mouseEvent);
+                AddOrEditConcertWindow addOrEditConcertWindow = new AddOrEditConcertWindow(getDataBaseConnector(),festiwal,temp);
+                addOrEditConcertWindow.setVisible(true);
+                setVisible(false);
             }
         });
 
         super.getEditButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                if(!getTable1().getSelectionModel().isSelectionEmpty()) {
+                    AddOrEditConcertWindow addOrEditConcertWindow = new AddOrEditConcertWindow(getDataBaseConnector(),festiwal,temp,koncerty.get(getTable1().getSelectedRow()));
+                    addOrEditConcertWindow.setVisible(true);
+                    setVisible(false);
+                }
+            }
+        });
+
+        super.getDeleteButton().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);

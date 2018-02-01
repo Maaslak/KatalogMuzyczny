@@ -63,7 +63,7 @@ public class ArtistWindow extends Detailed{
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 if(!getTable1().getSelectionModel().isSelectionEmpty()) {
-                    AddOrEditAlbumWindow addOrEditAlbumWindow = new AddOrEditAlbumWindow(getDataBaseConnector(),temp,albumy.get(getTable1().getSelectedRow()));
+                    AddOrEditAlbumWindow addOrEditAlbumWindow = new AddOrEditAlbumWindow(getDataBaseConnector(),zespol,temp,albumy.get(getTable1().getSelectedRow()));
                     addOrEditAlbumWindow.setVisible(true);
                     setVisible(false);
                 }

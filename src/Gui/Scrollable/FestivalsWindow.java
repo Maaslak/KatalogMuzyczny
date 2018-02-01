@@ -1,6 +1,8 @@
 package Gui.Scrollable;
 
 import DataBase.DataBaseConnector;
+import Gui.Change.AddOrEditConcertWindow;
+import Gui.Change.AddOrEditFestivalWindow;
 import Gui.Detailed.ConcertWindow;
 import Gui.Detailed.FestivalWindow;
 import JavaObjects.Festiwal;
@@ -99,6 +101,28 @@ public class FestivalsWindow extends Scrollable{
         });
 
         FestivalsWindow temp = this;
+        super.getAddButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                AddOrEditFestivalWindow addOrEditFestivalWindow = new AddOrEditFestivalWindow(getDataBaseConnector(),temp);
+                addOrEditFestivalWindow.setVisible(true);
+                setVisible(false);
+            }
+        });
+
+        super.getEditButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                if(!getTable1().getSelectionModel().isSelectionEmpty()) {
+                    AddOrEditFestivalWindow addOrEditFestivalWindow = new AddOrEditFestivalWindow(getDataBaseConnector(),temp,festiwale.get(getTable1().getSelectedRow()));
+                    addOrEditFestivalWindow.setVisible(true);
+                    setVisible(false);
+                }
+            }
+        });
+
         super.getSelectButton().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
