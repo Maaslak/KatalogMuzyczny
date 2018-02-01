@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class AddOrEditArtistWindow extends Change {
@@ -32,7 +33,6 @@ public class AddOrEditArtistWindow extends Change {
     public AddOrEditArtistWindow(DataBaseConnector dataBaseConnector, JFrame father) {
         super(dataBaseConnector, father);
         setAddArtist();
-        mouse(); //TODO przeciazyc
     }
 
     /*public AddOrEditArtistWindow(DataBaseConnector dataBaseConnector, Koncert koncert, JFrame father, Zespol zespol) {
@@ -46,7 +46,6 @@ public class AddOrEditArtistWindow extends Change {
         super(dataBaseConnector, father);
         this.zespolEdit = zespol;
         setEditArtist();
-        mouse(); //TODO przeciazyc
     }
 
 
@@ -111,6 +110,23 @@ public class AddOrEditArtistWindow extends Change {
         c.gridx = 2;
         addPanel.add(countryJTextField, c);
         this.pack();
+
+        getOkButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                Date dateFrom = null;
+                if(dateDatePicker.getDate() != null)
+                    dateFrom = Date.valueOf(dateDatePicker.getDate());
+                try {
+                    getDataBaseConnector().insertZespol(nameJTextField.getText(),dateFrom,cityJTextField.getText(),countryJTextField.getText());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                setVisible(false);
+                getFather().setVisible(true);
+            }
+        });
     }
 
     /*public void setEditArtistInConcert(){

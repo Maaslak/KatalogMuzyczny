@@ -32,6 +32,8 @@ public class ArtistWindow extends Detailed{
                     "Język" };
 
             model.setColumnIdentifiers(header);
+            model.getDataVector().removeAllElements();
+            model.fireTableDataChanged();
             for(int i=0; i<albums.size();i++){
                 model.addRow(new Object[] {albums.get(i).getNazwa(), albums.get(i).getDate(), albums.get(i).getOcena(), albums.get(i).getJezyk()});
             }
@@ -63,7 +65,7 @@ public class ArtistWindow extends Detailed{
         super.setVisible(b);
         this.albums.clear();
         try {
-            this.albums = getDataBaseConnector().getAlbumy();
+            this.albums = getDataBaseConnector().getAlbumy("",null,null,null, "", new Integer(zespol.getId()));
             DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
             model.getDataVector().removeAllElements();
             model.fireTableDataChanged();

@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Date;
 
 public class AddOrEditFestivalWindow extends Change{
     private JLabel name, date_start, date_end;
@@ -60,6 +61,26 @@ public class AddOrEditFestivalWindow extends Change{
         c.gridx = 2;
         addPanel.add(endDatePicker, c);
         this.pack();
+
+        getOkButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                Date dateStart = null;
+                if(startDatePicker.getDate() != null)
+                    dateStart = Date.valueOf(startDatePicker.getDate());
+                Date dateEnd = null;
+                if(startDatePicker.getDate() != null)
+                    dateEnd = Date.valueOf(endDatePicker.getDate());
+                try {
+                    getDataBaseConnector().insertFestiwal(nameJTextField.getText(),dateStart,dateEnd);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                setVisible(false);
+                getFather().setVisible(true);
+            }
+        });
     }
 
     public void setEditFestival(){

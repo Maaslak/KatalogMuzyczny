@@ -25,21 +25,18 @@ public class AddOrEditAlbumWindow extends Change {
     public AddOrEditAlbumWindow(DataBaseConnector dataBaseConnector, JFrame father) {
         super(dataBaseConnector, father);
         setAddPanelwithoutzespol();
-        //mouse(); //TODO przeciazyc
     }
 
     public AddOrEditAlbumWindow(DataBaseConnector dataBaseConnector, JFrame father, Album albumEdit) {
         super(dataBaseConnector, father);
         this.albumEdit = albumEdit;
         setEditPanel();
-        //mouse(); //TODO przeciazyc
     }
 
     public AddOrEditAlbumWindow(DataBaseConnector dataBaseConnector, Zespol zespol, JFrame father) {
         super(dataBaseConnector, father);
         this.zespol = zespol;
         setAdd();
-        //mouse();
     }
 
     public AddOrEditAlbumWindow(DataBaseConnector dataBaseConnector, Zespol zespol, JFrame father, Album albumEdit) {
@@ -47,7 +44,6 @@ public class AddOrEditAlbumWindow extends Change {
         this.zespol = zespol;
         this.albumEdit = albumEdit;
         setEdit();
-        //mouse();
     }
 
     public void setAddPanelwithoutzespol(){
@@ -56,54 +52,75 @@ public class AddOrEditAlbumWindow extends Change {
         this.date = new JLabel("Date");
         this.rating = new JLabel("Rate");
         this.language = new JLabel("Language");
-
         try {
             ArrayList<Zespol> zespoly = getDataBaseConnector().getZespoly();
             this.zespolyJComboBox = new JComboBox();
             for(int i =0; i<zespoly.size();i++)
                 this.zespolyJComboBox.addItem(zespoly.get(i).getNazwa());
+
+            //this.zespolJTextField = new JTextField(5);
+            nameJTextField = new JTextField(5);
+            dateDatePicker = new DatePicker();
+            ratingJTextField = new JTextField(5);
+            languageJTextField = new JTextField(5);
+
+            c = new GridBagConstraints();
+            c.gridy = 1;
+            c.gridx = 1;
+            addPanel.add(this.zespolname, c);
+            c.gridy = 2;
+            c.gridx = 1;
+            addPanel.add(name, c);
+            c.gridy = 3;
+            c.gridx = 1;
+            addPanel.add(date, c);
+            c.gridy = 4;
+            c.gridx = 1;
+            addPanel.add(rating, c);
+            c.gridy = 5;
+            c.gridx = 1;
+            addPanel.add(language, c);
+            c.gridy = 1;
+            c.gridx = 2;
+            addPanel.add(zespolyJComboBox, c);
+            c.gridy = 2;
+            c.gridx = 2;
+            addPanel.add(nameJTextField, c);
+            c.gridy = 3;
+            c.gridx = 2;
+            addPanel.add(dateDatePicker, c);
+            c.gridy = 4;
+            c.gridx = 2;
+            addPanel.add(ratingJTextField, c);
+            c.gridy = 5;
+            c.gridx = 2;
+            addPanel.add(languageJTextField, c);
+            this.pack();
+            getOkButton().addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent mouseEvent) {
+                    super.mouseClicked(mouseEvent);
+                    Date dateFrom = null;
+                    Float ratingFloat = null;
+                    Integer row = zespolyJComboBox.getSelectedIndex();
+                    if(dateDatePicker.getDate() != null)
+                        dateFrom = Date.valueOf(dateDatePicker.getDate());
+                    if(!ratingJTextField.getText().isEmpty())
+                        ratingFloat = Float.valueOf(ratingJTextField.getText());
+                    try {
+                        getDataBaseConnector().insertAlbum(nameJTextField.getText(),zespoly.get(row).getId(),dateFrom,ratingFloat,languageJTextField.getText());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    setVisible(false);
+                    getFather().setVisible(true);
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        //this.zespolJTextField = new JTextField(5);
-        nameJTextField = new JTextField(5);
-        dateDatePicker = new DatePicker();
-        ratingJTextField = new JTextField(5);
-        languageJTextField = new JTextField(5);
 
-        c = new GridBagConstraints();
-        c.gridy = 1;
-        c.gridx = 1;
-        addPanel.add(this.zespolname, c);
-        c.gridy = 2;
-        c.gridx = 1;
-        addPanel.add(name, c);
-        c.gridy = 3;
-        c.gridx = 1;
-        addPanel.add(date, c);
-        c.gridy = 4;
-        c.gridx = 1;
-        addPanel.add(rating, c);
-        c.gridy = 5;
-        c.gridx = 1;
-        addPanel.add(language, c);
-        c.gridy = 1;
-        c.gridx = 2;
-        addPanel.add(zespolyJComboBox, c);
-        c.gridy = 2;
-        c.gridx = 2;
-        addPanel.add(nameJTextField, c);
-        c.gridy = 3;
-        c.gridx = 2;
-        addPanel.add(dateDatePicker, c);
-        c.gridy = 4;
-        c.gridx = 2;
-        addPanel.add(ratingJTextField, c);
-        c.gridy = 5;
-        c.gridx = 2;
-        addPanel.add(languageJTextField, c);
-        this.pack();
     }
 
     public void setEditPanel(){
