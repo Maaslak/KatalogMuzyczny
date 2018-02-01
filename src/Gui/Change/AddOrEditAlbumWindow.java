@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class AddOrEditAlbumWindow extends Change {
@@ -24,21 +25,21 @@ public class AddOrEditAlbumWindow extends Change {
     public AddOrEditAlbumWindow(DataBaseConnector dataBaseConnector, JFrame father) {
         super(dataBaseConnector, father);
         setAddPanelwithoutzespol();
-        mouse(); //TODO przeciazyc
+        //mouse(); //TODO przeciazyc
     }
 
     public AddOrEditAlbumWindow(DataBaseConnector dataBaseConnector, JFrame father, Album albumEdit) {
         super(dataBaseConnector, father);
         this.albumEdit = albumEdit;
         setEditPanel();
-        mouse(); //TODO przeciazyc
+        //mouse(); //TODO przeciazyc
     }
 
     public AddOrEditAlbumWindow(DataBaseConnector dataBaseConnector, Zespol zespol, JFrame father) {
         super(dataBaseConnector, father);
         this.zespol = zespol;
         setAdd();
-        mouse();
+        //mouse();
     }
 
     public AddOrEditAlbumWindow(DataBaseConnector dataBaseConnector, Zespol zespol, JFrame father, Album albumEdit) {
@@ -46,7 +47,7 @@ public class AddOrEditAlbumWindow extends Change {
         this.zespol = zespol;
         this.albumEdit = albumEdit;
         setEdit();
-        mouse();
+        //mouse();
     }
 
     public void setAddPanelwithoutzespol(){
@@ -182,6 +183,25 @@ public class AddOrEditAlbumWindow extends Change {
         c.gridx = 2;
         addPanel.add(languageJTextField, c);
         this.pack();
+        getOkButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                Date dateFrom = null;
+                Float ratingFloat = null;
+                if(dateDatePicker.getDate() != null)
+                    dateFrom = Date.valueOf(dateDatePicker.getDate());
+                if(!ratingJTextField.getText().isEmpty())
+                    ratingFloat = Float.valueOf(ratingJTextField.getText());
+                try {
+                    getDataBaseConnector().insertAlbum(nameJTextField.getText(),zespol.getId(),dateFrom,ratingFloat,languageJTextField.getText());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                setVisible(false);
+                getFather().setVisible(true);
+            }
+        });
     }
 
     public void setEdit(){

@@ -88,6 +88,24 @@ public class AlbumsWindow extends Scrollable{
         this.pack();
     }
 
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        this.albums.clear();
+        try {
+            this.albums = getDataBaseConnector().getAlbumy();
+            DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
+            model.getDataVector().removeAllElements();
+            model.fireTableDataChanged();
+            for(int i=0; i<albums.size();i++){
+                model.addRow(new Object[] {albums.get(i).getNazwa(), albums.get(i).getDate(), albums.get(i).getOcena(), albums.get(i).getJezyk()});
+            }
+            getTable1().setModel(model);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void mouse(){
         super.getFilterButton().addMouseListener(new MouseAdapter() {
             @Override

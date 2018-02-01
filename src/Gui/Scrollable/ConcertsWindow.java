@@ -72,6 +72,24 @@ public class ConcertsWindow extends Scrollable {
         this.pack();
     }
 
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        this.koncerty.clear();
+        try {
+            this.koncerty = getDataBaseConnector().getKoncert();
+            DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
+            model.getDataVector().removeAllElements();
+            model.fireTableDataChanged();
+            for(int i=0; i<koncerty.size();i++){
+                model.addRow(new Object[] {koncerty.get(i).getNazwa(), koncerty.get(i).getData(), koncerty.get(i).getMiasto_nazwa()});
+            }
+            getTable1().setModel(model);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void mouse(){
         super.getFilterButton().addMouseListener(new MouseAdapter() {
             @Override

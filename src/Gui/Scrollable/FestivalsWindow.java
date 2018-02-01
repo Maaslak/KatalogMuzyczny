@@ -78,6 +78,24 @@ public class FestivalsWindow extends Scrollable{
         this.pack();
     }
 
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        this.festiwale.clear();
+        try {
+            this.festiwale = getDataBaseConnector().getFestiwale();
+            DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
+            model.getDataVector().removeAllElements();
+            model.fireTableDataChanged();
+            for(int i=0; i<festiwale.size();i++){
+                model.addRow(new Object[] {festiwale.get(i).getNazwa(), festiwale.get(i).getDataRozpoczecia(), festiwale.get(i).getDataZakonczenia()});
+            }
+            getTable1().setModel(model);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void mouse(){
         super.getFilterButton().addMouseListener(new MouseAdapter() {
             @Override

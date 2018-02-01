@@ -95,6 +95,24 @@ public class ArtistsWindow extends Scrollable {
         this.pack();
     }
 
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        this.zespoly.clear();
+        try {
+            this.zespoly = getDataBaseConnector().getZespoly();
+            DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
+            model.getDataVector().removeAllElements();
+            model.fireTableDataChanged();
+            for(int i=0; i<zespoly.size();i++){
+                model.addRow(new Object[] {zespoly.get(i).getNazwa(), zespoly.get(i).getDate(), zespoly.get(i).getMiasto_zalozenia(), zespoly.get(i).getKraj_zalozenia()});
+            }
+            getTable1().setModel(model);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void mouse(){
         super.getFilterButton().addMouseListener(new MouseAdapter() {
             @Override
@@ -107,7 +125,7 @@ public class ArtistsWindow extends Scrollable {
                         dateFrom = Date.valueOf(from.getDate());
                     if(to.getDate() != null)
                         dateTo = Date.valueOf(to.getDate());
-                    zespoly = getDataBaseConnector().getZespoly(nameJTextField.getText(),dateFrom,dateTo,nationalityJTextField.getText(),"");
+                    zespoly = getDataBaseConnector().getZespoly(nameJTextField.getText(),dateFrom,dateTo,nationalityJTextField.getText(),cityJTextField.getText());
                     DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
                     model.getDataVector().removeAllElements();
                     model.fireTableDataChanged();

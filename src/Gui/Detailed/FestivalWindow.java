@@ -8,6 +8,7 @@ import JavaObjects.Zespol;
 import com.github.lgooddatepicker.components.DatePicker;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -25,6 +26,21 @@ public class FestivalWindow extends Detailed{
         super(dataBaseConnector,father);
         this.festiwal = festiwal;
         setInformationPanel();
+        try {
+            //this.koncerty = dataBaseConnector.getKoncert("",null,null,"", "", new Integer(festiwal.getId()));
+            DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
+            String header[] = new String[] { "Nazwa", "Data", "Miasto" };
+
+            model.setColumnIdentifiers(header);
+            for(int i=0; i<koncerty.size();i++){
+                model.addRow(new Object[] {koncerty.get(i).getNazwa(), koncerty.get(i).getData(), koncerty.get(i).getMiasto_nazwa()});
+            }
+            getTable1().setModel(model);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            //TODO wyskakujace okienko z bledem
+        }
         mouse();
     }
 
@@ -39,6 +55,24 @@ public class FestivalWindow extends Detailed{
         c.gridx = 1;
         informationPanel.add(head, c);
         this.pack();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        this.koncerty.clear();
+        try {
+            this.koncerty = getDataBaseConnector().getKoncert();
+            DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
+            model.getDataVector().removeAllElements();
+            model.fireTableDataChanged();
+            for(int i=0; i<koncerty.size();i++){
+                model.addRow(new Object[] {koncerty.get(i).getNazwa(), koncerty.get(i).getData(), koncerty.get(i).getMiasto_nazwa()});
+            }
+            getTable1().setModel(model);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     FestivalWindow temp = this;
