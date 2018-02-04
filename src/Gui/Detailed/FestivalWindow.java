@@ -46,7 +46,7 @@ public class FestivalWindow extends Detailed{
 
     public void setInformationPanel(){
         this.info = new JLabel(festiwal.toString());
-        this.head = new JLabel("Albumy");
+        this.head = new JLabel("Koncerty");
         c = new GridBagConstraints();
         c.gridy = 1;
         c.gridx = 1;

@@ -14,6 +14,12 @@ public class Festiwal {
         this.id = id;
     }
 
+    public Festiwal(String nazwa, Date dataRozpoczecia, Date dataZakonczenia) {
+        this.nazwa = nazwa;
+        this.dataRozpoczecia = dataRozpoczecia;
+        this.dataZakonczenia = dataZakonczenia;
+    }
+
     public String getNazwa() {
         return nazwa;
     }

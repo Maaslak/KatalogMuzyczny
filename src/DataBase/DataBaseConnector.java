@@ -37,7 +37,7 @@ public class DataBaseConnector {
         connectionProperties = new Properties();
         connectionProperties.put("user", user);
         connectionProperties.put("password", password);
-        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1522:orcl", connectionProperties);
+        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", connectionProperties);
     }
 
     public ArrayList<Zespol> getZespoly() throws Exception {
@@ -55,22 +55,22 @@ public class DataBaseConnector {
             query += "NAZWA LIKE ? ";
         }
         if(dataBegin != null){
-            if(query.charAt(query.length() - 1) == '?')
+            if(query.charAt(query.length() - 2) == '?')
                 query += "AND ";
             query += "data_zalozenia > ? ";
         }
         if(dataEnd != null){
-            if(query.charAt(query.length() - 1) == '?')
+            if(query.charAt(query.length() - 2) == '?')
                 query += "AND ";
             query += "data_zalozenia < ? ";
         }
         if(!kraj_zalozenia.isEmpty()){
-            if(query.charAt(query.length() - 1) == '?')
+            if(query.charAt(query.length() - 2) == '?')
                 query += "AND ";
             query += "kraj_zalozenia = ? ";
         }
         if(!miasto_zalozenia.isEmpty()){
-            if(query.charAt(query.length() - 1) == '?')
+            if(query.charAt(query.length() - 2) == '?')
                 query += "AND ";
             query += "miasto_zalozenia = ? ";
         }
@@ -148,27 +148,27 @@ public class DataBaseConnector {
             query += "NAZWA LIKE ? ";
         }
         if(dateBegin != null){
-            if(query.charAt(query.length() - 1) == '?')
+            if(query.charAt(query.length() - 2) == '?')
                 query += "AND ";
             query += "data_wydania > ? ";
         }
         if(dateEnd != null){
-            if(query.charAt(query.length() - 1) == '?')
+            if(query.charAt(query.length() - 2) == '?')
                 query += "AND ";
             query += "data_wydania < ? ";
         }
         if(ocena != null){
-                if(query.charAt(query.length() - 1) == '?')
+                if(query.charAt(query.length() - 2) == '?')
                     query += "AND ";
                 query += "ocena = ? ";
             }
         if(!jezyk.isEmpty()){
-            if(query.charAt(query.length() - 1) == '?')
+            if(query.charAt(query.length() - 2) == '?')
                 query += "AND ";
             query += "jezyk = ? ";
         }
         if(zespolId != null){
-            if(query.charAt(query.length() - 1) == '?')
+            if(query.charAt(query.length() - 2) == '?')
                 query += "AND ";
             query += "zespol_id = ? ";
         }
@@ -242,7 +242,7 @@ public class DataBaseConnector {
     }
 
     public ArrayList<Koncert> getKoncert(String nazwa, Date dateBegin, Date dateEnd, String miastoNazwa, Integer festiwalId) throws Exception {
-        if(nazwa.isEmpty() && dateBegin == null && dateEnd == null && miastoNazwa.isEmpty())
+        if(nazwa.isEmpty() && dateBegin == null && dateEnd == null && miastoNazwa.isEmpty() && festiwalId == null)
             return getKoncert();
         String query= new String();
         query += "SELECT * FROM KONCERTY WHERE ";
@@ -250,22 +250,22 @@ public class DataBaseConnector {
             query += "NAZWA LIKE ? ";
         }
         if(dateBegin != null){
-            if(query.charAt(query.length() - 1) == '?')
+            if(query.charAt(query.length() - 2) == '?')
                 query += "AND ";
             query += "data > ? ";
         }
         if(dateEnd != null){
-            if(query.charAt(query.length() - 1) == '?')
+            if(query.charAt(query.length() - 2) == '?')
                 query += "AND ";
             query += "data < ? ";
         }
         if(!miastoNazwa.isEmpty()){
-            if(query.charAt(query.length() - 1) == '?')
+            if(query.charAt(query.length() - 2) == '?')
                 query += "AND ";
             query += "Miasto_nazwa = ? ";
         }
         if(festiwalId != null){
-            if(query.charAt(query.length() - 1) == '?')
+            if(query.charAt(query.length() - 2) == '?')
                 query += "AND ";
             query += "FESTIWAL_ID = ?";
         }
@@ -343,12 +343,12 @@ public class DataBaseConnector {
             query += "NAZWA LIKE ? ";
         }
         if(dateBegin != null){
-            if(query.charAt(query.length() - 1) == '?')
+            if(query.charAt(query.length() - 2) == '?')
                 query += "AND ";
             query += "data_rozpoczecia > ? ";
         }
         if(dateEnd != null){
-            if(query.charAt(query.length() - 1) == '?')
+            if(query.charAt(query.length() - 2) == '?')
                 query += "AND ";
             query += "data_zakonczenia < ? ";
         }
@@ -475,14 +475,18 @@ public class DataBaseConnector {
         return utwory;
     }
 
-    public ArrayList<Gatunek> getGatunki(int zespolId) throws Exception {
+    public ArrayList<Gatunek> getGatunki(Integer zespolId) throws Exception {
         PreparedStatement statement = null;
-        miasta.clear();
+        gatunki.clear();
         boolean error = false;
         ResultSet resultSet = null;
+        String sql = "SELECT * FROM GATUNKI ";
+        if(zespolId != null)
+            sql += "g JOIN PRZYNALEZNOSCI p USING(nazwa) WHERE p.ZESPOL_ID = ?";
         try {
-            statement = connection.prepareStatement("SELECT * FROM GATUNKI g JOIN PRZYNALEZNOSCI p USING(nazwa) WHERE p.ZESPOL_ID = ?");
-            statement.setInt(1, zespolId);
+            statement = connection.prepareStatement(sql);
+            if(zespolId != null)
+                statement.setInt(1, zespolId);
             resultSet = statement.executeQuery();
             while (resultSet.next()){
                 Gatunek gatunek= new Gatunek(resultSet.getString(1), resultSet.getString(2));
@@ -547,25 +551,25 @@ public class DataBaseConnector {
         return muzycy;
     }
 
-    public int insertUtwor(String tytul, Timestamp czas, int albumId) throws Exception {
+    public int insertUtwor(Utwor utwor, Integer albumId) throws Exception {
         boolean error = false;
         int changes = 0;
         PreparedStatement statement= null;
         ResultSet rs = null;
         String sql;
         sql = "INSERT INTO UTWORY(TYTUL, ALBUM_ID";
-        if(czas != null)
+        if(utwor.getCzas() != null)
             sql += ", CZAS ";
         sql += ") VALUES (?, ?";
-        if(czas != null)
+        if(utwor.getCzas() != null)
             sql += " ,?";
         sql += ")";
         try {
             statement = connection.prepareStatement(sql);
-            statement.setString(1, tytul);
+            statement.setString(1, utwor.getTytul());
             statement.setInt(2, albumId);
-            if(czas != null)
-                statement.setTimestamp(3, czas);
+            if(utwor.getCzas() != null)
+                statement.setTimestamp(3, utwor.getCzas());
             changes = statement.executeUpdate();
 
         } catch (SQLException ex) {
@@ -590,42 +594,42 @@ public class DataBaseConnector {
         return changes;
     }
 
-    public int insertAlbum(String nazwa, int zespolId, Date dataWydania, Float ocena, String jezyk) throws Exception {
+    public int insertAlbum(Album album, Integer zespolId) throws Exception {
         boolean error = false;
         int changes = 0;
         PreparedStatement statement= null;
         ResultSet rs = null;
         String sql;
         sql = "INSERT INTO ALBUMY(NAZWA, ZESPOL_ID";
-        if(dataWydania != null)
+        if(album.getDataWydania() != null)
             sql += ", data_wydania";
-        if(ocena != null)
+        if(album.getOcena() != null)
             sql += ", ocena";
-        if(!jezyk.isEmpty())
+        if(!album.getJezyk().isEmpty())
             sql += ", jezyk";
         sql += ") VALUES (?, ?";
-        if(dataWydania != null)
+        if(album.getDataWydania() != null)
             sql += ", ?";
-        if(ocena != null)
+        if(album.getOcena() != null)
             sql += ", ?";
-        if(!jezyk.isEmpty())
+        if(!album.getJezyk().isEmpty())
             sql += ", ?";
         sql += ")";
         try {
             statement = connection.prepareStatement(sql);
-            statement.setString(1, nazwa);
+            statement.setString(1, album.getNazwa());
             statement.setInt(2, zespolId);
             int i = 3;
-            if(dataWydania != null) {
-                statement.setDate(i, dataWydania);
+            if(album.getDataWydania() != null) {
+                statement.setDate(i, album.getDataWydania());
                 i++;
             }
-            if(ocena != null){
-                statement.setFloat(i, ocena);
+            if(album.getOcena() != null){
+                statement.setFloat(i, album.getOcena());
                 i++;
             }
-            if(!jezyk.isEmpty()){
-                statement.setString(i, jezyk);
+            if(!album.getJezyk().isEmpty()){
+                statement.setString(i, album.getJezyk());
                 i++;
             }
             changes = statement.executeUpdate();
@@ -652,7 +656,7 @@ public class DataBaseConnector {
         return changes;
     }
 
-    public int insertKoncert(String nazwa,  Date data, String miastoNazwa, int zespolId, Integer festiwalId) throws Exception {
+    public int insertKoncert(Koncert koncert, Integer festiwalId) throws Exception {
         boolean error = false;
         int changes = 0;
         PreparedStatement statement= null;
@@ -667,10 +671,10 @@ public class DataBaseConnector {
         sql += ")";
         try {
             statement = connection.prepareStatement(sql);
-            statement.setString(1, nazwa);
-            statement.setDate(2, data);
-            statement.setString(3, miastoNazwa);
-            statement.setInt(4, zespolId);
+            statement.setString(1, koncert.getNazwa());
+            statement.setDate(2, koncert.getData());
+            statement.setString(3, koncert.getMiasto_nazwa());
+            statement.setInt(4, koncert.getZespolId());
             if(festiwalId != null)
                 statement.setInt(5, festiwalId);
             changes = statement.executeUpdate();
@@ -697,35 +701,35 @@ public class DataBaseConnector {
         return changes;
     }
 
-    public int insertZespol(String nazwa,  Date dataZalozenia, String miastoZalozenia, String krajZalozenia) throws Exception {
+    public int insertZespol(Zespol zespol) throws Exception {
         boolean error = false;
         int changes = 0;
         PreparedStatement statement= null;
         ResultSet rs = null;
         String sql;
         sql = "INSERT INTO ZESPOLY(NAZWA, DATA_ZALOZENIA";
-        if(!miastoZalozenia.isEmpty())
+        if(!zespol.getMiasto_zalozenia().isEmpty())
             sql += ", MIASTO_ZALOZENIA";
-        if(!krajZalozenia.isEmpty())
+        if(!zespol.getKraj_zalozenia().isEmpty())
             sql += ", KRAJ_ZALOZENIA";
         sql += ") VALUES (?, ?";
-        if(!miastoZalozenia.isEmpty())
+        if(!zespol.getMiasto_zalozenia().isEmpty())
             sql += ", ?";
-        if(!krajZalozenia.isEmpty())
+        if(!zespol.getKraj_zalozenia().isEmpty())
             sql += ", ?";
         sql += ")";
         try {
 
             statement = connection.prepareStatement(sql);
-            statement.setString(1, nazwa);
-            statement.setDate(2, dataZalozenia);
+            statement.setString(1, zespol.getNazwa());
+            statement.setDate(2, zespol.getDate());
             int i =3;
-            if(!miastoZalozenia.isEmpty()){
-                statement.setString(i, miastoZalozenia);
+            if(!zespol.getMiasto_zalozenia().isEmpty()){
+                statement.setString(i, zespol.getMiasto_zalozenia());
                 i++;
             }
-            if(!krajZalozenia.isEmpty())
-                statement.setString(i, krajZalozenia);
+            if(!zespol.getKraj_zalozenia().isEmpty())
+                statement.setString(i, zespol.getKraj_zalozenia());
             changes = statement.executeUpdate();
 
         } catch (SQLException ex) {
@@ -750,27 +754,27 @@ public class DataBaseConnector {
         return changes;
     }
 
-    public int insertFestiwal(String nazwa,  Date dataRozpoczecia, Date dataZakonczenia) throws Exception {
+    public int insertFestiwal(Festiwal festiwal) throws Exception {
         boolean error = false;
         int changes = 0;
         PreparedStatement statement= null;
         ResultSet rs = null;
         String sql;
         sql = "INSERT INTO FESTIWALE(NAZWA, DATA_ROZPOCZECIA";
-        if(dataZakonczenia != null)
+        if(festiwal.getDataZakonczenia() != null)
             sql += ", DATA_ZAKONCZENIA";
         sql += ") VALUES (?, ?";
-        if(dataZakonczenia != null)
+        if(festiwal.getDataZakonczenia() != null)
             sql += ", ?";
         sql += ")";
         try {
 
             statement = connection.prepareStatement(sql);
-            statement.setString(1, nazwa);
-            statement.setDate(2, dataRozpoczecia);
+            statement.setString(1, festiwal.getNazwa());
+            statement.setDate(2, festiwal.getDataRozpoczecia());
             int i =3;
-            if(dataZakonczenia != null)
-                statement.setDate(i, dataZakonczenia);
+            if(festiwal.getDataZakonczenia() != null)
+                statement.setDate(i, festiwal.getDataZakonczenia());
             changes = statement.executeUpdate();
 
         } catch (SQLException ex) {

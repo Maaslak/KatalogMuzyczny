@@ -108,7 +108,8 @@ public class AddOrEditAlbumWindow extends Change {
                     if(!ratingJTextField.getText().isEmpty())
                         ratingFloat = Float.valueOf(ratingJTextField.getText());
                     try {
-                        getDataBaseConnector().insertAlbum(nameJTextField.getText(),zespoly.get(row).getId(),dateFrom,ratingFloat,languageJTextField.getText());
+                        Album album = new Album(nameJTextField.getText(), dateFrom,ratingFloat,languageJTextField.getText());
+                        getDataBaseConnector().insertAlbum(album, zespoly.get(row).getId());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -211,7 +212,8 @@ public class AddOrEditAlbumWindow extends Change {
                 if(!ratingJTextField.getText().isEmpty())
                     ratingFloat = Float.valueOf(ratingJTextField.getText());
                 try {
-                    getDataBaseConnector().insertAlbum(nameJTextField.getText(),zespol.getId(),dateFrom,ratingFloat,languageJTextField.getText());
+                    Album album = new Album(nameJTextField.getText(), dateFrom,ratingFloat,languageJTextField.getText());
+                    getDataBaseConnector().insertAlbum(album, zespol.getId());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

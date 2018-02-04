@@ -112,7 +112,8 @@ public class AddOrEditConcertWindow extends Change{
                     if(dateDatePicker.getDate() != null)
                         dateFrom = Date.valueOf(dateDatePicker.getDate());
                     try {
-                        getDataBaseConnector().insertKoncert(nameJTextField.getText(),dateFrom,cityJTextField.getText(),zespoly.get(row_zespol).getId(),festiwale.get(row_festival).getId());
+                        Koncert koncert = new Koncert(nameJTextField.getText(), dateFrom,cityJTextField.getText(),zespoly.get(row_zespol).getId());
+                        getDataBaseConnector().insertKoncert(koncert,festiwale.get(row_festival).getId());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

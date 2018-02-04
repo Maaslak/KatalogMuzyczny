@@ -33,7 +33,7 @@ public class AlbumWindow extends Detailed{
 
             model.setColumnIdentifiers(header);
             for(int i=0; i<utwory.size();i++){
-                model.addRow(new Object[] {utwory.get(i).getTytul(), utwory.get(i).getCzas()});
+                model.addRow(new Object[] {utwory.get(i).getTytul(), utwory.get(i).getFormatedTimestamp()});
             }
             getTable1().setModel(model);
 
@@ -67,7 +67,7 @@ public class AlbumWindow extends Detailed{
             model.getDataVector().removeAllElements();
             model.fireTableDataChanged();
             for(int i=0; i<utwory.size();i++){
-                model.addRow(new Object[] {utwory.get(i).getTytul(), utwory.get(i).getCzas()});
+                model.addRow(new Object[] {utwory.get(i).getTytul(), utwory.get(i).getFormatedTimestamp()});
             }
             getTable1().setModel(model);
         } catch (Exception e) {

@@ -69,6 +69,12 @@ public class ConcertsWindow extends Scrollable {
         c.gridy = 1;
         c.gridx = 1;
         filterPanel.add(nameJTextField, c);
+        c.gridy = 2;
+        c.gridx = 0;
+        filterPanel.add(city, c);
+        c.gridy = 2;
+        c.gridx = 1;
+        filterPanel.add(cityTextField, c);
         this.pack();
     }
 

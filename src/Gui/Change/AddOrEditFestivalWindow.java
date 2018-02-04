@@ -73,7 +73,8 @@ public class AddOrEditFestivalWindow extends Change{
                 if(startDatePicker.getDate() != null)
                     dateEnd = Date.valueOf(endDatePicker.getDate());
                 try {
-                    getDataBaseConnector().insertFestiwal(nameJTextField.getText(),dateStart,dateEnd);
+                    Festiwal festiwal = new Festiwal(nameJTextField.getText(),dateStart,dateEnd);
+                    getDataBaseConnector().insertFestiwal(festiwal);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

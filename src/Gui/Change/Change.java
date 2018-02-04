@@ -29,6 +29,8 @@ public abstract class Change extends JFrame{
         });
     }
 
+
+
     public JButton getOkButton() {
         return okButton;
     }

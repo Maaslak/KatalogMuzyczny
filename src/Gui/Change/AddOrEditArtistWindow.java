@@ -1,13 +1,15 @@
 package Gui.Change;
 
 import DataBase.DataBaseConnector;
-import JavaObjects.Album;
+import JavaObjects.Gatunek;
 import JavaObjects.Koncert;
 import JavaObjects.Zespol;
 import com.github.lgooddatepicker.components.DatePicker;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Date;
@@ -15,13 +17,17 @@ import java.util.ArrayList;
 
 public class AddOrEditArtistWindow extends Change {
 
-    private JLabel zespolName, name, date, city, country;
-    private JTextField koncertJTextField, nameJTextField, cityJTextField, countryJTextField;
+    private JLabel zespolName, name, date, city, country, gatunekAdd, gatunekDel;
+    private JTextField koncertJTextField, nameJTextField, cityJTextField, countryJTextField, newGatunek;
+    private JButton addGatunekJButton;
     private JComboBox zespolyJComboBox;
+    private JComboBox gatunkiAddJComboBox;
+    private JComboBox gatunkiDeleteJComboBox;
     private DatePicker dateDatePicker;
     private Koncert koncert;
     private Zespol zespolEdit;
     private GridBagConstraints c;
+    private boolean externalGanunkiChange = false;
 
     /*public AddOrEditArtistWindow(DataBaseConnector dataBaseConnector, Koncert koncert, JFrame father) {
         super(dataBaseConnector, father);
@@ -78,7 +84,38 @@ public class AddOrEditArtistWindow extends Change {
         this.date = new JLabel("Date");
         this.city = new JLabel("City");
         this.country = new JLabel("Country");
+        this.gatunekAdd = new JLabel("Add genere");
+        this.gatunekDel = new JLabel("Selected generes (delete)");
+        this.addGatunekJButton = new JButton("Add genere");
+        this.gatunkiAddJComboBox = new JComboBox();
+        this.gatunkiDeleteJComboBox = new JComboBox();
+        this.gatunkiAddJComboBox.addActionListener (new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(((DefaultComboBoxModel)gatunkiDeleteJComboBox.getModel()).getIndexOf(gatunkiAddJComboBox.getSelectedItem()) == -1) {
+                    externalGanunkiChange = true;
+                    gatunkiDeleteJComboBox.addItem(gatunkiAddJComboBox.getSelectedItem());
+                }
+            }
+        });
+        this.gatunkiDeleteJComboBox.addActionListener (new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(e.getModifiers());
+                if(!externalGanunkiChange)
+                    gatunkiDeleteJComboBox.removeItem(gatunkiDeleteJComboBox.getSelectedItem());
+                externalGanunkiChange = false;
+            }
+        });
+        try {
+            ArrayList<Gatunek> gatunki = getDataBaseConnector().getGatunki(null);
+            for (Gatunek gatunek :
+                    gatunki) {
+                this.gatunkiAddJComboBox.addItem(gatunek.getNazwa());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+        this.gatunkiDeleteJComboBox.removeAllItems();
         this.nameJTextField = new JTextField(5);
         this.dateDatePicker = new DatePicker();
         this.cityJTextField = new JTextField(5);
@@ -109,6 +146,18 @@ public class AddOrEditArtistWindow extends Change {
         c.gridy = 5;
         c.gridx = 2;
         addPanel.add(countryJTextField, c);
+        c.gridy = 6;
+        c.gridx = 1;
+        addPanel.add(gatunekAdd, c);
+        c.gridy = 6;
+        c.gridx = 2;
+        addPanel.add(gatunkiAddJComboBox, c);
+        c.gridy = 7;
+        c.gridx = 1;
+        addPanel.add(gatunekDel, c);
+        c.gridy = 7;
+        c.gridx = 2;
+        addPanel.add(gatunkiDeleteJComboBox, c);
         this.pack();
 
         getOkButton().addMouseListener(new MouseAdapter() {
@@ -119,7 +168,8 @@ public class AddOrEditArtistWindow extends Change {
                 if(dateDatePicker.getDate() != null)
                     dateFrom = Date.valueOf(dateDatePicker.getDate());
                 try {
-                    getDataBaseConnector().insertZespol(nameJTextField.getText(),dateFrom,cityJTextField.getText(),countryJTextField.getText());
+                    Zespol zespol = new Zespol(nameJTextField.getText(),dateFrom,cityJTextField.getText(),countryJTextField.getText());
+                    getDataBaseConnector().insertZespol(zespol);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

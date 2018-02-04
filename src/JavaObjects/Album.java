@@ -5,16 +5,20 @@ import java.sql.Date;
 public class Album {
     private String nazwa;
     private String jezyk;
-    private float ocena;
+    private Float ocena;
     private Date dataWydania;
-    private int id;
+    private Integer id;
 
-    public Album(String nazwa, Date dataWydania, float ocena, String jezyk, int id){
+    public Album(String nazwa, Date dataWydania, Float ocena, String jezyk, Integer id){
         this.nazwa = nazwa;
         this.dataWydania = dataWydania;
         this.ocena = ocena;
         this.jezyk = jezyk;
         this.id = id;
+    }
+
+    public Album(String nazwa, Date dataWydania, Float ocena, String jezyk){
+        this(nazwa, dataWydania, ocena, jezyk, null);
     }
 
     public String getNazwa() {
@@ -33,11 +37,11 @@ public class Album {
         this.jezyk = jezyk;
     }
 
-    public float getOcena() {
+    public Float getOcena() {
         return ocena;
     }
 
-    public void setOcena(float ocena) {
+    public void setOcena(Float ocena) {
         this.ocena = ocena;
     }
 
@@ -57,11 +61,11 @@ public class Album {
         this.dataWydania = dataWydania;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

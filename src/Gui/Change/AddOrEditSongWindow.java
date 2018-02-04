@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class AddOrEditSongWindow extends Change{
 
@@ -65,11 +66,10 @@ public class AddOrEditSongWindow extends Change{
                     time_sec = Integer.valueOf(timeJTextField.getText());
                 try {
                     int time_min = time_sec/60;
-                    time_sec = time_sec%60;
-                    Date temp = new Date(0);
-                    temp.setMinutes(time_min);
-                    temp.setSeconds(time_sec);
-                    getDataBaseConnector().insertUtwor(titleJTextField.getText(),temp,album.getId());
+                    //time_sec = time_sec%60;
+                    Timestamp timestamp = new Timestamp(time_sec*1000);
+                    Utwor utwor = new Utwor(titleJTextField.getText(), timestamp);
+                    getDataBaseConnector().insertUtwor(utwor,album.getId());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
