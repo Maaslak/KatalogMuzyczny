@@ -33,10 +33,10 @@ public class ArtistsWindow extends Scrollable {
         try {
             this.zespoly = dataBaseConnector.getZespoly();
             DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
-            model.addColumn("nazwa");
-            model.addColumn("data_zalozenia");
-            model.addColumn("miast_zalozenia");
-            model.addColumn("kraj_zalozenia");
+            model.addColumn("Name");
+            model.addColumn("Formed Date");
+            model.addColumn("City");
+            model.addColumn("Country");
 
             for(int i=0; i<zespoly.size();i++){
                 model.addRow(new Object[] {zespoly.get(i).getNazwa(), zespoly.get(i).getDate(), zespoly.get(i).getMiasto_zalozenia(), zespoly.get(i).getKraj_zalozenia()});
@@ -179,9 +179,13 @@ public class ArtistsWindow extends Scrollable {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
-                if(!getTable1().getSelectionModel().isSelectionEmpty()) {
-                    // Drop
-                };
+                try {
+                    getDataBaseConnector().deleteZespol(zespoly.get(getTable1().getSelectedRow()).getId());
+                    setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
     }

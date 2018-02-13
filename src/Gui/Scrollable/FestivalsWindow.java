@@ -30,7 +30,7 @@ public class FestivalsWindow extends Scrollable{
         try {
             this.festiwale = dataBaseConnector.getFestiwale();
             DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
-            String header[] = new String[] { "Nazwa", "Data rozpoczecia", "Data zakoczenia" };
+            String header[] = new String[] { "Name", "Beginning date", "Ending date" };
             model.setColumnIdentifiers(header);
             for(int i=0; i<festiwale.size();i++){
                 model.addRow(new Object[] {festiwale.get(i).getNazwa(), festiwale.get(i).getDataRozpoczecia(), festiwale.get(i).getDataZakonczenia()});

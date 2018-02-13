@@ -28,7 +28,7 @@ public class ConcertsWindow extends Scrollable {
         try {
             this.koncerty = dataBaseConnector.getKoncert();
             DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
-            String header[] = new String[] { "Nazwa", "Data", "Miasto" };
+            String header[] = new String[] { "Name", "Date", "City" };
             model.setColumnIdentifiers(header);
             for(int i=0; i<koncerty.size();i++){
                 model.addRow(new Object[] {koncerty.get(i).getNazwa(), koncerty.get(i).getData(), koncerty.get(i).getMiasto_nazwa()});
@@ -36,6 +36,7 @@ public class ConcertsWindow extends Scrollable {
             getTable1().setModel(model);
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
         }
 
         c = new GridBagConstraints();
@@ -93,6 +94,7 @@ public class ConcertsWindow extends Scrollable {
             getTable1().setModel(model);
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -118,6 +120,8 @@ public class ConcertsWindow extends Scrollable {
                     getTable1().setModel(model);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
+
                 }
             }
         });
@@ -153,6 +157,23 @@ public class ConcertsWindow extends Scrollable {
                     ConcertWindow concertWindow= new ConcertWindow(getDataBaseConnector(),temp,koncerty.get(getTable1().getSelectedRow()));
                     concertWindow.setVisible(true);
                     setVisible(false);
+                }
+            }
+        });
+
+        super.getDeleteButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                if(!getTable1().getSelectionModel().isSelectionEmpty()) {
+                    Koncert koncert = koncerty.get(getTable1().getSelectedRow());
+                    try {
+                        getDataBaseConnector().deleteKoncert(koncert.getNazwa(), koncert.getData());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
+                    }
+                    setVisible(true);
                 }
             }
         });

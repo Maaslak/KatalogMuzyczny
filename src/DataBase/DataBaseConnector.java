@@ -52,17 +52,17 @@ public class DataBaseConnector {
         String query= new String();
         query += "SELECT * FROM ZESPOLY WHERE ";
         if(!nazwa.isEmpty()) {
-            query += "NAZWA LIKE ? ";
+            query += "NAZWA = ? ";
         }
         if(dataBegin != null){
             if(query.charAt(query.length() - 2) == '?')
                 query += "AND ";
-            query += "data_zalozenia > ? ";
+            query += "data_zalozenia >= ? ";
         }
         if(dataEnd != null){
             if(query.charAt(query.length() - 2) == '?')
                 query += "AND ";
-            query += "data_zalozenia < ? ";
+            query += "data_zalozenia <= ? ";
         }
         if(!kraj_zalozenia.isEmpty()){
             if(query.charAt(query.length() - 2) == '?')
@@ -107,7 +107,7 @@ public class DataBaseConnector {
         try {
             resultSet = statement.executeQuery();
             while (resultSet.next()){
-                Zespol zespol = new Zespol(resultSet.getString(1), resultSet.getDate(2), resultSet.getString(3), resultSet.getString(4), resultSet.getInt(5));
+                Zespol zespol = new Zespol(resultSet.getString(1), resultSet.getDate(2), resultSet.getString(3), resultSet.getString(4), resultSet.getInt(5), this);
                 zespoly.add(zespol);
             }
         } catch (SQLException e) {
@@ -475,18 +475,24 @@ public class DataBaseConnector {
         return utwory;
     }
 
-    public ArrayList<Gatunek> getGatunki(Integer zespolId) throws Exception {
+    public ArrayList<Gatunek> getGatunki(Integer zespolId, String nazwa) throws Exception {
+        if(!nazwa.isEmpty() && zespolId != null)
+            throw new Exception("Bad use of function 'getGatunki'");
         PreparedStatement statement = null;
         gatunki.clear();
         boolean error = false;
         ResultSet resultSet = null;
         String sql = "SELECT * FROM GATUNKI ";
         if(zespolId != null)
-            sql += "g JOIN PRZYNALEZNOSCI p USING(nazwa) WHERE p.ZESPOL_ID = ?";
+            sql += "g JOIN PRZYNALEZNOSCI p ON g.NAZWA = p.GATUNEK_NAZWA WHERE p.ZESPOL_ID = ?";
+        if(!nazwa.isEmpty())
+            sql += "WHERE NAZWA = ?";
         try {
             statement = connection.prepareStatement(sql);
             if(zespolId != null)
                 statement.setInt(1, zespolId);
+            if(!nazwa.isEmpty())
+                statement.setString(1, nazwa);
             resultSet = statement.executeQuery();
             while (resultSet.next()){
                 Gatunek gatunek= new Gatunek(resultSet.getString(1), resultSet.getString(2));
@@ -941,27 +947,26 @@ public class DataBaseConnector {
         return changes;
     }
 
-    public int insertPrzynaleznosc(String nazwa,  String gatunekNazwa, int zespolId, Character glowna) throws Exception {
+    public int insertPrzynaleznosc(String gatunekNazwa, int zespolId, Character glowna) throws Exception {
         boolean error = false;
         int changes = 0;
         PreparedStatement statement= null;
         ResultSet rs = null;
         String sql;
-        sql = "INSERT INTO PRZYNALEZNOSCI(NAZWA, GATUNEK_NAZWA, ZESPOL_ID";
+        sql = "INSERT INTO PRZYNALEZNOSCI(GATUNEK_NAZWA, ZESPOL_ID";
         if(glowna != null)
             sql += ", GLOWNA";
-        sql += ") VALUES (?, ?, ?";
+        sql += ") VALUES (?, ?";
         if(glowna != null)
             sql += ", ?";
         sql += ")";
         try {
 
             statement = connection.prepareStatement(sql);
-            statement.setString(1, nazwa);
-            statement.setString(2, gatunekNazwa);
-            statement.setInt(3, zespolId);
+            statement.setString(1, gatunekNazwa);
+            statement.setInt(2, zespolId);
             if(glowna != null)
-                statement.setString(4, glowna.toString());
+                statement.setObject(3, glowna);
             changes = statement.executeUpdate();
 
         } catch (SQLException ex) {
@@ -1069,6 +1074,9 @@ public class DataBaseConnector {
         PreparedStatement statement = null;
         int changes = 0;
         try {
+            statement = connection.prepareStatement("delete from UTWORY WHERE ALBUM_ID = ?");
+            statement.setInt(1, albumId);
+            changes = statement.executeUpdate();
             statement = connection.prepareStatement("delete from ALBUMY WHERE ALBUM_ID = ?");
             statement.setInt(1, albumId);
             changes = statement.executeUpdate();
@@ -1092,6 +1100,9 @@ public class DataBaseConnector {
         PreparedStatement statement = null;
         int changes = 0;
         try {
+            statement = connection.prepareStatement("delete from PRZYNALEZNOSCI WHERE ZESPOL_ID = ?");
+            statement.setInt(1, zespolId);
+            changes = statement.executeUpdate();
             statement = connection.prepareStatement("delete from ZESPOLY WHERE ZESPOL_ID = ?");
             statement.setInt(1, zespolId);
             changes = statement.executeUpdate();
@@ -1182,16 +1193,14 @@ public class DataBaseConnector {
             throw new Exception("Nie udalo sie usunac przynaleznosci do Czlonkostwa");
     }
 
-    public void deleteKoncert(String nazwa, Date data, String miastoNazwa, int zespolId) throws Exception {
+    public void deleteKoncert(String nazwa, Date data) throws Exception {
         boolean error =false;
         PreparedStatement statement = null;
         int changes = 0;
         try {
-            statement = connection.prepareStatement("delete from KONCERTY WHERE NAZWA = ? AND DATA = ? AND MIASTO_NAZWA = ? AND ZESPOL_ID = ?");
+            statement = connection.prepareStatement("delete from KONCERTY WHERE NAZWA = ? AND DATA = ?");
             statement.setString(1, nazwa);
             statement.setDate(2, data);
-            statement.setString(3, miastoNazwa);
-            statement.setInt(4, zespolId);
             changes = statement.executeUpdate();
         } catch (SQLException ex) {
             System.out.println("Bład wykonania polecenia" + ex.toString());

@@ -3,6 +3,7 @@ package Gui.Detailed;
 import DataBase.DataBaseConnector;
 import Gui.Change.AddOrEditAlbumWindow;
 import JavaObjects.Album;
+import JavaObjects.Gatunek;
 import JavaObjects.Zespol;
 
 import javax.swing.*;
@@ -18,6 +19,7 @@ public class ArtistWindow extends Detailed{
     private JLabel head;
     private Zespol zespol;
     private ArrayList<Album> albums;
+    private ArrayList<Gatunek> generes;
     private GridBagConstraints c;
 
     public ArtistWindow(DataBaseConnector dataBaseConnector, JFrame father, Zespol zespol){
@@ -28,8 +30,8 @@ public class ArtistWindow extends Detailed{
         try {
             this.albums = dataBaseConnector.getAlbumy("",null,null,null, "", new Integer(zespol.getId()));
             DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
-            String header[] = new String[] { "Nazwa", "Data_wydania", "Ocena",
-                    "Język" };
+            String header[] = new String[] { "Name", "Recorded", "Rating",
+                    "Language" };
 
             model.setColumnIdentifiers(header);
             model.getDataVector().removeAllElements();
@@ -38,10 +40,9 @@ public class ArtistWindow extends Detailed{
                 model.addRow(new Object[] {albums.get(i).getNazwa(), albums.get(i).getDate(), albums.get(i).getOcena(), albums.get(i).getJezyk()});
             }
             getTable1().setModel(model);
-
         } catch (Exception e) {
             e.printStackTrace();
-            //TODO wyskakujace okienko z bledem
+            JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
         }
 
         mouse();
@@ -75,6 +76,7 @@ public class ArtistWindow extends Detailed{
             getTable1().setModel(model);
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -94,6 +96,13 @@ public class ArtistWindow extends Detailed{
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
+                try {
+                    getDataBaseConnector().deleteAlbum(albums.get(getTable1().getSelectedRow()).getId());
+                    setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 

@@ -31,8 +31,8 @@ public class AlbumsWindow extends Scrollable{
         try {
             this.albums = dataBaseConnector.getAlbumy();
             DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
-            String header[] = new String[] { "Nazwa", "Data_wydania", "Ocena",
-                    "Język" };
+            String header[] = new String[] { "Name", "Recorded", "Rating",
+                    "Language" };
 
             model.setColumnIdentifiers(header);
             for(int i=0; i<albums.size();i++){
@@ -174,9 +174,13 @@ public class AlbumsWindow extends Scrollable{
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
-                if(!getTable1().getSelectionModel().isSelectionEmpty()) {
-                    // Drop
-                };
+                try {
+                    getDataBaseConnector().deleteAlbum(albums.get(getTable1().getSelectedRow()).getId());
+                    setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
     }

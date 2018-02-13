@@ -116,6 +116,7 @@ public class AddOrEditConcertWindow extends Change{
                         getDataBaseConnector().insertKoncert(koncert,festiwale.get(row_festival).getId());
                     } catch (Exception e) {
                         e.printStackTrace();
+                        JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
                     }
                     setVisible(false);
                     getFather().setVisible(true);
@@ -123,6 +124,7 @@ public class AddOrEditConcertWindow extends Change{
             });
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -140,6 +142,7 @@ public class AddOrEditConcertWindow extends Change{
                 this.zespolyJComboBox.addItem(zespoly.get(i).getNazwa());
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
         }
         this.dateDatePicker = new DatePicker();
         this.cityJTextField = new JTextField(koncertEdit.getMiasto_nazwa(),5);
@@ -181,6 +184,7 @@ public class AddOrEditConcertWindow extends Change{
                 this.concertJComboBox.addItem(koncerty.get(i).getNazwa());
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
         }
 
         c = new GridBagConstraints();
@@ -203,6 +207,7 @@ public class AddOrEditConcertWindow extends Change{
                 this.concertJComboBox.addItem(koncerty.get(i).getNazwa());
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
         }
 
         c = new GridBagConstraints();

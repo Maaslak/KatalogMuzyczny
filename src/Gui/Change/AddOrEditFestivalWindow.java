@@ -77,6 +77,7 @@ public class AddOrEditFestivalWindow extends Change{
                     getDataBaseConnector().insertFestiwal(festiwal);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
                 }
                 setVisible(false);
                 getFather().setVisible(true);

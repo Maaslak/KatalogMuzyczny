@@ -1,22 +1,33 @@
 package JavaObjects;
 
+import DataBase.DataBaseConnector;
+
 import java.awt.*;
 import java.sql.Date;
+import java.util.ArrayList;
 
 public class Zespol {
     private String nazwa, miasto_zalozenia, kraj_zalozenia;
     private Date date;
     private Integer id;
+    private ArrayList<Gatunek> generes;
+    private DataBaseConnector connector;
 
-    public Zespol(String nazwa, Date date, String miasto_zalozenia, String kraj_zalozenia, Integer id){
+    public Zespol(String nazwa, Date date, String miasto_zalozenia, String kraj_zalozenia, Integer id, DataBaseConnector connector) throws Exception {
         this.nazwa = nazwa;
         this.date = date;
         this.miasto_zalozenia = miasto_zalozenia;
         this.kraj_zalozenia = kraj_zalozenia;
         this.id = id;
+        this.connector = connector;
+        uploadGeneres();
     }
-    public Zespol(String nazwa, Date date, String miasto_zalozenia, String kraj_zalozenia){
-        this(nazwa, date, miasto_zalozenia, kraj_zalozenia, null);
+    public Zespol(String nazwa, Date date, String miasto_zalozenia, String kraj_zalozenia, DataBaseConnector connector) throws Exception {
+        this(nazwa, date, miasto_zalozenia, kraj_zalozenia, null, connector);
+    }
+
+    private void uploadGeneres() throws Exception {
+        this.generes = connector.getGatunki(id, "");
     }
     public String getNazwa() {
         return nazwa;
@@ -60,6 +71,17 @@ public class Zespol {
 
     @Override
     public String toString() {
-        return "<html>Nazwa: " + nazwa + "<br/>Data: " + date.toString() + "<br/>Miasto zalozenia: " + miasto_zalozenia + "<br/>Kraj zalozenia: " + kraj_zalozenia + "<br/><br/></html>";
+        String string = "<html>Nazwa: " + nazwa + "<br/>Data: " + date.toString() + "<br/>Miasto zalozenia: " + miasto_zalozenia + "<br/>Kraj zalozenia: " + kraj_zalozenia + "<br/>Gatunki:";
+        try {
+            uploadGeneres();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        for (Gatunek genere :
+                this.generes) {
+            string += genere.getNazwa() + "<br/>";
+        }
+        string += "<br/></html>";
+        return string;
     }
 }

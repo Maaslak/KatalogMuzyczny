@@ -72,6 +72,7 @@ public class AddOrEditSongWindow extends Change{
                     getDataBaseConnector().insertUtwor(utwor,album.getId());
                 } catch (Exception e) {
                     e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
                 }
                 setVisible(false);
                 getFather().setVisible(true);

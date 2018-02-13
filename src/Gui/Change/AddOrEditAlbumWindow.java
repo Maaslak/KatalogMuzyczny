@@ -112,6 +112,7 @@ public class AddOrEditAlbumWindow extends Change {
                         getDataBaseConnector().insertAlbum(album, zespoly.get(row).getId());
                     } catch (Exception e) {
                         e.printStackTrace();
+                        JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
                     }
                     setVisible(false);
                     getFather().setVisible(true);
@@ -119,6 +120,7 @@ public class AddOrEditAlbumWindow extends Change {
             });
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
         }
 
 
@@ -216,6 +218,7 @@ public class AddOrEditAlbumWindow extends Change {
                     getDataBaseConnector().insertAlbum(album, zespol.getId());
                 } catch (Exception e) {
                     e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
                 }
                 setVisible(false);
                 getFather().setVisible(true);

@@ -29,7 +29,7 @@ public class FestivalWindow extends Detailed{
         try {
             this.koncerty = dataBaseConnector.getKoncert("",null,null,"", festiwal.getId());
             DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
-            String header[] = new String[] { "Nazwa", "Data", "Miasto" };
+            String header[] = new String[] { "Name", "Date", "City" };
 
             model.setColumnIdentifiers(header);
             for(int i=0; i<koncerty.size();i++){
@@ -39,7 +39,7 @@ public class FestivalWindow extends Detailed{
 
         } catch (Exception e) {
             e.printStackTrace();
-            //TODO wyskakujace okienko z bledem
+            JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
         }
         mouse();
     }
@@ -72,6 +72,7 @@ public class FestivalWindow extends Detailed{
             getTable1().setModel(model);
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
         }
     }
 

@@ -29,7 +29,7 @@ public class AlbumWindow extends Detailed{
         try {
             this.utwory = dataBaseConnector.getUtwory(album.getId());
             DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
-            String header[] = new String[] { "Tytuł", "Czas" };
+            String header[] = new String[] { "Title", "Duration" };
 
             model.setColumnIdentifiers(header);
             for(int i=0; i<utwory.size();i++){
@@ -39,7 +39,7 @@ public class AlbumWindow extends Detailed{
 
         } catch (Exception e) {
             e.printStackTrace();
-            //TODO wyskakujace okienko z bledem
+            JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
         }
         mouse();
     }
@@ -72,6 +72,7 @@ public class AlbumWindow extends Detailed{
             getTable1().setModel(model);
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -91,6 +92,13 @@ public class AlbumWindow extends Detailed{
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
+                try {
+                    getDataBaseConnector().deleteUtwor(utwory.get(getTable1().getSelectedRow()).getTytul(), album.getId());
+                    setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
