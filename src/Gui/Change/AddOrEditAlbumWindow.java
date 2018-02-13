@@ -30,7 +30,7 @@ public class AddOrEditAlbumWindow extends Change {
     public AddOrEditAlbumWindow(DataBaseConnector dataBaseConnector, JFrame father, Album albumEdit) {
         super(dataBaseConnector, father);
         this.albumEdit = albumEdit;
-        setEditPanel();
+        setEditPanelwithoutzespol();
     }
 
     public AddOrEditAlbumWindow(DataBaseConnector dataBaseConnector, Zespol zespol, JFrame father) {
@@ -122,11 +122,88 @@ public class AddOrEditAlbumWindow extends Change {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
         }
-
-
     }
 
-    public void setEditPanel(){
+    void setEditPanelwithoutzespol(){
+        this.zespolname = new JLabel("Artist");
+        this.name = new JLabel("Name");
+        this.date = new JLabel("Date");
+        this.rating = new JLabel("Rate");
+        this.language = new JLabel("Language");
+        try {
+            ArrayList<Zespol> zespoly = getDataBaseConnector().getZespoly();
+            this.zespolyJComboBox = new JComboBox();
+            for(int i =0; i<zespoly.size();i++)
+                this.zespolyJComboBox.addItem(zespoly.get(i).getNazwa());
+
+            //this.zespolJTextField = new JTextField(5);
+            nameJTextField = new JTextField(albumEdit.getNazwa(),5);
+            dateDatePicker = new DatePicker();
+            ratingJTextField = new JTextField(5);
+            languageJTextField = new JTextField(albumEdit.getJezyk(),5);
+
+            c = new GridBagConstraints();
+            c.gridy = 1;
+            c.gridx = 1;
+            addPanel.add(this.zespolname, c);
+            c.gridy = 2;
+            c.gridx = 1;
+            addPanel.add(name, c);
+            c.gridy = 3;
+            c.gridx = 1;
+            addPanel.add(date, c);
+            c.gridy = 4;
+            c.gridx = 1;
+            addPanel.add(rating, c);
+            c.gridy = 5;
+            c.gridx = 1;
+            addPanel.add(language, c);
+            c.gridy = 1;
+            c.gridx = 2;
+            addPanel.add(zespolyJComboBox, c);
+            c.gridy = 2;
+            c.gridx = 2;
+            addPanel.add(nameJTextField, c);
+            c.gridy = 3;
+            c.gridx = 2;
+            addPanel.add(dateDatePicker, c);
+            c.gridy = 4;
+            c.gridx = 2;
+            addPanel.add(ratingJTextField, c);
+            c.gridy = 5;
+            c.gridx = 2;
+            addPanel.add(languageJTextField, c);
+            this.pack();
+            getOkButton().addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent mouseEvent) {
+                    super.mouseClicked(mouseEvent);
+                    Date dateFrom = null;
+                    Float ratingFloat = null;
+                    Integer row = zespolyJComboBox.getSelectedIndex();
+                    if(dateDatePicker.getDate() != null)
+                        dateFrom = Date.valueOf(dateDatePicker.getDate());
+                    if(!ratingJTextField.getText().isEmpty())
+                        ratingFloat = Float.valueOf(ratingJTextField.getText());
+                    try {
+                        //Album album = new Album(nameJTextField.getText(), dateFrom,ratingFloat,languageJTextField.getText());
+                        //getDataBaseConnector().insertAlbum(album, zespoly.get(row).getId());
+                        getDataBaseConnector().updateAlbum(nameJTextField.getText(), dateFrom,ratingFloat,languageJTextField.getText(),albumEdit.getId());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
+                    }
+                    setVisible(false);
+                    getFather().setVisible(true);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /*public void setEditPanel(){
         this.name = new JLabel("Name");
         this.date = new JLabel("Date");
         this.rating = new JLabel("Rate");
@@ -163,7 +240,7 @@ public class AddOrEditAlbumWindow extends Change {
         c.gridx = 2;
         addPanel.add(languageJTextField, c);
         this.pack();
-    }
+    }*/
 
     public void setAdd(){
         //z id zespolu

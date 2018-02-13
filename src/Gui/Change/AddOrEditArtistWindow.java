@@ -385,6 +385,26 @@ public class AddOrEditArtistWindow extends Change {
                 temp.setVisible(false);
             }
         });
+        getOkButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                Date dateFrom = null;
+                if(dateDatePicker.getDate() != null)
+                    dateFrom = Date.valueOf(dateDatePicker.getDate());
+                try {
+                    String new_name = nameJTextField.getText();
+                    String new_city = cityJTextField.getText();
+                    String new_country = countryJTextField.getText();
+                    getDataBaseConnector().updateZespol(new_name,dateFrom,new_city,new_country,zespolEdit.getId());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
+                }
+                setVisible(false);
+                getFather().setVisible(true);
+            }
+        });
     }
 
     public void addGatunek(String nazwa) {
