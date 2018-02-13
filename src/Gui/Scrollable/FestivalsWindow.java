@@ -153,6 +153,7 @@ public class FestivalsWindow extends Scrollable{
                 if(!getTable1().getSelectionModel().isSelectionEmpty()) {
                     try {
                         //edit concert
+                        setVisible(true);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

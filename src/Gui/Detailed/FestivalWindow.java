@@ -105,6 +105,7 @@ public class FestivalWindow extends Detailed{
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 //edit concert
+                setVisible(true);
             }
         });
 
