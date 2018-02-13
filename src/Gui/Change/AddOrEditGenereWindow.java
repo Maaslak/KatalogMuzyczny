@@ -36,6 +36,7 @@ public class AddOrEditGenereWindow extends Change {
         name = new JTextField("", 10);
         description = new JTextArea(10, 10);
         description.setLineWrap(true);
+        description.setWrapStyleWord(true);
         c = new GridBagConstraints();
         c.gridy = 1;
         c.gridx = 1;

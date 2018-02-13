@@ -5,6 +5,8 @@ import DataBase.DataBaseConnector;
 import javax.swing.*;
 import javax.swing.event.RowSorterEvent;
 import javax.swing.event.RowSorterListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -35,8 +37,13 @@ public abstract class Scrollable extends JFrame {
                 father.setVisible(true);
             }
         });
+        TableModel model = new DefaultTableModel() {
+            public boolean isCellEditable(int rowIndex, int mColIndex) {
+                return false;
+            }
+        };
+        this.table1.setModel(model);
         this.table1.setAutoCreateRowSorter(true);
-
     }
 
     public JButton getFilterButton() {
