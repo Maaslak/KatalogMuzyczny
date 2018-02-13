@@ -3,6 +3,8 @@ package Gui.Scrollable;
 import DataBase.DataBaseConnector;
 
 import javax.swing.*;
+import javax.swing.event.RowSorterEvent;
+import javax.swing.event.RowSorterListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -33,6 +35,8 @@ public abstract class Scrollable extends JFrame {
                 father.setVisible(true);
             }
         });
+        this.table1.setAutoCreateRowSorter(true);
+
     }
 
     public JButton getFilterButton() {

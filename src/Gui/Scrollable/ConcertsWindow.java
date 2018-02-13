@@ -142,7 +142,7 @@ public class ConcertsWindow extends Scrollable {
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 if(!getTable1().getSelectionModel().isSelectionEmpty()) {
-                    AddOrEditConcertWindow addOrEditConcertWindow = new AddOrEditConcertWindow(getDataBaseConnector(),temp,koncerty.get(getTable1().getSelectedRow()));
+                    AddOrEditConcertWindow addOrEditConcertWindow = new AddOrEditConcertWindow(getDataBaseConnector(),temp,koncerty.get(getTable1().convertRowIndexToModel(getTable1().getSelectedRow())));
                     addOrEditConcertWindow.setVisible(true);
                     setVisible(false);
                 }
@@ -154,7 +154,7 @@ public class ConcertsWindow extends Scrollable {
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 if(!getTable1().getSelectionModel().isSelectionEmpty()) {
-                    ConcertWindow concertWindow= new ConcertWindow(getDataBaseConnector(),temp,koncerty.get(getTable1().getSelectedRow()));
+                    ConcertWindow concertWindow= new ConcertWindow(getDataBaseConnector(),temp,koncerty.get(getTable1().convertRowIndexToModel(getTable1().getSelectedRow())));
                     concertWindow.setVisible(true);
                     setVisible(false);
                 }
@@ -166,7 +166,7 @@ public class ConcertsWindow extends Scrollable {
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 if(!getTable1().getSelectionModel().isSelectionEmpty()) {
-                    Koncert koncert = koncerty.get(getTable1().getSelectedRow());
+                    Koncert koncert = koncerty.get(getTable1().convertRowIndexToModel(getTable1().getSelectedRow()));
                     try {
                         getDataBaseConnector().deleteKoncert(koncert.getNazwa(), koncert.getData());
                     } catch (Exception e) {

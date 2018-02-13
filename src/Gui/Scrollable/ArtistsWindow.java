@@ -146,7 +146,7 @@ public class ArtistsWindow extends Scrollable {
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 if(!getTable1().getSelectionModel().isSelectionEmpty()) {
-                    ArtistWindow artistWindow = new ArtistWindow(getDataBaseConnector(),temp,zespoly.get(getTable1().getSelectedRow()));
+                    ArtistWindow artistWindow = new ArtistWindow(getDataBaseConnector(),temp,zespoly.get(getTable1().convertRowIndexToModel(getTable1().getSelectedRow())));
                     artistWindow.setVisible(true);
                     setVisible(false);
                 }
@@ -168,7 +168,7 @@ public class ArtistsWindow extends Scrollable {
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 if(!getTable1().getSelectionModel().isSelectionEmpty()) {
-                    AddOrEditArtistWindow addOrEditArtistWindow = new AddOrEditArtistWindow(getDataBaseConnector(),temp,zespoly.get(getTable1().getSelectedRow()));
+                    AddOrEditArtistWindow addOrEditArtistWindow = new AddOrEditArtistWindow(getDataBaseConnector(),temp,zespoly.get(getTable1().convertRowIndexToModel(getTable1().getSelectedRow())));
                     addOrEditArtistWindow.setVisible(true);
                     setVisible(false);
                 }
@@ -180,7 +180,7 @@ public class ArtistsWindow extends Scrollable {
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 try {
-                    getDataBaseConnector().deleteZespol(zespoly.get(getTable1().getSelectedRow()).getId());
+                    getDataBaseConnector().deleteZespol(zespoly.get(getTable1().convertRowIndexToModel(getTable1().getSelectedRow())).getId());
                     setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();

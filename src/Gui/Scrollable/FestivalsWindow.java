@@ -134,7 +134,7 @@ public class FestivalsWindow extends Scrollable{
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 if(!getTable1().getSelectionModel().isSelectionEmpty()) {
-                    AddOrEditFestivalWindow addOrEditFestivalWindow = new AddOrEditFestivalWindow(getDataBaseConnector(),temp,festiwale.get(getTable1().getSelectedRow()));
+                    AddOrEditFestivalWindow addOrEditFestivalWindow = new AddOrEditFestivalWindow(getDataBaseConnector(),temp,festiwale.get(getTable1().convertRowIndexToModel(getTable1().getSelectedRow())));
                     addOrEditFestivalWindow.setVisible(true);
                     setVisible(false);
                 }
@@ -146,7 +146,7 @@ public class FestivalsWindow extends Scrollable{
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 if(!getTable1().getSelectionModel().isSelectionEmpty()) {
-                    FestivalWindow festivalWindow= new FestivalWindow(getDataBaseConnector(),temp,festiwale.get(getTable1().getSelectedRow()));
+                    FestivalWindow festivalWindow= new FestivalWindow(getDataBaseConnector(),temp,festiwale.get(getTable1().convertRowIndexToModel(getTable1().getSelectedRow())));
                     festivalWindow.setVisible(true);
                     setVisible(false);
                 }

@@ -163,7 +163,7 @@ public class AlbumsWindow extends Scrollable{
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 if(!getTable1().getSelectionModel().isSelectionEmpty()) {
-                    AddOrEditAlbumWindow addOrEditAlbumWindow = new AddOrEditAlbumWindow(getDataBaseConnector(),temp,albums.get(getTable1().getSelectedRow()));
+                    AddOrEditAlbumWindow addOrEditAlbumWindow = new AddOrEditAlbumWindow(getDataBaseConnector(),temp,albums.get(getTable1().convertRowIndexToModel(getTable1().getSelectedRow())));
                     addOrEditAlbumWindow.setVisible(true);
                     setVisible(false);
                 }
@@ -175,7 +175,7 @@ public class AlbumsWindow extends Scrollable{
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 try {
-                    getDataBaseConnector().deleteAlbum(albums.get(getTable1().getSelectedRow()).getId());
+                    getDataBaseConnector().deleteAlbum(albums.get(getTable1().convertRowIndexToModel(getTable1().getSelectedRow())).getId());
                     setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
