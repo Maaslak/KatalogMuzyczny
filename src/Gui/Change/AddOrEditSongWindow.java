@@ -32,7 +32,7 @@ public class AddOrEditSongWindow extends Change{
         super(dataBaseConnector, father);
         this.utworEdit = utworEdit;
         this.album = album;
-        //setEditSong();
+        setEditSong();
     }
 
     public void setAddSong(){
@@ -80,44 +80,51 @@ public class AddOrEditSongWindow extends Change{
         });
     }
 
-    /*public void setEditSong(){
-        this.name = new JLabel("Name");
-        this.date = new JLabel("Date");
-        this.city = new JLabel("City");
-        this.country = new JLabel("Country");
+    public void setEditSong(){
+        this.title = new JLabel("Title");
+        this.time = new JLabel("Time[in sec]");
 
-        this.nameJTextField = new JTextField(zespolEdit.getNazwa(),5);
-        this.dateDatePicker = new DatePicker();
-        this.cityJTextField = new JTextField(zespolEdit.getMiasto_zalozenia(),5);
-        this.countryJTextField = new JTextField(zespolEdit.getKraj_zalozenia(),5);
+        this.titleJTextField = new JTextField(utworEdit.getTytul(),5);
+        this.timeJTextField = new JTextField(5);
 
         c = new GridBagConstraints();
         c.gridy = 1;
         c.gridx = 1;
-        addPanel.add(this.name, c);
+        addPanel.add(title, c);
         c.gridy = 2;
         c.gridx = 1;
-        addPanel.add(date, c);
-        c.gridy = 3;
-        c.gridx = 1;
-        addPanel.add(city, c);
-        c.gridy = 4;
-        c.gridx = 1;
-        addPanel.add(country, c);
+        addPanel.add(time, c);
         c.gridy = 1;
         c.gridx = 2;
-        addPanel.add(nameJTextField, c);
+        addPanel.add(titleJTextField, c);
         c.gridy = 2;
         c.gridx = 2;
-        addPanel.add(dateDatePicker, c);
-        c.gridy = 3;
-        c.gridx = 2;
-        addPanel.add(cityJTextField, c);
-        c.gridy = 4;
-        c.gridx = 2;
-        addPanel.add(countryJTextField, c);
+        addPanel.add(timeJTextField, c);
         this.pack();
-    }*/
+
+
+        getOkButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                int time_sec = 0;
+                if(!timeJTextField.getText().isEmpty())
+                    time_sec = Integer.valueOf(timeJTextField.getText());
+                try {
+                    int time_min = time_sec/60;
+                    //time_sec = time_sec%60;
+                    Timestamp timestamp = new Timestamp(time_sec*1000);
+                    //Utwor utwor = new Utwor(titleJTextField.getText(), timestamp);
+                    getDataBaseConnector().updateUtwor(timestamp,titleJTextField.getText());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
+                }
+                setVisible(false);
+                getFather().setVisible(true);
+            }
+        });
+    }
 
     public void mouse(){
         getOkButton().addMouseListener(new MouseAdapter() {

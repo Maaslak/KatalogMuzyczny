@@ -1286,7 +1286,7 @@ public class DataBaseConnector {
             throw new Exception("Nie udalo sie usunac muzyka");
     }
 
-    public void updateUtwor(String tytul, Timestamp czas) throws Exception {
+    public void updateUtwor(Timestamp czas, String tytul) throws Exception {
         boolean error =false;
         PreparedStatement statement = null;
         int changes = 0;
