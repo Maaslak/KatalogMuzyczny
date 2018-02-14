@@ -9,6 +9,8 @@ import com.github.lgooddatepicker.components.DatePicker;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Date;
@@ -22,6 +24,7 @@ public class AddOrEditConcertWindow extends Change{
     private Festiwal festiwal;
     private Koncert koncertEdit;
     private GridBagConstraints c;
+    private boolean isNewCity;
 
     public AddOrEditConcertWindow(DataBaseConnector dataBaseConnector, JFrame father) {
         super(dataBaseConnector, father);
@@ -75,8 +78,15 @@ public class AddOrEditConcertWindow extends Change{
             ArrayList<Miasto> miasta = getDataBaseConnector().getMiasta();
             for (Miasto miasto :
                     miasta) {
-                this.cityJComboBox.addItem(miasto);
+                this.cityJComboBox.addItem(miasto.getNazwa());
             }
+            AddOrEditConcertWindow temp = this;
+            this.cityJComboBox.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    temp.cityJTextField.setText((String)temp.cityJComboBox.getSelectedItem());
+                }
+            });
             c = new GridBagConstraints();
             c.gridy = 1;
             c.gridx = 1;
@@ -110,30 +120,35 @@ public class AddOrEditConcertWindow extends Change{
                 @Override
                 public void mouseClicked(MouseEvent mouseEvent) {
                     super.mouseClicked(mouseEvent);
+                    try {
+                        if(cityJTextField.getText().isEmpty())
+                            throw new Exception("Please add city information");
+                        System.out.println(cityJTextField.getText());
                     if(((DefaultComboBoxModel)cityJComboBox.getModel()).getIndexOf(cityJTextField.getText()) == -1) {
                         DialagForm dialog = new DialagForm("Do you want to add a new city?");
                         dialog.pack();
-                        dialog.setVisible(true);
+                        boolean accepted = dialog.customSetVisible(true);
+                        if(!accepted)
+                            throw new Exception("If you don't want to add a new city, please chose one from the drop downlist");
                     }
                     Integer row_zespol = zespolyJComboBox.getSelectedIndex();
-                    Integer row_festival;
+                    Integer festiwalId;
                     if(festivalJComboBox.getSelectedIndex()>-1)
-                        row_festival = festivalJComboBox.getSelectedIndex();
+                        festiwalId = festiwale.get(festivalJComboBox.getSelectedIndex()).getId();
                     else
-                        row_festival = null;
+                        festiwalId = null;
 
                     Date dateFrom = null;
                     if(dateDatePicker.getDate() != null)
                         dateFrom = Date.valueOf(dateDatePicker.getDate());
-                    try {
                         Koncert koncert = new Koncert(nameJTextField.getText(), dateFrom,cityJTextField.getText(),zespoly.get(row_zespol).getId());
-                        getDataBaseConnector().insertKoncert(koncert,festiwale.get(row_festival).getId());
+                        getDataBaseConnector().insertKoncert(koncert,festiwalId);
+                    setVisible(false);
+                    getFather().setVisible(true);
                     } catch (Exception e) {
                         e.printStackTrace();
                         JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
                     }
-                    setVisible(false);
-                    getFather().setVisible(true);
                 }
             });
         } catch (Exception e) {
@@ -147,7 +162,7 @@ public class AddOrEditConcertWindow extends Change{
         this.zespol = new JLabel("Artist");
         this.date = new JLabel("Date");
         this.city = new JLabel("City");
-
+        this.cityJComboBox = new JComboBox();
         this.nameJTextField = new JTextField(koncertEdit.getNazwa(),5);
         try {
             ArrayList<Zespol> zespoly = getDataBaseConnector().getZespoly();
@@ -160,7 +175,17 @@ public class AddOrEditConcertWindow extends Change{
         }
         this.dateDatePicker = new DatePicker();
         this.cityJTextField = new JTextField(koncertEdit.getMiasto_nazwa(),5);
-
+        ArrayList<Miasto> miasta = null;
+        try {
+            miasta = getDataBaseConnector().getMiasta();
+            for (Miasto miasto :
+                    miasta) {
+                this.cityJComboBox.addItem(miasto);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
         c = new GridBagConstraints();
         c.gridy = 1;
         c.gridx = 1;
@@ -244,5 +269,9 @@ public class AddOrEditConcertWindow extends Change{
                 getFather().setVisible(true);
             }
         });
+    }
+
+    public void setNewCity(boolean newCity) {
+        isNewCity = newCity;
     }
 }

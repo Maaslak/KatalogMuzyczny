@@ -663,6 +663,8 @@ public class DataBaseConnector {
     }
 
     public int insertKoncert(Koncert koncert, Integer festiwalId) throws Exception {
+        if(koncert == null)
+            throw new Exception("No concert added");
         boolean error = false;
         int changes = 0;
         PreparedStatement statement= null;
@@ -671,7 +673,7 @@ public class DataBaseConnector {
         sql = "INSERT INTO KONCERTY(NAZWA, DATA,  MIASTO_NAZWA, ZESPOL_ID";
         if(festiwalId != null)
             sql += ", Festiwal_ID";
-        sql += ") VALUES (?, ?, ?, ?, ?";
+        sql += ") VALUES (?, ?, ?, ?";
         if(festiwalId != null)
             sql += ", ?";
         sql += ")";

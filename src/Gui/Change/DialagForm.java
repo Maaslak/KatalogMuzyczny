@@ -7,8 +7,12 @@ public class DialagForm extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
+    private JLabel message;
+    private boolean isEndOfDialog = false;
+    private boolean returningValue;
 
     public DialagForm(String message) {
+        this.message.setText(message);
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -43,11 +47,21 @@ public class DialagForm extends JDialog {
 
     private void onOK() {
         // add your code here
+        returningValue = true;
+        isEndOfDialog = true;
         dispose();
     }
 
     private void onCancel() {
         // add your code here if necessary
+        returningValue = false;
+        isEndOfDialog = true;
         dispose();
+    }
+
+    public boolean customSetVisible(boolean b) {
+        super.setVisible(b);
+        while(!isEndOfDialog);
+        return returningValue;
     }
 }
