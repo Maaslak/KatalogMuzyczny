@@ -3,6 +3,7 @@ package Gui.Change;
 import DataBase.DataBaseConnector;
 import JavaObjects.Festiwal;
 import JavaObjects.Koncert;
+import JavaObjects.Miasto;
 import JavaObjects.Zespol;
 import com.github.lgooddatepicker.components.DatePicker;
 
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 public class AddOrEditConcertWindow extends Change{
     private JLabel koncert_name, name, zespol, date, city, festival;
     private JTextField koncertJTextField, nameJTextField, cityJTextField;
-    private JComboBox zespolyJComboBox, concertJComboBox, festivalJComboBox;
+    private JComboBox zespolyJComboBox, concertJComboBox, festivalJComboBox, cityJComboBox;
     private DatePicker dateDatePicker;
     private Festiwal festiwal;
     private Koncert koncertEdit;
@@ -55,6 +56,7 @@ public class AddOrEditConcertWindow extends Change{
         this.date = new JLabel("Date");
         this.city = new JLabel("City");
         this.festival = new JLabel("Festival");
+        this.cityJComboBox = new JComboBox();
 
         this.nameJTextField = new JTextField(5);
         try {
@@ -70,7 +72,11 @@ public class AddOrEditConcertWindow extends Change{
             this.festivalJComboBox = new JComboBox();
             for(int i =0; i<festiwale.size();i++)
                 this.zespolyJComboBox.addItem(festiwale.get(i).getNazwa());
-
+            ArrayList<Miasto> miasta = getDataBaseConnector().getMiasta();
+            for (Miasto miasto :
+                    miasta) {
+                this.cityJComboBox.addItem(miasto);
+            }
             c = new GridBagConstraints();
             c.gridy = 1;
             c.gridx = 1;
@@ -96,11 +102,19 @@ public class AddOrEditConcertWindow extends Change{
             c.gridy = 4;
             c.gridx = 2;
             addPanel.add(cityJTextField, c);
+            c.gridy = 4;
+            c.gridx = 3;
+            addPanel.add(cityJComboBox, c);
             this.pack();
             getOkButton().addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent mouseEvent) {
                     super.mouseClicked(mouseEvent);
+                    if(((DefaultComboBoxModel)cityJComboBox.getModel()).getIndexOf(cityJTextField.getText()) == -1) {
+                        DialagForm dialog = new DialagForm("Do you want to add a new city?");
+                        dialog.pack();
+                        dialog.setVisible(true);
+                    }
                     Integer row_zespol = zespolyJComboBox.getSelectedIndex();
                     Integer row_festival;
                     if(festivalJComboBox.getSelectedIndex()>-1)
