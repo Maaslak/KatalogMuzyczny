@@ -9,6 +9,7 @@ import JavaObjects.Zespol;
 import com.github.lgooddatepicker.components.DatePicker;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -36,6 +37,18 @@ public class ConcertWindow extends Detailed{
     public void setInformationPanel(){
         this.info = new JLabel(koncert.toString());
         this.head = new JLabel("Zespoly");
+        try {
+            this.zespol = getDataBaseConnector().getZespol(koncert.getZespolId());
+            DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
+            model.addColumn("Name");
+            model.addColumn("Formed Date");
+            model.addColumn("City");
+            model.addColumn("Country");
+            model.addRow(new Object[] {zespol.getNazwa(), zespol.getDate(), zespol.getMiasto_zalozenia(), zespol.getKraj_zalozenia()});
+            getTable1().setModel(model);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         c = new GridBagConstraints();
         c.gridy = 1;
         c.gridx = 1;

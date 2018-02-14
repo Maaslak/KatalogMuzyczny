@@ -46,6 +46,40 @@ public class DataBaseConnector {
         return executegetZespoly(statement);
     }
 
+    public Zespol getZespol(int zespolId) throws Exception {
+        PreparedStatement statement = null;
+        statement = connection.prepareStatement("SELECT * FROM ZESPOLY WHERE ZESPOL_ID = ?");
+        statement.setInt(1, zespolId);
+        boolean error = false;
+        ResultSet resultSet = null;
+        Zespol zespol = null;
+        try {
+            resultSet = statement.executeQuery();
+            resultSet.next();
+            zespol =  new Zespol(resultSet.getString(1), resultSet.getDate(2), resultSet.getString(3), resultSet.getString(4), resultSet.getInt(5), this);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            error = true;
+        }
+        finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
+        if (error)
+            throw new Exception("Nie udalo sie pobrac zespolu");
+        return zespol;
+    }
+
     public ArrayList<Zespol> getZespoly(String nazwa, Date dataBegin, Date dataEnd, String kraj_zalozenia, String miasto_zalozenia) throws Exception {
         if(nazwa.isEmpty() && dataBegin == null && dataEnd == null && kraj_zalozenia!= null && kraj_zalozenia.isEmpty() && miasto_zalozenia.isEmpty())
             return getZespoly();
@@ -1440,6 +1474,30 @@ public class DataBaseConnector {
         }
         if (error == true)
             throw new Exception("Nie udalo sie zmodyfikowac czlonkostwa");
+    }
+    public void addKoncertToFestiwal(Integer festiwalId, String nazwa, Date data) throws Exception {
+        boolean error =false;
+        PreparedStatement statement = null;
+        int changes = 0;
+        try {
+            statement = connection.prepareStatement("UPDATE KONCERTY SET FESTIWAL_ID = ? WHERE NAZWA = ? AND DATA = ?");
+            statement.setInt(1, festiwalId);
+            statement.setString(2, nazwa);
+            statement.setDate(3, data);
+            changes = statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if (error == true)
+            throw new Exception("Nie udalo sie zmodyfikowac festiwalu");
     }
 /*
     public void updateKoncerty(String nazwa, Date data, String miastoNazwa, int festiwalId, int zespolId) throws Exception {

@@ -24,7 +24,6 @@ public class AddOrEditConcertWindow extends Change{
     private Festiwal festiwal;
     private Koncert koncertEdit;
     private GridBagConstraints c;
-    private boolean isNewCity;
 
     public AddOrEditConcertWindow(DataBaseConnector dataBaseConnector, JFrame father) {
         super(dataBaseConnector, father);
@@ -41,6 +40,7 @@ public class AddOrEditConcertWindow extends Change{
 
     public AddOrEditConcertWindow(DataBaseConnector dataBaseConnector, Festiwal festival, JFrame father) {
         super(dataBaseConnector, father);
+        this.festiwal = festival;
         this.koncertEdit = koncertEdit;
         setAddConcertInFestival();
         mouse(); //TODO przeciazyc
@@ -52,6 +52,7 @@ public class AddOrEditConcertWindow extends Change{
         setEditConcertInFestival();
         mouse(); //TODO przeciazyc
     }
+
 
     public void setAddConcert(){
         this.name = new JLabel("Name");
@@ -123,13 +124,13 @@ public class AddOrEditConcertWindow extends Change{
                     try {
                         if(cityJTextField.getText().isEmpty())
                             throw new Exception("Please add city information");
-                        System.out.println(cityJTextField.getText());
                     if(((DefaultComboBoxModel)cityJComboBox.getModel()).getIndexOf(cityJTextField.getText()) == -1) {
                         DialagForm dialog = new DialagForm("Do you want to add a new city?");
                         dialog.pack();
                         boolean accepted = dialog.customSetVisible(true);
                         if(!accepted)
                             throw new Exception("If you don't want to add a new city, please chose one from the drop downlist");
+                        getDataBaseConnector().insertMiasto(cityJTextField.getText(), null, null);
                     }
                     Integer row_zespol = zespolyJComboBox.getSelectedIndex();
                     Integer festiwalId;
@@ -182,6 +183,12 @@ public class AddOrEditConcertWindow extends Change{
                     miasta) {
                 this.cityJComboBox.addItem(miasto);
             }
+            this.cityJComboBox.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    cityJTextField.setText((String)cityJComboBox.getSelectedItem());
+                }
+            });
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
@@ -211,6 +218,9 @@ public class AddOrEditConcertWindow extends Change{
         c.gridy = 4;
         c.gridx = 2;
         addPanel.add(cityJTextField, c);
+        c.gridy = 4;
+        c.gridx = 3;
+        addPanel.add(cityJComboBox, c);
         this.pack();
     }
 
@@ -220,7 +230,7 @@ public class AddOrEditConcertWindow extends Change{
             ArrayList<Koncert> koncerty = getDataBaseConnector().getKoncert();
             this.concertJComboBox = new JComboBox();
             for(int i =0; i<koncerty.size();i++)
-                this.concertJComboBox.addItem(koncerty.get(i).getNazwa());
+                this.concertJComboBox.addItem(koncerty.get(i));
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
@@ -235,6 +245,20 @@ public class AddOrEditConcertWindow extends Change{
         addPanel.add(concertJComboBox, c);
         //update
         this.pack();
+        getOkButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                try {
+                    getDataBaseConnector().addKoncertToFestiwal(festiwal.getId(), ((Koncert)concertJComboBox.getSelectedItem()).getNazwa(), ((Koncert)concertJComboBox.getSelectedItem()).getData());
+                    setVisible(false);
+                    getFather().setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
     }
 
     public void setEditConcertInFestival(){
@@ -258,6 +282,20 @@ public class AddOrEditConcertWindow extends Change{
         addPanel.add(concertJComboBox, c);
 
         this.pack();
+        getOkButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                try {
+                    getDataBaseConnector().addKoncertToFestiwal(festiwal.getId(), koncertEdit.getNazwa(), koncertEdit.getData());
+                    setVisible(false);
+                    getFather().setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
     }
 
     public void mouse(){
@@ -271,7 +309,4 @@ public class AddOrEditConcertWindow extends Change{
         });
     }
 
-    public void setNewCity(boolean newCity) {
-        isNewCity = newCity;
-    }
 }
