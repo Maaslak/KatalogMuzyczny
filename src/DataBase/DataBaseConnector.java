@@ -1337,6 +1337,33 @@ public class DataBaseConnector {
             throw new Exception("Nie udalo sie zmodyfikowac albumu");
     }
 
+    public void updateZespol(String name, Date data, String city, String country, int zespolId) throws Exception {
+        boolean error =false;
+        PreparedStatement statement = null;
+        int changes = 0;
+        try {
+            statement = connection.prepareStatement("UPDATE ZESPOLY SET NAZWA = ?, DATA_ZALOZENIA = ?, MIASTO_ZALOZENIA = ?, KRAJ_ZALOZENIA = ? WHERE ZESPOL_ID = ?");
+            statement.setString(1, name);
+            statement.setDate(2, data);
+            statement.setString(3, city);
+            statement.setString(4, country);
+            statement.setInt(5, zespolId);
+            changes = statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if (error == true)
+            throw new Exception("Nie udalo sie zmodyfikowac zespolu");
+    }
+
     public void updatePrzynaleznosc(String glowna, String nazwaGatunku,  int zespolId) throws Exception {
         boolean error =false;
         PreparedStatement statement = null;
