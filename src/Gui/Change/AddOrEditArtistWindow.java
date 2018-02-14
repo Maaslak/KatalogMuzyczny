@@ -111,24 +111,27 @@ public class AddOrEditArtistWindow extends Change {
                 if(((DefaultComboBoxModel)gatunkiDeleteJComboBox.getModel()).getIndexOf(gatunkiAddJComboBox.getSelectedItem()) == -1) {
                     externalGanunkiChange = true;
                     gatunkiDeleteJComboBox.addItem(gatunkiAddJComboBox.getSelectedItem());
-                    if(addedGeneres.indexOf((String)gatunkiAddJComboBox.getSelectedItem()) == -1)
+                    if(deletedGeneres.indexOf((String)gatunkiAddJComboBox.getSelectedItem()) == -1)
+                        deletedGeneres.remove((String) gatunkiAddJComboBox.getSelectedItem());
+                    else
                         addedGeneres.add((String) gatunkiAddJComboBox.getSelectedItem());
+
                 }
             }
         });
         this.gatunkiDeleteJComboBox.addActionListener (new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if(!externalGanunkiChange) {
-                    gatunkiDeleteJComboBox.removeItem(gatunkiDeleteJComboBox.getSelectedItem());
                     int index = addedGeneres.indexOf((String)gatunkiDeleteJComboBox.getSelectedItem());
                     if(index != -1)
                         addedGeneres.remove(index);
                     else
                         deletedGeneres.add((String) gatunkiDeleteJComboBox.getSelectedItem());
+                    gatunkiDeleteJComboBox.removeItem(gatunkiDeleteJComboBox.getSelectedItem());
+                    }
+                    externalGanunkiChange = false;
                 }
-                externalGanunkiChange = false;
-            }
-        });
+                });
         AddOrEditArtistWindow temp = this;
         this.addGatunekJButton.addActionListener(new ActionListener() {
             @Override
@@ -291,6 +294,7 @@ public class AddOrEditArtistWindow extends Change {
         this.gatunkiAddJComboBox = new JComboBox();
         this.gatunkiDeleteJComboBox = new JComboBox();
         this.addGatunekJButton = new JButton("Add genere");
+        this.dateDatePicker.setDate(zespolEdit.getDate().toLocalDate());
         try {
             ArrayList<Gatunek> gatunki = getDataBaseConnector().getGatunki(null, "");
             for (Gatunek gatunek :
@@ -316,20 +320,23 @@ public class AddOrEditArtistWindow extends Change {
                 if(((DefaultComboBoxModel)gatunkiDeleteJComboBox.getModel()).getIndexOf(gatunkiAddJComboBox.getSelectedItem()) == -1) {
                     externalGanunkiChange = true;
                     gatunkiDeleteJComboBox.addItem(gatunkiAddJComboBox.getSelectedItem());
-                    if(addedGeneres.indexOf((String)gatunkiAddJComboBox.getSelectedItem()) == -1)
+                    if(deletedGeneres.indexOf((String)gatunkiAddJComboBox.getSelectedItem()) != -1)
+                        deletedGeneres.remove((String) gatunkiAddJComboBox.getSelectedItem());
+                    else
                         addedGeneres.add((String) gatunkiAddJComboBox.getSelectedItem());
+
                 }
             }
         });
         this.gatunkiDeleteJComboBox.addActionListener (new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if(!externalGanunkiChange) {
-                    gatunkiDeleteJComboBox.removeItem(gatunkiDeleteJComboBox.getSelectedItem());
                     int index = addedGeneres.indexOf((String)gatunkiDeleteJComboBox.getSelectedItem());
                     if(index != -1)
                         addedGeneres.remove(index);
                     else
                         deletedGeneres.add((String) gatunkiDeleteJComboBox.getSelectedItem());
+                    gatunkiDeleteJComboBox.removeItem(gatunkiDeleteJComboBox.getSelectedItem());
                 }
                 externalGanunkiChange = false;
             }
@@ -397,6 +404,16 @@ public class AddOrEditArtistWindow extends Change {
                     String new_city = cityJTextField.getText();
                     String new_country = countryJTextField.getText();
                     getDataBaseConnector().updateZespol(new_name,dateFrom,new_city,new_country,zespolEdit.getId());
+                    for (String genere :
+                            addedGeneres) {
+                        if(genere != null)
+                            getDataBaseConnector().insertPrzynaleznosc(genere, zespolEdit.getId(), null);
+                    }
+                    for (String genere :
+                            deletedGeneres) {
+                        if(genere != null)
+                            getDataBaseConnector().deletePrzynaleznosc(genere, zespolEdit.getId());
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);

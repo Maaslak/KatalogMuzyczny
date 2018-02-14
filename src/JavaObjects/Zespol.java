@@ -2,8 +2,8 @@ package JavaObjects;
 
 import DataBase.DataBaseConnector;
 
-import java.awt.*;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Zespol {
@@ -51,6 +51,10 @@ public class Zespol {
 
     public void setKraj_zalozenia(String kraj_zalozenia) {
         this.kraj_zalozenia = kraj_zalozenia;
+    }
+
+    public LocalDate getLocalDate() {
+        return date.toLocalDate();
     }
 
     public Date getDate() {
