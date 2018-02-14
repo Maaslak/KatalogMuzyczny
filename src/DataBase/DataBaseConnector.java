@@ -1186,6 +1186,9 @@ public class DataBaseConnector {
         PreparedStatement statement = null;
         int changes = 0;
         try {
+            statement = connection.prepareStatement("delete from PRZYNALEZNOSCI where GATUNEK_NAZWA = ?");
+            statement.setString(1, nazwa);
+            changes = statement.executeUpdate();
             statement = connection.prepareStatement("delete from GATUNKI where NAZWA = ?");
             statement.setString(1, nazwa);
             changes = statement.executeUpdate();
@@ -1499,18 +1502,15 @@ public class DataBaseConnector {
         if (error == true)
             throw new Exception("Nie udalo sie zmodyfikowac festiwalu");
     }
-/*
-    public void updateKoncerty(String nazwa, Date data, String miastoNazwa, int festiwalId, int zespolId) throws Exception {
+
+    public void deleteKoncertFromFestiwal(String nazwa, Date data) throws Exception {
         boolean error =false;
         PreparedStatement statement = null;
         int changes = 0;
         try {
-            statement = connection.prepareStatement("UPDATE KONCERTY SET  = ?, FUNKCJA = ? WHERE OD = ? AND ZESPOL_ID = ? AND MUZYK_ID = ?");
-            statement.setDate(1, dataDo);
-            statement.setString(2, funkcja);
-            statement.setDate(3, dataOd);
-            statement.setInt(4, zespolId);
-            statement.setInt(5, muzykId);
+            statement = connection.prepareStatement("UPDATE KONCERTY SET FESTIWAL_ID = NULL WHERE NAZWA = ? AND DATA = ?");
+            statement.setString(1, nazwa);
+            statement.setDate(2, data);
             changes = statement.executeUpdate();
         } catch (SQLException ex) {
             System.out.println("Bład wykonania polecenia" + ex.toString());
@@ -1520,13 +1520,42 @@ public class DataBaseConnector {
                 try {
                     statement.close();
                 } catch (SQLException e) {
-                    /* kod obsługi *//* }
+                    /* kod obsługi */ }
             }
         }
         if (error == true)
-            throw new Exception("Nie udalo sie zmodyfikowac czlonkostwa");
+            throw new Exception("Nie udalo sie zmodyfikowac festiwalu");
     }
-*/
+
+    public void updateKoncerty(Koncert prev, String nazwa, Date data, String miastoNazwa, int zespolId) throws Exception {
+        boolean error =false;
+        PreparedStatement statement = null;
+        int changes = 0;
+        try {
+
+            statement = connection.prepareStatement("UPDATE KONCERTY SET NAZWA = ?, DATA = ?, MIASTO_NAZWA = ?, ZESPOL_ID = ? WHERE NAZWA = ? AND DATA = ?");
+            statement.setString(1, nazwa);
+            statement.setDate(2, data);
+            statement.setString(3, miastoNazwa);
+            statement.setInt(4, zespolId);
+            statement.setString(5, prev.getNazwa());
+            statement.setDate(6, prev.getData());
+            changes = statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if (error == true)
+            throw new Exception("Nie udalo sie zmodyfikowac koncertu");
+    }
+
 
 
     public void disconnect() throws SQLException {

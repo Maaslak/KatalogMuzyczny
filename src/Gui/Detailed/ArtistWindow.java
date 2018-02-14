@@ -85,7 +85,8 @@ public class ArtistWindow extends Detailed{
             @Override
             public void actionPerformed(ActionEvent e) {
                 Gatunek genere = (Gatunek)generesJComboBox.getSelectedItem();
-                JOptionPane.showMessageDialog(null, genere.getOpis(), genere.getNazwa(), JOptionPane.INFORMATION_MESSAGE);
+                if(genere != null)
+                    JOptionPane.showMessageDialog(null, genere.getOpis(), genere.getNazwa(), JOptionPane.INFORMATION_MESSAGE);
             }
         });
     }
@@ -126,6 +127,8 @@ public class ArtistWindow extends Detailed{
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 try {
+                    if(getTable1().getSelectedRow() == -1)
+                        throw new Exception("Please select a row");
                     getDataBaseConnector().deleteAlbum(albums.get(getTable1().getSelectedRow()).getId());
                     setVisible(true);
                 } catch (Exception e) {

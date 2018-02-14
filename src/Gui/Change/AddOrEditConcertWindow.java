@@ -6,6 +6,7 @@ import JavaObjects.Koncert;
 import JavaObjects.Miasto;
 import JavaObjects.Zespol;
 import com.github.lgooddatepicker.components.DatePicker;
+import oracle.sql.DATE;
 
 import javax.swing.*;
 import java.awt.*;
@@ -169,19 +170,22 @@ public class AddOrEditConcertWindow extends Change{
             ArrayList<Zespol> zespoly = getDataBaseConnector().getZespoly();
             this.zespolyJComboBox = new JComboBox();
             for(int i =0; i<zespoly.size();i++)
-                this.zespolyJComboBox.addItem(zespoly.get(i).getNazwa());
+                this.zespolyJComboBox.addItem(zespoly.get(i));
+            Zespol selectedZespol = getDataBaseConnector().getZespol(koncertEdit.getZespolId());
+            this.zespolyJComboBox.setSelectedItem(selectedZespol);
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
         }
         this.dateDatePicker = new DatePicker();
+        this.dateDatePicker.setDate(koncertEdit.getData().toLocalDate());
         this.cityJTextField = new JTextField(koncertEdit.getMiasto_nazwa(),5);
         ArrayList<Miasto> miasta = null;
         try {
             miasta = getDataBaseConnector().getMiasta();
             for (Miasto miasto :
                     miasta) {
-                this.cityJComboBox.addItem(miasto);
+                this.cityJComboBox.addItem(miasto.getNazwa());
             }
             this.cityJComboBox.addActionListener(new ActionListener() {
                 @Override
@@ -222,6 +226,33 @@ public class AddOrEditConcertWindow extends Change{
         c.gridx = 3;
         addPanel.add(cityJComboBox, c);
         this.pack();
+        getOkButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                try {
+                    if(cityJTextField.getText().isEmpty())
+                        throw new Exception("Please add city information");
+                    if(((DefaultComboBoxModel)cityJComboBox.getModel()).getIndexOf(cityJTextField.getText()) == -1) {
+                        DialagForm dialog = new DialagForm("Do you want to add a new city?");
+                        dialog.pack();
+                        boolean accepted = dialog.customSetVisible(true);
+                        if(!accepted)
+                            throw new Exception("If you don't want to add a new city, please chose one from the drop downlist");
+                        getDataBaseConnector().insertMiasto(cityJTextField.getText(), null, null);
+                    }
+                    Date date = null;
+                    if(dateDatePicker.getDate() != null)
+                        date = Date.valueOf(dateDatePicker.getDate());
+                    getDataBaseConnector().updateKoncerty(koncertEdit, nameJTextField.getText(), date, cityJTextField.getText(), ((Zespol)zespolyJComboBox.getSelectedItem()).getId());
+                    setVisible(false);
+                    getFather().setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
     }
 
     public void setAddConcertInFestival(){

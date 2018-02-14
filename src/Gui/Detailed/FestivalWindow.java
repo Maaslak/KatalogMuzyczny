@@ -104,8 +104,16 @@ public class FestivalWindow extends Detailed{
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
-                //edit concert
-                setVisible(true);
+                if(!getTable1().getSelectionModel().isSelectionEmpty()) {
+                    Koncert koncert = koncerty.get(getTable1().convertRowIndexToModel(getTable1().getSelectedRow()));
+                    try {
+                        getDataBaseConnector().deleteKoncertFromFestiwal(koncert.getNazwa(), koncert.getData());
+                        setVisible(true);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
             }
         });
 
