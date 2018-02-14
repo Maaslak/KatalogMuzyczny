@@ -73,18 +73,18 @@ public class Zespol {
         this.id = id;
     }
 
-    @Override
-    public String toString() {
-        String string = "<html>Nazwa: " + nazwa + "<br/>Data: " + date.toString() + "<br/>Miasto zalozenia: " + miasto_zalozenia + "<br/>Kraj zalozenia: " + kraj_zalozenia + "<br/>Gatunki:";
+    public ArrayList<Gatunek> getGeneres() {
         try {
             uploadGeneres();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        for (Gatunek genere :
-                this.generes) {
-            string += genere.getNazwa() + "<br/>";
-        }
+        return generes;
+    }
+
+    @Override
+    public String toString() {
+        String string = "<html>Nazwa: " + nazwa + "<br/>Data: " + date.toString() + "<br/>Miasto zalozenia: " + miasto_zalozenia + "<br/>Kraj zalozenia: " + kraj_zalozenia + "<br/>Gatunki:";
         string += "<br/></html>";
         return string;
     }

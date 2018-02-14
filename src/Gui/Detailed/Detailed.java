@@ -17,6 +17,7 @@ public abstract class Detailed extends JFrame{
     private JButton editButton;
     private JButton deleteButton;
     private JButton exitButton;
+    protected JPanel additionalInformationPanel;
     private DataBaseConnector dataBaseConnector;
     private JFrame father;
 

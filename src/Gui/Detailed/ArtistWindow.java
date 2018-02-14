@@ -9,6 +9,8 @@ import JavaObjects.Zespol;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ public class ArtistWindow extends Detailed{
 
     private JLabel info;
     private JLabel head;
+    private JComboBox generesJComboBox;
+    private JButton genereButton;
     private Zespol zespol;
     private ArrayList<Album> albums;
     private ArrayList<Gatunek> generes;
@@ -51,14 +55,39 @@ public class ArtistWindow extends Detailed{
     public void setInformationPanel(){
         this.info = new JLabel(zespol.toString());
         this.head = new JLabel("Albumy");
+        this.generesJComboBox = new JComboBox();
+        this.genereButton = new JButton("Read about selected genere");
+        try {
+            generes = getDataBaseConnector().getGatunki(zespol.getId(), "");
+            for (Gatunek genere :
+                    generes) {
+                    this.generesJComboBox.addItem(genere);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
+        }
         c = new GridBagConstraints();
         c.gridy = 1;
         c.gridx = 1;
         informationPanel.add(info, c);
-        c.gridy = 2;
+        c.gridy = 3;
         c.gridx = 1;
         informationPanel.add(head, c);
+        c.gridx = 1;
+        c.gridy = 2;
+        informationPanel.add(generesJComboBox, c);
+        c.gridx = 2;
+        c.gridy = 2;
+        informationPanel.add(genereButton, c);
         this.pack();
+        this.genereButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Gatunek genere = (Gatunek)generesJComboBox.getSelectedItem();
+                JOptionPane.showMessageDialog(null, genere.getOpis(), genere.getNazwa(), JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
     }
 
     @Override

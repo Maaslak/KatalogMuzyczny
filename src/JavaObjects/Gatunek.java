@@ -26,8 +26,9 @@ public class Gatunek {
 
     @Override
     public String toString() {
-        return "<html>Gatunek" +
+        return nazwa;
+        /*return "<html>Gatunek" +
                 "Nazwa: " + nazwa + "<br/>" +
-                "Opis: '" + opis + "<br/></html>";
+                "Opis: '" + opis + "<br/></html>";*/
     }
 }
