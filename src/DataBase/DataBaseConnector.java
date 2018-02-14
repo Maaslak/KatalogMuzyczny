@@ -413,8 +413,8 @@ public class DataBaseConnector {
             statement = connection.prepareStatement("SELECT * FROM MIASTA");
             resultSet = statement.executeQuery();
             while (resultSet.next()){
-                Koncert koncert = new Koncert(resultSet.getString(1), resultSet.getDate(2), resultSet.getString(3), resultSet.getInt(5));
-                koncerty.add(koncert);
+                Miasto miasto = new Miasto(resultSet.getString(1), resultSet.getInt(2), resultSet.getInt(3));
+                miasta.add(miasto);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -435,7 +435,7 @@ public class DataBaseConnector {
             }
         }
         if (error)
-            throw new Exception("Nie udalo sie pobrac koncertow");
+            throw new Exception("Nie udalo sie pobrac miast");
         return miasta;
     }
 
