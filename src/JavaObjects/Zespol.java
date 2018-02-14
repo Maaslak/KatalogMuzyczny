@@ -2,8 +2,8 @@ package JavaObjects;
 
 import DataBase.DataBaseConnector;
 
-import java.awt.*;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Zespol {
@@ -53,6 +53,10 @@ public class Zespol {
         this.kraj_zalozenia = kraj_zalozenia;
     }
 
+    public LocalDate getLocalDate() {
+        return date.toLocalDate();
+    }
+
     public Date getDate() {
         return date;
     }
@@ -69,18 +73,18 @@ public class Zespol {
         this.id = id;
     }
 
-    @Override
-    public String toString() {
-        String string = "<html>Nazwa: " + nazwa + "<br/>Data: " + date.toString() + "<br/>Miasto zalozenia: " + miasto_zalozenia + "<br/>Kraj zalozenia: " + kraj_zalozenia + "<br/>Gatunki:";
+    public ArrayList<Gatunek> getGeneres() {
         try {
             uploadGeneres();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        for (Gatunek genere :
-                this.generes) {
-            string += genere.getNazwa() + "<br/>";
-        }
+        return generes;
+    }
+
+    @Override
+    public String toString() {
+        String string = "<html>Nazwa: " + nazwa + "<br/>Data: " + date.toString() + "<br/>Miasto zalozenia: " + miasto_zalozenia + "<br/>Kraj zalozenia: " + kraj_zalozenia + "<br/>Gatunki:";
         string += "<br/></html>";
         return string;
     }

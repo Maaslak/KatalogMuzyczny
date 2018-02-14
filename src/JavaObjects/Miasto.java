@@ -33,4 +33,9 @@ public class Miasto {
     public void setPolozenieY(int polozenieY) {
         this.polozenieY = polozenieY;
     }
+
+    @Override
+    public String toString() {
+        return nazwa;
+    }
 }

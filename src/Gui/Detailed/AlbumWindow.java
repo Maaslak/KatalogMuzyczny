@@ -26,6 +26,8 @@ public class AlbumWindow extends Detailed{
         super(dataBaseConnector,father);
         this.album = album;
         setInformationPanel();
+        super.getEditButton().setVisible(false);
+        super.getSelectButton().setVisible(false);
         try {
             this.utwory = dataBaseConnector.getUtwory(album.getId());
             DefaultTableModel model = (DefaultTableModel) getTable1().getModel();

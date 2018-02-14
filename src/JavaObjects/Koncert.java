@@ -6,6 +6,7 @@ public class Koncert {
     private String nazwa, miasto_nazwa;
     private Date data;
     private int zespolId;
+    private int festiwalId;
 
     public Koncert(String nazwa, Date data, String miasto_nazwa, int zespolId) {
         this.nazwa = nazwa;
@@ -49,5 +50,10 @@ public class Koncert {
     @Override
     public String toString() {
         return "<html>Nazwa: " + nazwa + "<br/>Data: " + data + "<br/>Miasto: " + miasto_nazwa + "<br/><br/><html>";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.toString() == obj.toString();
     }
 }

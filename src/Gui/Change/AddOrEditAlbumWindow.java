@@ -9,13 +9,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeListener;
 import java.sql.Date;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 public class AddOrEditAlbumWindow extends Change {
 
     private JLabel zespolname, name, date, rating, language;
-    private JTextField zespolJTextField, nameJTextField, ratingJTextField, languageJTextField;
+    private JTextField zespolJTextField, nameJTextField, languageJTextField;
+    private JFormattedTextField ratingJTextField;
     private JComboBox zespolyJComboBox;
     private DatePicker dateDatePicker;
     private Zespol zespol;
@@ -57,11 +60,12 @@ public class AddOrEditAlbumWindow extends Change {
             this.zespolyJComboBox = new JComboBox();
             for(int i =0; i<zespoly.size();i++)
                 this.zespolyJComboBox.addItem(zespoly.get(i).getNazwa());
-
+            NumberFormat amountFormat = NumberFormat.getNumberInstance();
             //this.zespolJTextField = new JTextField(5);
             nameJTextField = new JTextField(5);
             dateDatePicker = new DatePicker();
-            ratingJTextField = new JTextField(5);
+            ratingJTextField = new JFormattedTextField(amountFormat);
+            ratingJTextField.setColumns(5);
             languageJTextField = new JTextField(5);
 
             c = new GridBagConstraints();
@@ -139,7 +143,11 @@ public class AddOrEditAlbumWindow extends Change {
             //this.zespolJTextField = new JTextField(5);
             nameJTextField = new JTextField(albumEdit.getNazwa(),5);
             dateDatePicker = new DatePicker();
-            ratingJTextField = new JTextField(5);
+            dateDatePicker.setDate(albumEdit.getDate().toLocalDate());
+            NumberFormat amountFormat = NumberFormat.getNumberInstance();
+            ratingJTextField = new JFormattedTextField(amountFormat);
+            ratingJTextField.setColumns(5);
+            ratingJTextField.setValue(albumEdit.getOcena());
             languageJTextField = new JTextField(albumEdit.getJezyk(),5);
 
             c = new GridBagConstraints();
@@ -251,7 +259,9 @@ public class AddOrEditAlbumWindow extends Change {
 
         this.nameJTextField = new JTextField(5);
         this.dateDatePicker = new DatePicker();
-        this.ratingJTextField = new JTextField(5);
+        NumberFormat amountFormat = NumberFormat.getNumberInstance();
+        this.ratingJTextField = new JFormattedTextField(amountFormat);
+        this.ratingJTextField.setColumns(5);
         this.languageJTextField = new JTextField(5);
 
         c = new GridBagConstraints();
@@ -312,7 +322,11 @@ public class AddOrEditAlbumWindow extends Change {
 
         this.nameJTextField = new JTextField(albumEdit.getNazwa(),5);
         this.dateDatePicker = new DatePicker();
-        this.ratingJTextField = new JTextField(Float.toString(albumEdit.getOcena()),5);
+        dateDatePicker.setDate(albumEdit.getDate().toLocalDate());
+        NumberFormat amountFormat = NumberFormat.getNumberInstance();
+        this.ratingJTextField = new JFormattedTextField(amountFormat);
+        this.ratingJTextField.setColumns(5);
+        this.ratingJTextField.setValue(albumEdit.getOcena());
         this.languageJTextField = new JTextField(albumEdit.getJezyk(),5);
 
         c = new GridBagConstraints();
