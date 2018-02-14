@@ -1589,6 +1589,33 @@ public class DataBaseConnector {
             throw new Exception("Nie udalo sie zmodyfikowac koncertu");
     }
 
+    public int getNumberOfConcerts(String nazwaFestiwalu) throws Exception {
+        boolean error = false;
+        CallableStatement statement = null;
+        int result = 0;
+        try {
+
+            statement = connection.prepareCall("{? = call GETCITYCOUNT(?)}");
+            statement.registerOutParameter(1, Types.INTEGER);
+            statement.setString(2, nazwaFestiwalu);
+            statement.execute();
+            result = statement.getInt(1);
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
+        if (error == true)
+            throw new Exception("Nie udalo sie pobrac liczby koncerto");
+        return result;
+    }
+
 
 
     public void disconnect() throws SQLException {

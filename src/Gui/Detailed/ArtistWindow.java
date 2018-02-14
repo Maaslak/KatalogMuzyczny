@@ -85,8 +85,16 @@ public class ArtistWindow extends Detailed{
             @Override
             public void actionPerformed(ActionEvent e) {
                 Gatunek genere = (Gatunek)generesJComboBox.getSelectedItem();
-                if(genere != null)
-                    JOptionPane.showMessageDialog(null, genere.getOpis(), genere.getNazwa(), JOptionPane.INFORMATION_MESSAGE);
+                if(genere != null) {
+                    String message = null;
+                    try {
+                        message = "The number of concerts of that genere played: " + Integer.toString(getDataBaseConnector().getNumberOfConcerts(genere.getNazwa())) + "\n";
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                        JOptionPane.showMessageDialog(null, e1.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
+                    }
+                    JOptionPane.showMessageDialog(null,  message + genere.getOpis(), genere.getNazwa(), JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         });
     }
