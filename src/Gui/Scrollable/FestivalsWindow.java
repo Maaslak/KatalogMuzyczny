@@ -6,6 +6,7 @@ import Gui.Change.AddOrEditFestivalWindow;
 import Gui.Detailed.ConcertWindow;
 import Gui.Detailed.FestivalWindow;
 import JavaObjects.Festiwal;
+import JavaObjects.Koncert;
 import com.github.lgooddatepicker.components.DatePicker;
 
 import javax.swing.*;
@@ -13,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class FestivalsWindow extends Scrollable{
@@ -97,7 +99,12 @@ public class FestivalsWindow extends Scrollable{
                 super.mouseClicked(mouseEvent);
                 try {
                     festiwale.clear();
-                    festiwale = getDataBaseConnector().getFestiwale();
+                    Date dateFrom = null, dateTo = null;
+                    if(from.getDate() != null)
+                        dateFrom = Date.valueOf(from.getDate());
+                    if(to.getDate() != null)
+                        dateTo = Date.valueOf(to.getDate());
+                    festiwale = getDataBaseConnector().getFestiwale(nameJTextField.getText(), dateFrom, dateTo);
                     DefaultTableModel model = (DefaultTableModel) getTable1().getModel();
                     model.getDataVector().removeAllElements();
                     model.fireTableDataChanged();
@@ -151,12 +158,14 @@ public class FestivalsWindow extends Scrollable{
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 if(!getTable1().getSelectionModel().isSelectionEmpty()) {
+                    Festiwal festiwal = festiwale.get(getTable1().convertRowIndexToModel(getTable1().getSelectedRow()));
                     try {
-                        //edit concert
-                        setVisible(true);
+                        getDataBaseConnector().deleteFestiwal(festiwal.getId());
                     } catch (Exception e) {
                         e.printStackTrace();
+                        JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
                     }
+                    setVisible(true);
                 }
             }
         });

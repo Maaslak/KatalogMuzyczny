@@ -376,17 +376,23 @@ public class DataBaseConnector {
         if(!nazwa.isEmpty()) {
             query += "NAZWA LIKE ? ";
         }
-        if(dateBegin != null){
-            if(query.charAt(query.length() - 2) == '?')
+        if(dateBegin != null && dateEnd != null){
+            if (query.charAt(query.length() - 2) == '?')
                 query += "AND ";
-            query += "data_rozpoczecia > ? ";
+            query += "data_rozpoczecia > ? OR data_rozpoczecia < ? ";
         }
-        if(dateEnd != null){
-            if(query.charAt(query.length() - 2) == '?')
-                query += "AND ";
-            query += "data_zakonczenia < ? ";
+        else {
+            if (dateBegin != null) {
+                if (query.charAt(query.length() - 2) == '?')
+                    query += "AND ";
+                query += "data_rozpoczecia > ? ";
+            }
+            if (dateEnd != null) {
+                if (query.charAt(query.length() - 2) == '?')
+                    query += "AND ";
+                query += "data_rozpoczecia < ? ";
+            }
         }
-
         PreparedStatement statement = null;
         statement = connection.prepareStatement(query);
         int i = 1;
@@ -1540,6 +1546,33 @@ public class DataBaseConnector {
             statement.setInt(4, zespolId);
             statement.setString(5, prev.getNazwa());
             statement.setDate(6, prev.getData());
+            changes = statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if (error == true)
+            throw new Exception("Nie udalo sie zmodyfikowac koncertu");
+    }
+
+    public void updateFestiwale(Integer id, Festiwal newOne) throws Exception {
+        boolean error =false;
+        PreparedStatement statement = null;
+        int changes = 0;
+        try {
+
+            statement = connection.prepareStatement("UPDATE FESTIWALE SET NAZWA = ?, DATA_ROZPOCZECIA = ?, DATA_ZAKONCZENIA = ? WHERE FESTIWAL_ID = ?");
+            statement.setString(1, newOne.getNazwa());
+            statement.setDate(2, newOne.getDataRozpoczecia());
+            statement.setDate(3, newOne.getDataZakonczenia());
+            statement.setInt(4, id);
             changes = statement.executeUpdate();
         } catch (SQLException ex) {
             System.out.println("Bład wykonania polecenia" + ex.toString());

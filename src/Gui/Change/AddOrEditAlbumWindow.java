@@ -139,6 +139,7 @@ public class AddOrEditAlbumWindow extends Change {
             //this.zespolJTextField = new JTextField(5);
             nameJTextField = new JTextField(albumEdit.getNazwa(),5);
             dateDatePicker = new DatePicker();
+            dateDatePicker.setDate(albumEdit.getDate().toLocalDate());
             ratingJTextField = new JTextField(5);
             languageJTextField = new JTextField(albumEdit.getJezyk(),5);
 
@@ -312,6 +313,7 @@ public class AddOrEditAlbumWindow extends Change {
 
         this.nameJTextField = new JTextField(albumEdit.getNazwa(),5);
         this.dateDatePicker = new DatePicker();
+        dateDatePicker.setDate(albumEdit.getDate().toLocalDate());
         this.ratingJTextField = new JTextField(Float.toString(albumEdit.getOcena()),5);
         this.languageJTextField = new JTextField(albumEdit.getJezyk(),5);
 

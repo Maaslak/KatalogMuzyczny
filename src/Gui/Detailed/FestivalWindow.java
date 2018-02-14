@@ -88,6 +88,8 @@ public class FestivalWindow extends Detailed{
             }
         });
 
+        super.getEditButton().setVisible(false);
+        /*
         super.getEditButton().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
@@ -98,7 +100,7 @@ public class FestivalWindow extends Detailed{
                     setVisible(false);
                 }
             }
-        });
+        });*/
 
         super.getDeleteButton().addMouseListener(new MouseAdapter() {
             @Override
@@ -121,6 +123,11 @@ public class FestivalWindow extends Detailed{
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
+                if(!getTable1().getSelectionModel().isSelectionEmpty()) {
+                    ConcertWindow concertWindow= new ConcertWindow(getDataBaseConnector(),temp,koncerty.get(getTable1().convertRowIndexToModel(getTable1().getSelectedRow())));
+                    concertWindow.setVisible(true);
+                    setVisible(false);
+                }
             }
         });
     }

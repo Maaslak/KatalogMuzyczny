@@ -154,6 +154,11 @@ public class ArtistWindow extends Detailed{
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
+                if(!getTable1().getSelectionModel().isSelectionEmpty()) {
+                    AlbumWindow albumWindow = new AlbumWindow(getDataBaseConnector(),temp,albums.get(getTable1().getSelectedRow()));
+                    albumWindow.setVisible(true);
+                    setVisible(false);
+                }
             }
         });
     }

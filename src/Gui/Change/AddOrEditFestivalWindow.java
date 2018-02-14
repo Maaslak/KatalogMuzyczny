@@ -94,6 +94,8 @@ public class AddOrEditFestivalWindow extends Change{
         this.nameJTextField = new JTextField(festiwalEdit.getNazwa(),5);
         this.startDatePicker = new DatePicker();
         this.endDatePicker = new DatePicker();
+        startDatePicker.setDate(this.festiwalEdit.getDataRozpoczecia().toLocalDate());
+        endDatePicker.setDate(this.festiwalEdit.getDataZakonczenia().toLocalDate());
 
         c = new GridBagConstraints();
         c.gridy = 1;
@@ -115,6 +117,26 @@ public class AddOrEditFestivalWindow extends Change{
         c.gridx = 2;
         addPanel.add(endDatePicker, c);
         this.pack();
+        getOkButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                try {
+                    Date dateStart = null, dateEnd = null;
+                    if(startDatePicker.getDate() != null)
+                        dateStart = Date.valueOf(startDatePicker.getDate());
+                    if(endDatePicker.getDate() != null)
+                        dateEnd= Date.valueOf(endDatePicker.getDate());
+                    Festiwal festiwal = new Festiwal(nameJTextField.getText(),dateStart,dateEnd);
+                    getDataBaseConnector().updateFestiwale(festiwalEdit.getId(), festiwal);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
+                }
+                setVisible(false);
+                getFather().setVisible(true);
+            }
+        });
     }
 
     public void mouse(){

@@ -47,12 +47,13 @@ public class AddOrEditConcertWindow extends Change{
         mouse(); //TODO przeciazyc
     }
 
+    /*
     public AddOrEditConcertWindow(DataBaseConnector dataBaseConnector, Festiwal festival, JFrame father, Koncert koncertEdit) {
         super(dataBaseConnector, father);
         this.koncertEdit = koncertEdit;
         setEditConcertInFestival();
         mouse(); //TODO przeciazyc
-    }
+    }*/
 
 
     public void setAddConcert(){
@@ -291,7 +292,7 @@ public class AddOrEditConcertWindow extends Change{
             }
         });
     }
-
+    /*
     public void setEditConcertInFestival(){
         this.koncert_name = new JLabel("Concert");
         try {
@@ -327,7 +328,7 @@ public class AddOrEditConcertWindow extends Change{
 
             }
         });
-    }
+    }*/
 
     public void mouse(){
         getOkButton().addMouseListener(new MouseAdapter() {
