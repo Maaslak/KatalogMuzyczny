@@ -1,10 +1,7 @@
 package Gui;
 
 import DataBase.DataBaseConnector;
-import Gui.Scrollable.AlbumsWindow;
-import Gui.Scrollable.ArtistsWindow;
-import Gui.Scrollable.ConcertsWindow;
-import Gui.Scrollable.FestivalsWindow;
+import Gui.Scrollable.*;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -17,10 +14,12 @@ public class MainWindow{
     private JButton albumsButton;
     private JButton concertsButton;
     private JButton festivalsButton;
+    private JButton musiciansButton;
     private ArtistsWindow artistsWindow;
     private AlbumsWindow albumsWindow;
     private ConcertsWindow concertsWindow;
     private FestivalsWindow festivalsWindow;
+    private MusiciansWindow musiciansWindow;
     private DataBaseConnector dataBaseConnector;
 
     public MainWindow() {
@@ -37,6 +36,8 @@ public class MainWindow{
             albumsWindow = new AlbumsWindow(dataBaseConnector,frame);
             concertsWindow = new ConcertsWindow(dataBaseConnector,frame);
             festivalsWindow = new FestivalsWindow(dataBaseConnector,frame);
+            musiciansWindow = new MusiciansWindow(dataBaseConnector,frame);
+
 
             artistsButton.addMouseListener(new MouseAdapter() {
                 @Override
@@ -67,6 +68,14 @@ public class MainWindow{
                 public void mouseClicked(MouseEvent mouseEvent) {
                     super.mouseClicked(mouseEvent);
                     festivalsWindow.setVisible(true);
+                    frame.setVisible(false);
+                }
+            });
+            musiciansButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent mouseEvent) {
+                    super.mouseClicked(mouseEvent);
+                    musiciansWindow.setVisible(true);
                     frame.setVisible(false);
                 }
             });

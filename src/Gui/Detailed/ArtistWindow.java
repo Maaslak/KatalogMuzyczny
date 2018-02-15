@@ -20,7 +20,7 @@ public class ArtistWindow extends Detailed{
     private JLabel info;
     private JLabel head;
     private JComboBox generesJComboBox;
-    private JButton genereButton;
+    private JButton genereButton,musicianButton;
     private Zespol zespol;
     private ArrayList<Album> albums;
     private ArrayList<Gatunek> generes;
@@ -57,6 +57,7 @@ public class ArtistWindow extends Detailed{
         this.head = new JLabel("Albumy");
         this.generesJComboBox = new JComboBox();
         this.genereButton = new JButton("Read about selected genere");
+        this.musicianButton = new JButton("Add musician");
         try {
             generes = getDataBaseConnector().getGatunki(zespol.getId(), "");
             for (Gatunek genere :
@@ -80,6 +81,9 @@ public class ArtistWindow extends Detailed{
         c.gridx = 2;
         c.gridy = 2;
         informationPanel.add(genereButton, c);
+        c.gridx = 3;
+        c.gridy = 2;
+        informationPanel.add(musicianButton, c);
         this.pack();
         this.genereButton.addActionListener(new ActionListener() {
             @Override
@@ -159,6 +163,17 @@ public class ArtistWindow extends Detailed{
         });
 
         super.getSelectButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                if(!getTable1().getSelectionModel().isSelectionEmpty()) {
+                    AlbumWindow albumWindow = new AlbumWindow(getDataBaseConnector(),temp,albums.get(getTable1().getSelectedRow()));
+                    albumWindow.setVisible(true);
+                    setVisible(false);
+                }
+            }
+        });
+        this.musicianButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);

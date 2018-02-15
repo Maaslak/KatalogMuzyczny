@@ -563,12 +563,47 @@ public class DataBaseConnector {
 
     public ArrayList<Muzyk> getMuzycy(int zespolId) throws Exception {
         PreparedStatement statement = null;
-        miasta.clear();
+        muzycy.clear();
         boolean error = false;
         ResultSet resultSet = null;
         try {
             statement = connection.prepareStatement("SELECT * FROM MUZYCY g JOIN CZŁONKOWSTWA p USING(MUZYK_ID) WHERE p.ZESPOL_ID= ?");
             statement.setInt(1, zespolId);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                Muzyk muzyk= new Muzyk(resultSet.getString(2), resultSet.getString(3), resultSet.getDate(4), resultSet.getString(5));
+                muzycy.add(muzyk);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            error = true;
+        }
+        finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
+        if (error)
+            throw new Exception("Nie udalo sie pobrac muzykow");
+        return muzycy;
+    }
+
+    public ArrayList<Muzyk> getMuzycy() throws Exception {
+        PreparedStatement statement = null;
+        muzycy.clear();
+        boolean error = false;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement("SELECT * FROM MUZYCY");
             resultSet = statement.executeQuery();
             while (resultSet.next()){
                 Muzyk muzyk= new Muzyk(resultSet.getString(2), resultSet.getString(3), resultSet.getDate(4), resultSet.getString(5));
@@ -1238,6 +1273,30 @@ public class DataBaseConnector {
             throw new Exception("Nie udalo sie usunac przynaleznosci do Czlonkostwa");
     }
 
+    public void deleteCzlonkostwo(int zespolId, int muzykId) throws Exception {
+        boolean error =false;
+        PreparedStatement statement = null;
+        int changes = 0;
+        try {
+            statement = connection.prepareStatement("delete from CZŁONKOWSTWA where ZESPOL_ID = ? AND MUZYK_ID = ?");
+            statement.setInt(1, zespolId);
+            statement.setInt(2, muzykId);
+            changes = statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if (error == true)
+            throw new Exception("Nie udalo sie usunac przynaleznosci do Czlonkostwa");
+    }
+
     public void deleteKoncert(String nazwa, Date data) throws Exception {
         boolean error =false;
         PreparedStatement statement = null;
@@ -1308,13 +1367,13 @@ public class DataBaseConnector {
             throw new Exception("Nie udalo sie usunac festiwalu");
     }
 
-    public void deleteMuzyk(int muzykId) throws Exception {
+    public void deleteMuzyk(String nazwisko) throws Exception {
         boolean error =false;
         PreparedStatement statement = null;
         int changes = 0;
         try {
-            statement = connection.prepareStatement("delete from MUZYCY WHERE MUZYK_ID = ?");
-            statement.setInt(1, muzykId);
+            statement = connection.prepareStatement("delete from MUZYCY WHERE NAZWISKO = ?");
+            statement.setString(1, nazwisko);
             changes = statement.executeUpdate();
         } catch (SQLException ex) {
             System.out.println("Bład wykonania polecenia" + ex.toString());
@@ -1456,6 +1515,32 @@ public class DataBaseConnector {
         }
         if (error == true)
             throw new Exception("Nie udalo sie zmodyfikowac gatunek");
+    }
+
+    public void updateMuzyk(String imie, String nazwisko,  Date dataUrodzenia, String pochodzenie) throws Exception {
+        boolean error =false;
+        PreparedStatement statement = null;
+        int changes = 0;
+        try {
+            statement = connection.prepareStatement("UPDATE MUZYCY SET IMIE = ?, NAZWISKO = ?, DATA_URODZENIA = ?, POCHODZENIE = ? WHERE NAZWISKO = ?");
+            statement.setString(1, imie);
+            statement.setString(2, nazwisko);
+            statement.setDate(3, dataUrodzenia);
+            statement.setString(4, pochodzenie);
+            changes = statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+            error = true;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    /* kod obsługi */ }
+            }
+        }
+        if (error == true)
+            throw new Exception("Nie udalo sie zmodyfikowac albumu");
     }
 
     public void updateCzlonkostwo(Date dataOd, Date dataDo, String funkcja, int zespolId, int muzykId) throws Exception {
