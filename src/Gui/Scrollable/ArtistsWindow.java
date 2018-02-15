@@ -145,11 +145,16 @@ public class ArtistsWindow extends Scrollable {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
-                if(!getTable1().getSelectionModel().isSelectionEmpty()) {
-                    ArtistWindow artistWindow = new ArtistWindow(getDataBaseConnector(),temp,zespoly.get(getTable1().convertRowIndexToModel(getTable1().getSelectedRow())));
-                    artistWindow.setVisible(true);
-                    setVisible(false);
-                }
+                try{
+                if(getTable1().getSelectedRow() == -1)
+                    throw new Exception("Please select an album");
+                ArtistWindow artistWindow = new ArtistWindow(getDataBaseConnector(),temp,zespoly.get(getTable1().convertRowIndexToModel(getTable1().getSelectedRow())));
+                artistWindow.setVisible(true);
+                setVisible(false);
+                } catch (Exception e) {
+                        e.printStackTrace();
+                        JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
+                    }
             }
         });
 
@@ -167,10 +172,15 @@ public class ArtistsWindow extends Scrollable {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
-                if(!getTable1().getSelectionModel().isSelectionEmpty()) {
-                    AddOrEditArtistWindow addOrEditArtistWindow = new AddOrEditArtistWindow(getDataBaseConnector(),temp,zespoly.get(getTable1().convertRowIndexToModel(getTable1().getSelectedRow())));
-                    addOrEditArtistWindow.setVisible(true);
-                    setVisible(false);
+                try {
+                if(getTable1().getSelectedRow() == -1)
+                    throw new Exception("Please select an album");
+                AddOrEditArtistWindow addOrEditArtistWindow = new AddOrEditArtistWindow(getDataBaseConnector(),temp,zespoly.get(getTable1().convertRowIndexToModel(getTable1().getSelectedRow())));
+                addOrEditArtistWindow.setVisible(true);
+                setVisible(false);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -180,6 +190,8 @@ public class ArtistsWindow extends Scrollable {
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 try {
+                    if(getTable1().getSelectedRow() == -1)
+                        throw new Exception("Please select an album");
                     getDataBaseConnector().deleteZespol(zespoly.get(getTable1().convertRowIndexToModel(getTable1().getSelectedRow())).getId());
                     setVisible(true);
                 } catch (Exception e) {

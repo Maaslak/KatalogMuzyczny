@@ -111,7 +111,7 @@ public class AddOrEditArtistWindow extends Change {
                 if(((DefaultComboBoxModel)gatunkiDeleteJComboBox.getModel()).getIndexOf(gatunkiAddJComboBox.getSelectedItem()) == -1) {
                     externalGanunkiChange = true;
                     gatunkiDeleteJComboBox.addItem(gatunkiAddJComboBox.getSelectedItem());
-                    if(deletedGeneres.indexOf((String)gatunkiAddJComboBox.getSelectedItem()) == -1)
+                    if(deletedGeneres.indexOf((String)gatunkiAddJComboBox.getSelectedItem()) != -1)
                         deletedGeneres.remove((String) gatunkiAddJComboBox.getSelectedItem());
                     else
                         addedGeneres.add((String) gatunkiAddJComboBox.getSelectedItem());
@@ -128,10 +128,10 @@ public class AddOrEditArtistWindow extends Change {
                     else
                         deletedGeneres.add((String) gatunkiDeleteJComboBox.getSelectedItem());
                     gatunkiDeleteJComboBox.removeItem(gatunkiDeleteJComboBox.getSelectedItem());
-                    }
-                    externalGanunkiChange = false;
                 }
-                });
+                externalGanunkiChange = false;
+            }
+        });
         AddOrEditArtistWindow temp = this;
         this.addGatunekJButton.addActionListener(new ActionListener() {
             @Override
@@ -164,12 +164,17 @@ public class AddOrEditArtistWindow extends Change {
             public void actionPerformed(ActionEvent e) {
                 try {
                     String selected = (String)gatunkiAddJComboBox.getSelectedItem();
+                    DialagForm dialog = new DialagForm("Are You sure?");
+                    dialog.pack();
+                    boolean accepted = dialog.customSetVisible(true);
+                    if(!accepted)
+                        throw new Exception("Canceled");
                     getDataBaseConnector().deleteGatunek(selected);
-                    temp.setVisible(true);
                     gatunkiAddJComboBox.removeItem(selected);
                     gatunkiDeleteJComboBox.removeItem(selected);
                     addedGeneres.remove(selected);
                     deletedGeneres.remove(selected);
+                    temp.setVisible(true);
                 }
                 catch (Exception ex){
                     ex.printStackTrace();

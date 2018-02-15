@@ -52,12 +52,13 @@ public class Festiwal {
         this.id = id;
     }
 
+
     @Override
     public String toString() {
-        return "<html>Festiwal: " +
-                "<br/>Nazwa: " + nazwa +
-                "<br/>DataRozpoczecia: " + dataRozpoczecia +
-                "<br/>DataZakonczenia: " + dataZakonczenia +
+        return "<html>Festival: " +
+                "<br/>Name: " + nazwa +
+                "<br/>Beginning date: " + dataRozpoczecia +
+                "<br/>Ending date: " + dataZakonczenia +
                 "<br/><br/></html>";
     }
 }

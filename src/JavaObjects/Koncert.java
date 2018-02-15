@@ -6,13 +6,14 @@ public class Koncert {
     private String nazwa, miasto_nazwa;
     private Date data;
     private int zespolId;
-    private int festiwalId;
+    private Integer festiwalId;
 
-    public Koncert(String nazwa, Date data, String miasto_nazwa, int zespolId) {
+    public Koncert(String nazwa, Date data, String miasto_nazwa, int zespolId, Integer festiwalId) {
         this.nazwa = nazwa;
         this.miasto_nazwa = miasto_nazwa;
         this.data = data;
         this.zespolId = zespolId;
+        this.festiwalId = festiwalId;
     }
 
     public String getNazwa() {
@@ -49,7 +50,22 @@ public class Koncert {
 
     @Override
     public String toString() {
-        return "<html>Nazwa: " + nazwa + "<br/>Data: " + data + "<br/>Miasto: " + miasto_nazwa + "<br/><br/><html>";
+        return "<html>Name: " + nazwa + "<br/>Date: " + data + "<br/><br/><html>";
+    }
+
+    public String getInfo(){
+        String info = "<html>Name: " + nazwa + "<br/>Date: " + data;
+        if(miasto_nazwa != null)
+            info += "<br/>City: " + miasto_nazwa;
+        return  info + "<br/><br/><html>";
+    }
+
+    public Integer getFestiwalId() {
+        return festiwalId;
+    }
+
+    public void setFestiwalId(int festiwalId) {
+        this.festiwalId = festiwalId;
     }
 
     @Override

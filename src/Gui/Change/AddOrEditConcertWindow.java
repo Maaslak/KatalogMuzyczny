@@ -63,6 +63,7 @@ public class AddOrEditConcertWindow extends Change{
         this.city = new JLabel("City");
         this.festival = new JLabel("Festival");
         this.cityJComboBox = new JComboBox();
+        this.cityJTextField = new JTextField();
 
         this.nameJTextField = new JTextField(5);
         try {
@@ -144,7 +145,8 @@ public class AddOrEditConcertWindow extends Change{
                     Date dateFrom = null;
                     if(dateDatePicker.getDate() != null)
                         dateFrom = Date.valueOf(dateDatePicker.getDate());
-                        Koncert koncert = new Koncert(nameJTextField.getText(), dateFrom,cityJTextField.getText(),zespoly.get(row_zespol).getId());
+                        System.out.println(zespoly.get(row_zespol));
+                        Koncert koncert = new Koncert(nameJTextField.getText(), dateFrom,cityJTextField.getText(),zespoly.get(row_zespol).getId(), festiwalId);
                         getDataBaseConnector().insertKoncert(koncert,festiwalId);
                     setVisible(false);
                     getFather().setVisible(true);
@@ -250,6 +252,7 @@ public class AddOrEditConcertWindow extends Change{
                     getFather().setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
                 }
 
             }
@@ -258,9 +261,9 @@ public class AddOrEditConcertWindow extends Change{
 
     public void setAddConcertInFestival(){
         this.koncert_name = new JLabel("Concert");
+        this.concertJComboBox = new JComboBox();
         try {
             ArrayList<Koncert> koncerty = getDataBaseConnector().getKoncert();
-            this.concertJComboBox = new JComboBox();
             for(int i =0; i<koncerty.size();i++)
                 this.concertJComboBox.addItem(koncerty.get(i));
         } catch (Exception e) {
@@ -287,6 +290,7 @@ public class AddOrEditConcertWindow extends Change{
                     getFather().setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
                 }
 
             }
@@ -331,6 +335,7 @@ public class AddOrEditConcertWindow extends Change{
     }*/
 
     public void mouse(){
+        /*
         getOkButton().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
@@ -338,7 +343,7 @@ public class AddOrEditConcertWindow extends Change{
                 setVisible(false);
                 getFather().setVisible(true);
             }
-        });
+        });*/
     }
 
 }

@@ -59,13 +59,18 @@ public class AddOrEditAlbumWindow extends Change {
             ArrayList<Zespol> zespoly = getDataBaseConnector().getZespoly();
             this.zespolyJComboBox = new JComboBox();
             for(int i =0; i<zespoly.size();i++)
-                this.zespolyJComboBox.addItem(zespoly.get(i).getNazwa());
-            NumberFormat amountFormat = NumberFormat.getNumberInstance();
+                this.zespolyJComboBox.addItem(zespoly.get(i));
+            Zespol selected = getDataBaseConnector().getZespol(albumEdit.getZespolId());
+            this.zespolyJComboBox.setSelectedItem(selected);
             //this.zespolJTextField = new JTextField(5);
             nameJTextField = new JTextField(5);
             dateDatePicker = new DatePicker();
+            NumberFormat amountFormat = NumberFormat.getNumberInstance();
+            amountFormat.setMinimumFractionDigits(2);
+            amountFormat.setMaximumFractionDigits(2);
             ratingJTextField = new JFormattedTextField(amountFormat);
             ratingJTextField.setColumns(5);
+            ratingJTextField.setValue(new Double(0));
             languageJTextField = new JTextField(5);
 
             c = new GridBagConstraints();
@@ -109,8 +114,8 @@ public class AddOrEditAlbumWindow extends Change {
                     Integer row = zespolyJComboBox.getSelectedIndex();
                     if(dateDatePicker.getDate() != null)
                         dateFrom = Date.valueOf(dateDatePicker.getDate());
-                    if(!ratingJTextField.getText().isEmpty())
-                        ratingFloat = Float.valueOf(ratingJTextField.getText());
+                    if(ratingJTextField.getValue() != null)
+                        ratingFloat = ((Double) ratingJTextField.getValue()).floatValue();
                     try {
                         Album album = new Album(nameJTextField.getText(), dateFrom,ratingFloat,languageJTextField.getText());
                         getDataBaseConnector().insertAlbum(album, zespoly.get(row).getId());
@@ -138,16 +143,20 @@ public class AddOrEditAlbumWindow extends Change {
             ArrayList<Zespol> zespoly = getDataBaseConnector().getZespoly();
             this.zespolyJComboBox = new JComboBox();
             for(int i =0; i<zespoly.size();i++)
-                this.zespolyJComboBox.addItem(zespoly.get(i).getNazwa());
-
+                this.zespolyJComboBox.addItem(zespoly.get(i));
+            Zespol selected = getDataBaseConnector().getZespol(albumEdit.getZespolId());
+            this.zespolyJComboBox.setSelectedItem(selected);
             //this.zespolJTextField = new JTextField(5);
             nameJTextField = new JTextField(albumEdit.getNazwa(),5);
             dateDatePicker = new DatePicker();
-            dateDatePicker.setDate(albumEdit.getDate().toLocalDate());
+            if(albumEdit.getDate() != null)
+                dateDatePicker.setDate(albumEdit.getDate().toLocalDate());
             NumberFormat amountFormat = NumberFormat.getNumberInstance();
+            amountFormat.setMinimumFractionDigits(2);
+            amountFormat.setMaximumFractionDigits(2);
             ratingJTextField = new JFormattedTextField(amountFormat);
             ratingJTextField.setColumns(5);
-            ratingJTextField.setValue(albumEdit.getOcena());
+            ratingJTextField.setValue(new Double(albumEdit.getOcena()));
             languageJTextField = new JTextField(albumEdit.getJezyk(),5);
 
             c = new GridBagConstraints();
@@ -191,8 +200,8 @@ public class AddOrEditAlbumWindow extends Change {
                     Integer row = zespolyJComboBox.getSelectedIndex();
                     if(dateDatePicker.getDate() != null)
                         dateFrom = Date.valueOf(dateDatePicker.getDate());
-                    if(!ratingJTextField.getText().isEmpty())
-                        ratingFloat = Float.valueOf(ratingJTextField.getText());
+                    if(ratingJTextField.getValue() != null)
+                        ratingFloat = ((Double) ratingJTextField.getValue()).floatValue();
                     try {
                         //Album album = new Album(nameJTextField.getText(), dateFrom,ratingFloat,languageJTextField.getText());
                         //getDataBaseConnector().insertAlbum(album, zespoly.get(row).getId());
@@ -260,6 +269,8 @@ public class AddOrEditAlbumWindow extends Change {
         this.nameJTextField = new JTextField(5);
         this.dateDatePicker = new DatePicker();
         NumberFormat amountFormat = NumberFormat.getNumberInstance();
+        amountFormat.setMinimumFractionDigits(2);
+        amountFormat.setMaximumFractionDigits(2);
         this.ratingJTextField = new JFormattedTextField(amountFormat);
         this.ratingJTextField.setColumns(5);
         this.languageJTextField = new JTextField(5);
@@ -298,8 +309,8 @@ public class AddOrEditAlbumWindow extends Change {
                 Float ratingFloat = null;
                 if(dateDatePicker.getDate() != null)
                     dateFrom = Date.valueOf(dateDatePicker.getDate());
-                if(!ratingJTextField.getText().isEmpty())
-                    ratingFloat = Float.valueOf(ratingJTextField.getText());
+                if(ratingJTextField.getValue() != null)
+                    ratingFloat = ((Double) ratingJTextField.getValue()).floatValue();
                 try {
                     Album album = new Album(nameJTextField.getText(), dateFrom,ratingFloat,languageJTextField.getText());
                     getDataBaseConnector().insertAlbum(album, zespol.getId());
@@ -322,11 +333,14 @@ public class AddOrEditAlbumWindow extends Change {
 
         this.nameJTextField = new JTextField(albumEdit.getNazwa(),5);
         this.dateDatePicker = new DatePicker();
-        dateDatePicker.setDate(albumEdit.getDate().toLocalDate());
+        if(albumEdit.getDate() != null)
+            dateDatePicker.setDate(albumEdit.getDate().toLocalDate());
         NumberFormat amountFormat = NumberFormat.getNumberInstance();
+        amountFormat.setMinimumFractionDigits(2);
+        amountFormat.setMaximumFractionDigits(2);
         this.ratingJTextField = new JFormattedTextField(amountFormat);
         this.ratingJTextField.setColumns(5);
-        this.ratingJTextField.setValue(albumEdit.getOcena());
+        this.ratingJTextField.setValue(new Double(albumEdit.getOcena()));
         this.languageJTextField = new JTextField(albumEdit.getJezyk(),5);
 
         c = new GridBagConstraints();
@@ -355,6 +369,26 @@ public class AddOrEditAlbumWindow extends Change {
         c.gridx = 2;
         addPanel.add(languageJTextField, c);
         this.pack();
+        getOkButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                Date dateFrom = null;
+                Float ratingFloat = null;
+                if(dateDatePicker.getDate() != null)
+                    dateFrom = Date.valueOf(dateDatePicker.getDate());
+                if(ratingJTextField.isEditValid())
+                    ratingFloat = ((Double)ratingJTextField.getValue()).floatValue();
+                try {
+                    getDataBaseConnector().updateAlbum(nameJTextField.getText(), dateFrom,ratingFloat,languageJTextField.getText(),albumEdit.getId());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
+                }
+                setVisible(false);
+                getFather().setVisible(true);
+            }
+        });
     }
 
     public void mouse(){

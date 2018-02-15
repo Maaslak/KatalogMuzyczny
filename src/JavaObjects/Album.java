@@ -8,17 +8,19 @@ public class Album {
     private Float ocena;
     private Date dataWydania;
     private Integer id;
+    private Integer zespolId;
 
-    public Album(String nazwa, Date dataWydania, Float ocena, String jezyk, Integer id){
+    public Album(String nazwa, Date dataWydania, Float ocena, String jezyk, Integer id, Integer zespolId){
         this.nazwa = nazwa;
         this.dataWydania = dataWydania;
         this.ocena = ocena;
         this.jezyk = jezyk;
         this.id = id;
+        this.zespolId = zespolId;
     }
 
     public Album(String nazwa, Date dataWydania, Float ocena, String jezyk){
-        this(nazwa, dataWydania, ocena, jezyk, null);
+        this(nazwa, dataWydania, ocena, jezyk, null, null);
     }
 
     public String getNazwa() {
@@ -61,6 +63,14 @@ public class Album {
         this.dataWydania = dataWydania;
     }
 
+    public Integer getZespolId() {
+        return zespolId;
+    }
+
+    public void setZespolId(Integer zespolId) {
+        this.zespolId = zespolId;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -71,6 +81,17 @@ public class Album {
 
     @Override
     public String toString() {
-        return "<html>Nazwa: " + nazwa + "<br/>Data wydania: " + dataWydania + "<br/>Ocena: " + ocena + "<br/>Jezyk: " + jezyk + "<br/><br/></html>";
+        return "<html>Name: " + nazwa;
+    }
+
+    public String getInfo(){
+        String info = "<html>Name: " + nazwa;
+        if(dataWydania != null)
+            info += "<br/>Recorded date: " + dataWydania;
+        if(ocena != null)
+            info += "<br/>Rateing: " + ocena;
+        if(jezyk != null)
+            info += "<br/>Language: " + jezyk;
+        return info += "</html>";
     }
 }

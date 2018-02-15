@@ -13,11 +13,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.NumberFormat;
 
 public class AddOrEditSongWindow extends Change{
 
     private JLabel title, time;
-    private JTextField titleJTextField, timeJTextField;
+    private JTextField titleJTextField;
+    private JFormattedTextField timeJTextField;
     private Album album;
     private Utwor utworEdit;
     private GridBagConstraints c;
@@ -40,7 +42,9 @@ public class AddOrEditSongWindow extends Change{
         this.time = new JLabel("Time[in sec]");
 
         this.titleJTextField = new JTextField(5);
-        this.timeJTextField = new JTextField(5);
+        NumberFormat amountFormat = NumberFormat.getNumberInstance();
+        timeJTextField = new JFormattedTextField(amountFormat);
+        timeJTextField.setColumns(5);
 
         c = new GridBagConstraints();
         c.gridy = 1;

@@ -84,8 +84,22 @@ public class Zespol {
 
     @Override
     public String toString() {
-        String string = "<html>Nazwa: " + nazwa + "<br/>Data: " + date.toString() + "<br/>Miasto zalozenia: " + miasto_zalozenia + "<br/>Kraj zalozenia: " + kraj_zalozenia + "<br/>Gatunki:";
+        String string = "<html>Nazwa: " + nazwa + "<br/>Data: " + date.toString();
         string += "<br/></html>";
         return string;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return this.toString().equals(((Zespol)o).toString());
+    }
+
+    public String getInfo(){
+        String info = "<html>Nazwa: " + nazwa + "<br/>Data: " + date.toString();
+        if(miasto_zalozenia != null)
+            info += "<br/>Miasto zalozenia: " + miasto_zalozenia;
+        if(kraj_zalozenia != null)
+            info += "<br/>Kraj zalozenia: " + kraj_zalozenia;
+        return info + "<br/>Gatunki:<br/></html>";
     }
 }

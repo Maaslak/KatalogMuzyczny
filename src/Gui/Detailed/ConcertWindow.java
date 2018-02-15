@@ -35,7 +35,7 @@ public class ConcertWindow extends Detailed{
     }
 
     public void setInformationPanel(){
-        this.info = new JLabel(koncert.toString());
+        this.info = new JLabel(koncert.getInfo());
         this.head = new JLabel("Zespoly");
         try {
             this.zespol = getDataBaseConnector().getZespol(koncert.getZespolId());
