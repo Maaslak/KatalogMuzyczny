@@ -53,7 +53,7 @@ public class ArtistWindow extends Detailed{
     }
 
     public void setInformationPanel(){
-        this.info = new JLabel(zespol.toString());
+        this.info = new JLabel(zespol.getInfo());
         this.head = new JLabel("Albumy");
         this.generesJComboBox = new JComboBox();
         this.genereButton = new JButton("Read about selected genere");

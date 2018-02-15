@@ -37,7 +37,7 @@ public class DataBaseConnector {
         connectionProperties = new Properties();
         connectionProperties.put("user", user);
         connectionProperties.put("password", password);
-        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", connectionProperties);
+        connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1522:orcl", connectionProperties);
     }
 
     public ArrayList<Zespol> getZespoly() throws Exception {
@@ -243,7 +243,7 @@ public class DataBaseConnector {
 
             resultSet = statement.executeQuery();
             while (resultSet.next()){
-                Album album = new Album(resultSet.getString(1), resultSet.getDate(2), resultSet.getFloat(3), resultSet.getString(4), resultSet.getInt(5));
+                Album album = new Album(resultSet.getString(1), resultSet.getDate(2), resultSet.getFloat(3), resultSet.getString(4), resultSet.getInt(5), resultSet.getInt(6));
                 albumy.add(album);
             }
         } catch (SQLException e) {
@@ -336,7 +336,7 @@ public class DataBaseConnector {
         try {
             resultSet = statement.executeQuery();
             while (resultSet.next()){
-                Koncert koncert = new Koncert(resultSet.getString(1), resultSet.getDate(2), resultSet.getString(3), resultSet.getInt(5));
+                Koncert koncert = new Koncert(resultSet.getString(1), resultSet.getDate(2), resultSet.getString(3), resultSet.getInt(5), resultSet.getInt(4));
                 koncerty.add(koncert);
             }
         } catch (SQLException e) {
@@ -641,10 +641,23 @@ public class DataBaseConnector {
     }
 
     public int insertAlbum(Album album, Integer zespolId) throws Exception {
-        boolean error = false;
         int changes = 0;
-        PreparedStatement statement= null;
-        ResultSet rs = null;
+        if(album.getOcena() != null)
+            if(album.getOcena() < 0 || album.getOcena() > 5)
+                throw new Exception("Please provide rating in range <0, 5>");
+
+        boolean error =false;
+        PreparedStatement statement = null;
+        ResultSet rs;
+        if(album.getDataWydania() != null) {
+            statement = connection.prepareStatement("SELECT DATA_ZALOZENIA FROM ZESPOLY WHERE ZESPOL_ID = ?");
+            statement.setInt(1, zespolId);
+            rs = statement.executeQuery();
+            rs.next();
+            if (rs.getDate(1).getTime() > album.getDataWydania().getTime())
+                throw new Exception("The date must be greater than formed date of an artist");
+        }
+        rs = null;
         String sql;
         sql = "INSERT INTO ALBUMY(NAZWA, ZESPOL_ID";
         if(album.getDataWydania() != null)
@@ -709,6 +722,14 @@ public class DataBaseConnector {
         int changes = 0;
         PreparedStatement statement= null;
         ResultSet rs = null;
+        if(festiwalId != null){
+            statement = connection.prepareStatement("SELECT DATA_ROZPOCZECIA, DATA_ZAKONCZENIA FROM FESTIWALE WHERE FESTIWAL_ID = ?");
+            statement.setInt(1, festiwalId);
+            rs = statement.executeQuery();
+            rs.next();
+            if(koncert.getData().getTime() < rs.getDate(1).getTime() || koncert.getData().getTime() > rs.getDate(2).getTime())
+                throw new Exception("Date of concert isn't between festivals begin and end date");
+        }
         String sql;
         sql = "INSERT INTO KONCERTY(NAZWA, DATA,  MIASTO_NAZWA, ZESPOL_ID";
         if(festiwalId != null)
@@ -1140,9 +1161,26 @@ public class DataBaseConnector {
     public void deleteZespol(int zespolId) throws Exception {
         boolean error =false;
         PreparedStatement statement = null;
+        ResultSet rs = null;
+        statement = connection.prepareStatement("select count(*) from ALBUMY WHERE ZESPOL_ID = ?");
+        statement.setInt(1, zespolId);
+        rs = statement.executeQuery();
+        rs.next();
+        if(rs.getInt(1) > 0)
+            throw new Exception("Please delete all albums of that artist first");
+        statement = connection.prepareStatement("select count(*) from KONCERTY WHERE ZESPOL_ID = ?");
+        statement.setInt(1, zespolId);
+        rs = statement.executeQuery();
+        rs.next();
+        if(rs.getInt(1) > 0)
+            throw new Exception("Please delete all concerts of that artist first");
         int changes = 0;
         try {
+
             statement = connection.prepareStatement("delete from PRZYNALEZNOSCI WHERE ZESPOL_ID = ?");
+            statement.setInt(1, zespolId);
+            changes = statement.executeUpdate();
+            statement = connection.prepareStatement("delete from CZŁONKOWSTWA WHERE ZESPOL_ID = ?");
             statement.setInt(1, zespolId);
             changes = statement.executeUpdate();
             statement = connection.prepareStatement("delete from ZESPOLY WHERE ZESPOL_ID = ?");
@@ -1356,8 +1394,20 @@ public class DataBaseConnector {
     }
 
     public void updateAlbum(String nazwa, Date dataWydania, Float ocena, String jezyk, int albumId) throws Exception {
+        if(ocena != null)
+            if(ocena < 0 || ocena > 5)
+                throw new Exception("Please provide rating in range <0, 5>");
+
         boolean error =false;
         PreparedStatement statement = null;
+        if(dataWydania != null) {
+            statement = connection.prepareStatement("SELECT DATA_ZALOZENIA FROM ZESPOLY WHERE ZESPOL_ID = (SELECT ZESPOL_ID FROM ALBUMY WHERE ALBUM_ID = ?)");
+            statement.setInt(1, albumId);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            if (rs.getDate(1).getTime() > dataWydania.getTime())
+                throw new Exception("The date must be greater than formed date of an artist");
+        }
         int changes = 0;
         try {
             statement = connection.prepareStatement("UPDATE ALBUMY SET NAZWA = ?, DATA_WYDANIA = ?, OCENA = ?, JEZYK = ? WHERE ALBUM_ID = ?");
@@ -1487,6 +1537,13 @@ public class DataBaseConnector {
     public void addKoncertToFestiwal(Integer festiwalId, String nazwa, Date data) throws Exception {
         boolean error =false;
         PreparedStatement statement = null;
+        statement = connection.prepareStatement("SELECT FESTIWAL_ID FROM KONCERTY WHERE NAZWA = ? AND DATA = ?");
+        statement.setString(1, nazwa);
+        statement.setDate(2, data);
+        ResultSet rs = statement.executeQuery();
+        rs.next();
+        if(new Integer(rs.getInt(1)) != null)
+            throw new Exception("Concert connected with another festival");
         int changes = 0;
         try {
             statement = connection.prepareStatement("UPDATE KONCERTY SET FESTIWAL_ID = ? WHERE NAZWA = ? AND DATA = ?");
@@ -1536,6 +1593,17 @@ public class DataBaseConnector {
     public void updateKoncerty(Koncert prev, String nazwa, Date data, String miastoNazwa, int zespolId) throws Exception {
         boolean error =false;
         PreparedStatement statement = null;
+        ResultSet rs = null;
+        if(data != null){
+            if(prev.getFestiwalId() != null){
+                statement = connection.prepareStatement("SELECT DATA_ROZPOCZECIA, DATA_ZAKONCZENIA FROM FESTIWALE WHERE FESTIWAL_ID = ?");
+                statement.setInt(1, prev.getFestiwalId());
+                rs = statement.executeQuery();
+                rs.next();
+                if(data.getTime() < rs.getDate(1).getTime() || data.getTime() > rs.getDate(2).getTime())
+                    throw new Exception("Date of concert isn't between festivals begin and end date");
+            }
+        }
         int changes = 0;
         try {
 

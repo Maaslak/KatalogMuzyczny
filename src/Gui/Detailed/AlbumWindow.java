@@ -5,6 +5,7 @@ import Gui.Change.AddOrEditAlbumWindow;
 import Gui.Change.AddOrEditSongWindow;
 import JavaObjects.Album;
 import JavaObjects.Utwor;
+import JavaObjects.Zespol;
 import com.github.lgooddatepicker.components.DatePicker;
 
 import javax.swing.*;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 
 public class AlbumWindow extends Detailed{
 
-    private JLabel info;
+    private JLabel info, zespolInfo;
     private JLabel head;
     private Album album;
     private ArrayList<Utwor> utwory;
@@ -47,7 +48,14 @@ public class AlbumWindow extends Detailed{
     }
 
     public void setInformationPanel(){
-        this.info = new JLabel(album.toString());
+        try {
+            Zespol zespol = getDataBaseConnector().getZespol(album.getZespolId());
+            zespolInfo = new JLabel("<html> Artist: " + zespol + "<br/></html>");
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage(), "alert", JOptionPane.ERROR_MESSAGE);
+        }
+        this.info = new JLabel(album.getInfo());
         this.head = new JLabel("Utwory");
         c = new GridBagConstraints();
         c.gridy = 1;
@@ -55,6 +63,8 @@ public class AlbumWindow extends Detailed{
         informationPanel.add(info, c);
         c.gridy = 2;
         c.gridx = 1;
+        informationPanel.add(zespolInfo, c);
+        c.gridy = 3;
         informationPanel.add(head, c);
         this.pack();
     }

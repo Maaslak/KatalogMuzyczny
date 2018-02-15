@@ -38,4 +38,5 @@ public class Miasto {
     public String toString() {
         return nazwa;
     }
+
 }
