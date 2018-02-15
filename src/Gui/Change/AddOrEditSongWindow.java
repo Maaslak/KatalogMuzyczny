@@ -89,7 +89,7 @@ public class AddOrEditSongWindow extends Change{
         this.time = new JLabel("Time[in sec]");
 
         this.titleJTextField = new JTextField(utworEdit.getTytul(),5);
-        this.timeJTextField = new JTextField(5);
+        this.timeJTextField = (JFormattedTextField) new JTextField(5);
 
         c = new GridBagConstraints();
         c.gridy = 1;
