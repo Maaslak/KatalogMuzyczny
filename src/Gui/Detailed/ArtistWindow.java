@@ -2,6 +2,7 @@ package Gui.Detailed;
 
 import DataBase.DataBaseConnector;
 import Gui.Change.AddOrEditAlbumWindow;
+import Gui.Change.AddOrEditMembershipWindow;
 import JavaObjects.Album;
 import JavaObjects.Gatunek;
 import JavaObjects.Zespol;
@@ -177,11 +178,9 @@ public class ArtistWindow extends Detailed{
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
-                if(!getTable1().getSelectionModel().isSelectionEmpty()) {
-                    AlbumWindow albumWindow = new AlbumWindow(getDataBaseConnector(),temp,albums.get(getTable1().getSelectedRow()));
-                    albumWindow.setVisible(true);
+                AddOrEditMembershipWindow addOrEditMembershipWindow = new AddOrEditMembershipWindow(getDataBaseConnector(),temp,zespol);
+                    addOrEditMembershipWindow.setVisible(true);
                     setVisible(false);
-                }
             }
         });
     }

@@ -2,6 +2,7 @@ package Gui.Detailed;
 
 import DataBase.DataBaseConnector;
 import Gui.Change.AddOrEditArtistWindow;
+import Gui.Change.AddOrEditMembershipWindow;
 import Gui.Change.AddOrEditSongWindow;
 import Gui.Scrollable.ArtistsWindow;
 import JavaObjects.Album;
@@ -107,16 +108,19 @@ public class MusicianWindow extends Detailed{
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
-                //formatka do dodawania
+                AddOrEditMembershipWindow addOrEditMembershipWindow = new AddOrEditMembershipWindow(getDataBaseConnector(),temp,muzyk);
+                addOrEditMembershipWindow.setVisible(true);
+                setVisible(false);
             }
         });
 
-        /*super.getDeleteButton().addMouseListener(new MouseAdapter() {
+        /* TODO muzykId muzyk.getId()
+        super.getDeleteButton().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 try {
-                    getDataBaseConnector().deleteCzlonkostwo(zespoly.get(getTable1().getSelectedRow()).getId(), muzyk.getId);
+                    getDataBaseConnector().deleteCzlonkostwo(zespoly.get(getTable1().getSelectedRow()).getId(),muzyk.getId());
                     setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
